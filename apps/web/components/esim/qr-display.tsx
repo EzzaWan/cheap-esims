@@ -576,9 +576,9 @@ export function QRDisplay({
         </div>
 
         {activationCode && (
-          <div className="p-3 bg-[var(--voyage-bg-light)] rounded-lg border border-[var(--voyage-border)]">
-            <p className="text-xs text-[var(--voyage-muted)] mb-2">Activation Code:</p>
-            <code className="text-sm text-white font-mono break-all block">
+          <div className="p-3 bg-white rounded-none border-2 border-black">
+            <p className="text-xs text-gray-500 mb-2 uppercase font-mono font-bold">Activation Code:</p>
+            <code className="text-lg text-black font-mono break-all block font-bold tracking-tight">
               {activationCode}
             </code>
           </div>

@@ -84,7 +84,8 @@ export default function Home() {
                 </div>
                 <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9]">
                   Travel Data <br/>
-                  <span className="text-white drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] text-stroke-2">Cheapest in the World.</span>
+                  Cheapest In <br/>
+                  <span className="text-white drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] text-stroke-2">The World.</span>
                 </h1>
                 <p className="text-xl font-bold max-w-md">
                    Stop overpaying for roaming. Get instant eSIMs at wholesale prices.

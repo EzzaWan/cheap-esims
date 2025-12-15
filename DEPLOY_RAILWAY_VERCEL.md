@@ -166,4 +166,5 @@ In Clerk Dashboard → Settings → Domains:
 ---
 
 **Done!** Your app should now be live. 🎉
+<!-- trivial change to trigger Vercel deploy after reset -->
 

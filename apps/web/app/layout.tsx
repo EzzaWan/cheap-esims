@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import {
   ClerkProvider,
@@ -34,6 +35,20 @@ export default function RootLayout({
           <ErrorToastProvider>
             <html lang="en">
               <body className={`${inter.className} bg-background text-foreground min-h-screen antialiased flex flex-col`}>
+                {/* Google tag (gtag.js) */}
+                <Script
+                  src="https://www.googletagmanager.com/gtag/js?id=AW-17809762142"
+                  strategy="afterInteractive"
+                />
+                <Script id="google-analytics" strategy="afterInteractive">
+                  {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', 'AW-17809762142');
+                  `}
+                </Script>
+                
                 <Navbar />
                 
                 <main className="flex-1 w-full">

@@ -55,13 +55,13 @@ export default clerkMiddleware(async (auth, req) => {
     const csp = [
       "default-src 'self'",
       // Allow Clerk on both the default domains and our custom subdomain
-      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.clerk.com https://clerk.voyage-data.com https://clerk.cheap-esims.com https://js.stripe.com https://hcaptcha.com https://*.hcaptcha.com https://js.hcaptcha.com https://challenges.cloudflare.com https://embed.tawk.to https://cdn.jsdelivr.net",
+      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.clerk.com https://clerk.voyage-data.com https://clerk.cheap-esims.com https://js.stripe.com https://hcaptcha.com https://*.hcaptcha.com https://js.hcaptcha.com https://challenges.cloudflare.com https://embed.tawk.to https://cdn.jsdelivr.net https://www.googletagmanager.com",
       "worker-src 'self' blob:",
       "style-src 'self' 'unsafe-inline' https://embed.tawk.to",
       "img-src 'self' data: https: blob:",
       "font-src 'self' data: https://embed.tawk.to",
       // Allow XHR/fetch/WebSocket connections to Clerk custom domain + existing services
-      "connect-src 'self' https://*.clerk.com https://clerk.voyage-data.com https://clerk.cheap-esims.com https://accounts.cheap-esims.com https://api.stripe.com https://r.stripe.com https://errors.stripe.com https://*.upstash.io https://voyage-production-881a.up.railway.app https://*.up.railway.app https://ipapi.co https://hcaptcha.com https://*.hcaptcha.com https://challenges.cloudflare.com https://*.cloudflare.com https://embed.tawk.to https://*.tawk.to wss://*.tawk.to",
+      "connect-src 'self' https://*.clerk.com https://clerk.voyage-data.com https://clerk.cheap-esims.com https://accounts.cheap-esims.com https://api.stripe.com https://r.stripe.com https://errors.stripe.com https://*.upstash.io https://voyage-production-881a.up.railway.app https://*.up.railway.app https://ipapi.co https://hcaptcha.com https://*.hcaptcha.com https://challenges.cloudflare.com https://*.cloudflare.com https://embed.tawk.to https://*.tawk.to wss://*.tawk.to https://www.googletagmanager.com https://www.google-analytics.com",
       // Allow Clerk iframes from custom domain
       "frame-src 'self' https://*.clerk.com https://clerk.voyage-data.com https://clerk.cheap-esims.com https://js.stripe.com https://hcaptcha.com https://*.hcaptcha.com https://challenges.cloudflare.com https://*.cloudflare.com https://embed.tawk.to https://*.tawk.to",
       "object-src 'none'",

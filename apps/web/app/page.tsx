@@ -5,10 +5,13 @@ import Link from "next/link";
 import { SearchBar } from "@/components/SearchBar";
 import { CountryCard } from "@/components/CountryCard";
 import { CountrySkeleton } from "@/components/skeletons";
-import { ArrowRight, Zap, Globe, Map, Shield, Lock, Clock, CheckCircle2, Star, Quote } from "lucide-react";
+import { ArrowRight, Zap, Globe, Map, Shield, Lock, Clock, CheckCircle2, Star, Quote, Smartphone, Wifi, Plane, HelpCircle } from "lucide-react";
 import { safeFetch } from "@/lib/safe-fetch";
 import { getRegionForCountry, REGION_NAMES, Region } from "@/lib/regions";
 import { Button } from "@/components/ui/button";
+import { PlanCard, Plan } from "@/components/PlanCard";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { filterVisiblePlans } from "@/lib/plan-utils";
 
 interface Country {
   code: string;
@@ -24,6 +27,8 @@ export default function Home() {
   const [filteredRegions, setFilteredRegions] = useState<Country[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [popularPlans, setPopularPlans] = useState<Plan[]>([]);
+  const [loadingPlans, setLoadingPlans] = useState(false);
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -55,6 +60,48 @@ export default function Home() {
     };
     fetchCountries();
   }, []);
+
+  // Fetch popular plans from popular countries
+  useEffect(() => {
+    if (search) return; // Don't fetch if searching
+    
+    const fetchPopularPlans = async () => {
+      setLoadingPlans(true);
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+        // Popular countries: US, UK, France, Japan, Australia
+        const popularCountries = ['US', 'GB', 'FR', 'JP', 'AU'];
+        const allPlans: Plan[] = [];
+        
+        // Fetch plans from each popular country (limit to first 2 plans per country)
+        for (const countryCode of popularCountries) {
+          try {
+            const data = await safeFetch<Plan[]>(`${apiUrl}/countries/${countryCode}/plans`, { showToast: false });
+            if (Array.isArray(data) && data.length > 0) {
+              // Filter visible plans and take first 2
+              const visiblePlans = filterVisiblePlans(data).slice(0, 2);
+              allPlans.push(...visiblePlans);
+            }
+          } catch (error) {
+            console.error(`Failed to fetch plans for ${countryCode}:`, error);
+          }
+        }
+        
+        // Sort by price and take top 6
+        const sorted = allPlans
+          .sort((a, b) => a.price - b.price)
+          .slice(0, 6);
+        
+        setPopularPlans(sorted);
+      } catch (error) {
+        console.error("Failed to fetch popular plans", error);
+      } finally {
+        setLoadingPlans(false);
+      }
+    };
+    
+    fetchPopularPlans();
+  }, [search]);
 
   const countriesByRegion = useMemo(() => {
     const grouped: Record<Region, Country[]> = {
@@ -195,6 +242,94 @@ export default function Home() {
             </div>
           )}
 
+          {/* Why Choose Cheap eSIMs Section */}
+          {!search && (
+            <div className="space-y-6 pt-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-primary border-2 border-black p-2">
+                  <Zap className="h-6 w-6 text-black" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-black uppercase tracking-tighter text-black">Why Choose Us?</h2>
+                  <p className="text-sm font-mono font-bold text-gray-600 uppercase">Everything you need for seamless global connectivity</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white border-2 border-black p-6 shadow-hard hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all group">
+                  <div className="p-3 bg-secondary border-2 border-black w-fit mb-4 shadow-hard-sm group-hover:shadow-none transition-shadow">
+                    <Zap className="h-6 w-6 text-black" />
+                  </div>
+                  <h3 className="text-lg font-black uppercase text-black mb-2">Instant Activation</h3>
+                  <p className="text-sm font-mono text-gray-600">
+                    Get your eSIM activated within minutes. No waiting, no physical SIM cards needed.
+                  </p>
+                </div>
+                
+                <div className="bg-white border-2 border-black p-6 shadow-hard hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all group">
+                  <div className="p-3 bg-primary border-2 border-black w-fit mb-4 shadow-hard-sm group-hover:shadow-none transition-shadow">
+                    <Smartphone className="h-6 w-6 text-black" />
+                  </div>
+                  <h3 className="text-lg font-black uppercase text-black mb-2">Easy Setup</h3>
+                  <p className="text-sm font-mono text-gray-600">
+                    Simple QR code installation. Works on all eSIM-compatible devices worldwide.
+                  </p>
+                </div>
+                
+                <div className="bg-white border-2 border-black p-6 shadow-hard hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all group">
+                  <div className="p-3 bg-secondary border-2 border-black w-fit mb-4 shadow-hard-sm group-hover:shadow-none transition-shadow">
+                    <Wifi className="h-6 w-6 text-black" />
+                  </div>
+                  <h3 className="text-lg font-black uppercase text-black mb-2">Global Coverage</h3>
+                  <p className="text-sm font-mono text-gray-600">
+                    Connect in 190+ countries with high-speed 4G/LTE networks. Stay connected everywhere.
+                  </p>
+                </div>
+                
+                <div className="bg-white border-2 border-black p-6 shadow-hard hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all group">
+                  <div className="p-3 bg-primary border-2 border-black w-fit mb-4 shadow-hard-sm group-hover:shadow-none transition-shadow">
+                    <Plane className="h-6 w-6 text-black" />
+                  </div>
+                  <h3 className="text-lg font-black uppercase text-black mb-2">Travel-Friendly</h3>
+                  <p className="text-sm font-mono text-gray-600">
+                    No roaming charges, no contracts. Perfect for travelers, digital nomads, and business trips.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Popular Plans Section */}
+          {!search && (
+            <div className="space-y-6 pt-8">
+              <div className="flex items-center justify-between border-b-2 border-black pb-2">
+                <div>
+                  <h2 className="text-3xl font-black uppercase tracking-tighter text-black">Popular Plans</h2>
+                  <p className="text-sm font-mono font-bold text-gray-600 uppercase">Best-selling eSIM plans</p>
+                </div>
+                <Link href="/regions/global">
+                  <Button variant="outline" className="border-2 border-black bg-white text-black hover:bg-black hover:text-white rounded-none font-bold uppercase shadow-hard-sm hover:shadow-none transition-all">
+                    View All <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+              
+              {loadingPlans ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="bg-gray-100 border-2 border-gray-200 h-64 animate-pulse"></div>
+                  ))}
+                </div>
+              ) : popularPlans.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {popularPlans.map((plan) => (
+                    <PlanCard key={plan.packageCode} plan={plan} />
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          )}
+
           {/* Region Tabs (Mobile/Desktop) */}
           {!search && (
             <div className="space-y-4">
@@ -258,6 +393,79 @@ export default function Home() {
                 {filteredRegions.map((region) => (
                   <CountryCard key={region.code} country={region} />
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* FAQ Section */}
+          {!search && (
+            <div className="space-y-6 pt-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-black text-white border-2 border-black p-2">
+                  <HelpCircle className="h-6 w-6" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-black uppercase tracking-tighter text-black">FAQ</h2>
+                  <p className="text-sm font-mono font-bold text-gray-600 uppercase">Common questions answered</p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <Accordion type="single" collapsible className="w-full space-y-4">
+                  <AccordionItem value="item-1" className="border-2 border-black shadow-hard bg-white data-[state=open]:shadow-none data-[state=open]:translate-x-1 data-[state=open]:translate-y-1 transition-all">
+                    <AccordionTrigger className="px-6 py-4 text-left font-black uppercase hover:bg-secondary hover:no-underline [&[data-state=open]]:bg-primary">
+                      What is an eSIM and how does it work?
+                    </AccordionTrigger>
+                    <AccordionContent className="px-6 py-4 text-gray-700 font-mono text-sm border-t-2 border-black">
+                      An eSIM (embedded SIM) is a digital SIM card that's built into your device. Instead of a physical SIM card, you download a profile directly to your phone. Simply scan the QR code we provide, and your eSIM will be activated instantly. It works just like a regular SIM card but without the hassle of swapping physical cards.
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="item-2" className="border-2 border-black shadow-hard bg-white data-[state=open]:shadow-none data-[state=open]:translate-x-1 data-[state=open]:translate-y-1 transition-all">
+                    <AccordionTrigger className="px-6 py-4 text-left font-black uppercase hover:bg-secondary hover:no-underline [&[data-state=open]]:bg-primary">
+                      Which devices support eSIM?
+                    </AccordionTrigger>
+                    <AccordionContent className="px-6 py-4 text-gray-700 font-mono text-sm border-t-2 border-black">
+                      Most modern smartphones support eSIM, including iPhone XS and newer, Google Pixel 3 and newer, Samsung Galaxy S20 and newer, and many other devices. Check your device compatibility using our <Link href="/support/device-check" className="font-bold underline">device checker</Link> before purchasing.
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="item-3" className="border-2 border-black shadow-hard bg-white data-[state=open]:shadow-none data-[state=open]:translate-x-1 data-[state=open]:translate-y-1 transition-all">
+                    <AccordionTrigger className="px-6 py-4 text-left font-black uppercase hover:bg-secondary hover:no-underline [&[data-state=open]]:bg-primary">
+                      How quickly will I receive my eSIM?
+                    </AccordionTrigger>
+                    <AccordionContent className="px-6 py-4 text-gray-700 font-mono text-sm border-t-2 border-black">
+                      Your eSIM is delivered instantly via email after payment confirmation. You'll receive a QR code and activation instructions within minutes of your purchase. No waiting, no shipping delays!
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="item-4" className="border-2 border-black shadow-hard bg-white data-[state=open]:shadow-none data-[state=open]:translate-x-1 data-[state=open]:translate-y-1 transition-all">
+                    <AccordionTrigger className="px-6 py-4 text-left font-black uppercase hover:bg-secondary hover:no-underline [&[data-state=open]]:bg-primary">
+                      Can I use my regular SIM and eSIM at the same time?
+                    </AccordionTrigger>
+                    <AccordionContent className="px-6 py-4 text-gray-700 font-mono text-sm border-t-2 border-black">
+                      Yes! Most eSIM-compatible devices support dual SIM functionality, allowing you to use both your regular SIM and eSIM simultaneously. This is perfect for keeping your home number active while using data from your eSIM abroad.
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="item-5" className="border-2 border-black shadow-hard bg-white data-[state=open]:shadow-none data-[state=open]:translate-x-1 data-[state=open]:translate-y-1 transition-all">
+                    <AccordionTrigger className="px-6 py-4 text-left font-black uppercase hover:bg-secondary hover:no-underline [&[data-state=open]]:bg-primary">
+                      What happens if I don't use all my data?
+                    </AccordionTrigger>
+                    <AccordionContent className="px-6 py-4 text-gray-700 font-mono text-sm border-t-2 border-black">
+                      Unused data expires at the end of your plan's validity period. However, many of our plans are valid for 30 days, giving you plenty of time to use your data. Some plans also support top-ups if you need more data before expiry.
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="item-6" className="border-2 border-black shadow-hard bg-white data-[state=open]:shadow-none data-[state=open]:translate-x-1 data-[state=open]:translate-y-1 transition-all">
+                    <AccordionTrigger className="px-6 py-4 text-left font-black uppercase hover:bg-secondary hover:no-underline [&[data-state=open]]:bg-primary">
+                      Do you offer refunds?
+                    </AccordionTrigger>
+                    <AccordionContent className="px-6 py-4 text-gray-700 font-mono text-sm border-t-2 border-black">
+                      Yes, we offer a 30-day money-back guarantee. If you're not satisfied with your eSIM service, you can request a refund within 30 days of purchase. See our <Link href="/support?tab=refund" className="font-bold underline">refund policy</Link> for full details.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               </div>
             </div>
           )}

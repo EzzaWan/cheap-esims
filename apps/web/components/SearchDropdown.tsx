@@ -86,7 +86,7 @@ export function SearchDropdown() {
   return (
     <div className="relative w-full max-w-md">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" />
         <Input
           ref={inputRef}
           type="text"
@@ -98,7 +98,7 @@ export function SearchDropdown() {
               setIsOpen(true);
             }
           }}
-          className="pl-10 pr-4 h-10 bg-white border-2 border-black rounded-none font-mono text-sm"
+          className="pl-10 pr-4 h-10 bg-white border-2 border-black rounded-none font-mono text-sm text-black placeholder:text-gray-500"
         />
       </div>
 
@@ -122,10 +122,10 @@ export function SearchDropdown() {
                     <button
                       key={country.code}
                       onClick={() => handleCountryClick(country.code)}
-                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-primary hover:text-black transition-colors text-left"
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-primary hover:text-black transition-colors text-left text-black"
                     >
-                      <Globe className="h-4 w-4 flex-shrink-0" />
-                      <span className="font-bold text-sm">{country.name}</span>
+                      <Globe className="h-4 w-4 flex-shrink-0 text-gray-600" />
+                      <span className="font-bold text-sm text-black">{country.name}</span>
                     </button>
                   ))}
                 </div>
@@ -140,11 +140,11 @@ export function SearchDropdown() {
                     <button
                       key={plan.packageCode}
                       onClick={() => handlePlanClick(plan.packageCode)}
-                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-primary hover:text-black transition-colors text-left"
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-primary hover:text-black transition-colors text-left text-black"
                     >
-                      <Package className="h-4 w-4 flex-shrink-0" />
+                      <Package className="h-4 w-4 flex-shrink-0 text-gray-600" />
                       <div className="flex-1 min-w-0">
-                        <div className="font-bold text-sm truncate">{plan.name}</div>
+                        <div className="font-bold text-sm truncate text-black">{plan.name}</div>
                         <div className="text-xs text-gray-500 font-mono">{plan.location}</div>
                       </div>
                     </button>

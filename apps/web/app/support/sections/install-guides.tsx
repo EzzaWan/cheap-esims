@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -73,6 +74,15 @@ export function InstallGuides() {
                         <p className="text-gray-600 font-mono font-bold mb-2">
                           Open <strong className="text-black">Settings</strong> &gt; <strong className="text-black">Cellular</strong> (or <strong className="text-black">Mobile Data</strong>) &gt; <strong className="text-black">Add eSIM</strong>.
                         </p>
+                        <div className="mt-3 rounded-none overflow-hidden border-2 border-black max-w-sm">
+                          <Image
+                            src="/install-guides/iphone-step1-cellular-add-esim.webp"
+                            alt="iPhone Settings - Cellular - Add eSIM"
+                            width={400}
+                            height={800}
+                            className="w-full h-auto"
+                          />
+                        </div>
                       </div>
                     </div>
 
@@ -84,6 +94,26 @@ export function InstallGuides() {
                         <p className="text-gray-600 font-mono font-bold mb-2">
                           Select <strong className="text-black">Use QR Code</strong> and scan the code provided in your Cheap eSIMs account.
                         </p>
+                        <div className="mt-3 space-y-3">
+                          <div className="rounded-none overflow-hidden border-2 border-black max-w-sm">
+                            <Image
+                              src="/install-guides/iphone-step2-setup-cellular-qr.webp"
+                              alt="iPhone Set Up Cellular - Use QR Code option"
+                              width={400}
+                              height={800}
+                              className="w-full h-auto"
+                            />
+                          </div>
+                          <div className="rounded-none overflow-hidden border-2 border-black max-w-sm">
+                            <Image
+                              src="/install-guides/iphone-step2-scan-qr-code.webp"
+                              alt="iPhone Scan QR Code screen"
+                              width={400}
+                              height={800}
+                              className="w-full h-auto"
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -107,6 +137,15 @@ export function InstallGuides() {
                           <li><strong className="text-black">Default Line:</strong> Primary (for calls/SMS)</li>
                           <li><strong className="text-black">Cellular Data:</strong> Select your new eSIM</li>
                         </ul>
+                        <div className="mt-3 rounded-none overflow-hidden border-2 border-black max-w-sm">
+                          <Image
+                            src="/install-guides/iphone-step4-cellular-data-selection.webp"
+                            alt="iPhone Cellular Data - Select Travel eSIM"
+                            width={400}
+                            height={800}
+                            className="w-full h-auto"
+                          />
+                        </div>
                       </div>
                     </div>
 
@@ -123,6 +162,15 @@ export function InstallGuides() {
                           <li>Ensure <strong className="text-black">Network Selection</strong> is set to Automatic.</li>
                           <li>In <strong className="text-black">Voice & Data</strong>, select LTE or 5G.</li>
                         </ul>
+                        <div className="mt-3 rounded-none overflow-hidden border-2 border-black max-w-sm">
+                          <Image
+                            src="/install-guides/iphone-step5-data-roaming-settings.webp"
+                            alt="iPhone eSIM Settings - Data Roaming toggle"
+                            width={400}
+                            height={800}
+                            className="w-full h-auto"
+                          />
+                        </div>
                       </div>
                     </div>
 
@@ -144,6 +192,15 @@ export function InstallGuides() {
                         <p className="text-gray-600 font-mono font-bold mb-2">
                           Go to <strong className="text-black">Settings</strong> &gt; <strong className="text-black">Cellular</strong> &gt; <strong className="text-black">Add eSIM</strong> &gt; <strong className="text-black">Enter Details Manually</strong>.
                         </p>
+                        <div className="mt-3 rounded-none overflow-hidden border-2 border-black max-w-sm">
+                          <Image
+                            src="/install-guides/enter-details-manually-esim-iphone-3bb03a24.webp"
+                            alt="iPhone Enter Details Manually eSIM screen"
+                            width={400}
+                            height={800}
+                            className="w-full h-auto"
+                          />
+                        </div>
                       </div>
                     </div>
 

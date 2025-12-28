@@ -26,25 +26,50 @@ export class AdminSettingsController {
 
   @Get()
   async getSettings(@Req() req: any) {
-    let settings = await this.prisma.adminSettings.findUnique({
-      where: { id: 'settings' },
-    });
-
-    if (!settings) {
-      // Create default settings
-      settings = await this.prisma.adminSettings.create({
-        data: {
-          id: 'settings',
-          mockMode: false,
-          defaultMarkupPercent: 0,
-          defaultCurrency: 'USD',
-          adminEmails: [],
-          updatedAt: new Date(),
-        },
+    try {
+      let settings = await this.prisma.adminSettings.findUnique({
+        where: { id: 'settings' },
       });
-    }
 
-    return settings;
+      if (!settings) {
+        // Create default settings
+        try {
+          settings = await this.prisma.adminSettings.create({
+            data: {
+              id: 'settings',
+              mockMode: false,
+              defaultMarkupPercent: 0,
+              defaultCurrency: 'USD',
+              adminEmails: [],
+              updatedAt: new Date(),
+            },
+          });
+        } catch (createError) {
+          // If create fails, try to fetch again (race condition)
+          settings = await this.prisma.adminSettings.findUnique({
+            where: { id: 'settings' },
+          });
+        }
+      }
+
+      return settings;
+    } catch (error) {
+      // Return default settings if database fails
+      return {
+        id: 'settings',
+        mockMode: false,
+        defaultMarkupPercent: 0,
+        defaultCurrency: 'USD',
+        adminEmails: [],
+        emailEnabled: true,
+        emailFrom: null,
+        emailProvider: null,
+        discountsJson: null,
+        pricingJson: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+    }
   }
 
   @Post()
@@ -180,7 +205,12 @@ export class AdminDiscountsController {
   @Get()
   async getDiscounts() {
     // Public endpoint - anyone can read discounts
-    return await this.adminSettingsService.getDiscounts();
+    try {
+      return await this.adminSettingsService.getDiscounts();
+    } catch (error) {
+      // Return empty discounts if database fails
+      return { global: {}, individual: {} };
+    }
   }
 
   @Post()

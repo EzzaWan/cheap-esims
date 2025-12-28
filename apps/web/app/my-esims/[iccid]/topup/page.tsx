@@ -14,6 +14,8 @@ import { safeFetch } from "@/lib/safe-fetch";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Package } from "lucide-react";
 import { formatDataSize } from "@/lib/plan-utils";
+import { getPlanFlagLabels } from "@/lib/plan-flags";
+import { PlanFlags } from "@/components/PlanFlags";
 
 interface TopUpOption {
   packageCode: string;
@@ -151,6 +153,10 @@ export default function TopUpSelectionPage() {
             const priceUSD = plan.price || 0;
             const convertedPrice = convert(priceUSD);
             
+            // Extract flags and get cleaned name
+            const flagInfo = getPlanFlagLabels(plan);
+            const displayName = flagInfo.cleanedName || plan.name;
+            
             return (
               <div key={plan.packageCode} className="group h-full flex flex-col bg-white border-2 border-black rounded-none p-6 shadow-hard hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 cursor-pointer relative overflow-hidden">
                 
@@ -172,8 +178,11 @@ export default function TopUpSelectionPage() {
                 {/* Content */}
                 <div className="flex-grow space-y-4">
                    <div className="text-sm font-bold uppercase line-clamp-2 min-h-[2.5rem] text-black">
-                      {plan.name}
+                      {displayName}
                    </div>
+                   
+                   {/* Plan Flags (IP type, FUP, etc.) - neutral variant for list page */}
+                   <PlanFlags plan={plan} variant="neutral" />
                    
                    <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase text-gray-600">
                       <Globe className="h-3 w-3 text-black" />

@@ -133,105 +133,99 @@ export function InstallStepsDialog({
                 </div>
 
                 <div className="space-y-6">
+                  {/* Step 1 */}
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
                       1
                     </div>
                     <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Open Settings</h4>
+                      <h4 className="text-black font-black uppercase">Access Cellular Settings</h4>
                       <p className="text-gray-600 font-mono font-bold">
-                        Open the <strong className="text-black">Settings</strong> app on your iPhone.
+                        Go to <strong className="text-black">Settings</strong> &gt; <strong className="text-black">Cellular</strong> (or Mobile Data) &gt; <strong className="text-black">Add eSIM</strong>.
                       </p>
                     </div>
                   </div>
 
+                  {/* Step 2 */}
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
                       2
                     </div>
                     <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Navigate to Cellular</h4>
+                      <h4 className="text-black font-black uppercase">Scan QR Code</h4>
                       <p className="text-gray-600 font-mono font-bold">
-                        Tap <strong className="text-black">Cellular</strong> or <strong className="text-black">Mobile Data</strong>.
+                        Select <strong className="text-black">Use QR Code</strong> and scan the code.
                       </p>
+                      <div className="mt-2">
+                         <p className="text-xs text-gray-500 font-mono font-bold mb-1">
+                           Can't scan? <strong className="text-black">Enter Details Manually</strong>:
+                         </p>
+                         <div className="bg-gray-50 border-2 border-black p-2 rounded-none">
+                           <div className="flex justify-between items-center mb-1">
+                             <span className="text-xs text-gray-600 font-mono font-bold">SM-DP+:</span>
+                             <button onClick={() => handleCopy(displaySmdp, "smdp")} className="text-xs text-primary hover:underline font-black uppercase">
+                               {copied === "smdp" ? "Copied" : "Copy"}
+                             </button>
+                           </div>
+                           <code className="text-xs text-black block truncate mb-2 font-mono font-bold">{displaySmdp}</code>
+                           
+                           {activationCodeOnly && (
+                             <>
+                               <div className="flex justify-between items-center mb-1">
+                                 <span className="text-xs text-gray-600 font-mono font-bold">Code:</span>
+                                 <button onClick={() => handleCopy(activationCodeOnly, "ac")} className="text-xs text-primary hover:underline font-black uppercase">
+                                   {copied === "ac" ? "Copied" : "Copy"}
+                                 </button>
+                               </div>
+                               <code className="text-xs text-black block truncate font-mono font-bold">{activationCodeOnly}</code>
+                             </>
+                           )}
+                         </div>
+                      </div>
                     </div>
                   </div>
 
+                  {/* Step 3 */}
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
                       3
                     </div>
                     <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Add eSIM</h4>
+                      <h4 className="text-black font-black uppercase">Label Your eSIM</h4>
                       <p className="text-gray-600 font-mono font-bold">
-                        Tap <strong className="text-black">Add Cellular Plan</strong> or <strong className="text-black">Add eSIM</strong>.
+                        Name your new plan (e.g., "Cheap eSIMs") to easily identify it.
                       </p>
                     </div>
                   </div>
 
+                  {/* Step 4 */}
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
                       4
                     </div>
                     <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Scan QR Code</h4>
-                      <p className="text-gray-600 font-mono font-bold">
-                        Point your camera at the QR code shown in your account. Your iPhone will automatically detect and scan it.
-                      </p>
+                      <h4 className="text-black font-black uppercase">Set Default Line</h4>
+                      <ul className="list-disc list-inside text-sm text-gray-600 font-mono font-bold space-y-1">
+                        <li><strong className="text-black">Default Line:</strong> Primary (keep for calls/SMS)</li>
+                        <li><strong className="text-black">Cellular Data:</strong> Select your new eSIM</li>
+                      </ul>
                     </div>
                   </div>
 
+                  {/* Step 5 */}
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
                       5
                     </div>
                     <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Manual Entry (Alternative)</h4>
-                      <p className="text-gray-600 font-mono font-bold mb-2">
-                        If QR scanning doesn't work, you can enter details manually:
+                      <h4 className="text-black font-black uppercase">Configure Network</h4>
+                      <p className="text-gray-600 font-mono font-bold mb-1">
+                        In <strong className="text-black">Settings</strong> &gt; <strong className="text-black">Cellular</strong> &gt; Your eSIM:
                       </p>
-                      <ol className="list-decimal list-inside space-y-1 text-gray-600 font-mono font-bold ml-2">
-                        <li>Tap <strong className="text-black">Enter Details Manually</strong></li>
-                        <li>Enter the SM-DP+ address: <code className="text-xs bg-gray-100 border border-black px-2 py-1 font-mono font-bold">{displaySmdp}</code></li>
-                        {activationCodeOnly && (
-                          <li>Enter the activation code when prompted</li>
-                        )}
-                      </ol>
-                      {displaySmdp !== "Not available" && (
-                        <Button
-                          size="sm"
-                          onClick={() => handleCopy(displaySmdp, "smdp")}
-                          className="mt-2 bg-white border-2 border-black text-black font-black uppercase rounded-none shadow-hard-sm hover:shadow-none hover:bg-black hover:text-white"
-                        >
-                          {copied === "smdp" ? (
-                            <>
-                              <CheckCircle2 className="h-3 w-3 mr-1" />
-                              Copied
-                            </>
-                          ) : (
-                            <>
-                              <Copy className="h-3 w-3 mr-1" />
-                              Copy SM-DP+ Address
-                            </>
-                          )}
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
-                      6
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Complete Setup</h4>
-                      <p className="text-gray-600 font-mono font-bold">
-                        Follow the on-screen prompts to complete the installation. You may be asked to:
-                      </p>
-                      <ul className="list-disc list-inside space-y-1 text-gray-600 font-mono font-bold ml-2">
-                        <li>Label your eSIM (e.g., "Cheap eSIMs Data")</li>
-                        <li>Choose which SIM to use for data</li>
-                        <li>Enable or disable the eSIM line</li>
+                      <ul className="list-disc list-inside text-sm text-gray-600 font-mono font-bold space-y-1">
+                        <li>Toggle <strong className="text-black">Data Roaming</strong> ON</li>
+                        <li>Set <strong className="text-black">Network Selection</strong> to Automatic</li>
+                        <li>Ensure <strong className="text-black">Voice & Data</strong> is LTE or 5G</li>
                       </ul>
                     </div>
                   </div>

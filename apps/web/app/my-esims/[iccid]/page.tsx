@@ -358,13 +358,28 @@ export default function EsimDetailPage() {
             Download Receipt
           </Button>
         )}
-        <Link href={`/my-esims/${iccid}/topup`} className="w-full sm:w-auto">
-          <Button 
-             className="h-14 px-8 text-lg font-black uppercase bg-primary text-black border-2 border-black rounded-none shadow-hard hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all w-full"
-          >
-             Top Up Now
-          </Button>
-        </Link>
+        {/* Only show top-up button if plan supports top-ups (supportTopUpType === 2) */}
+        {profile?.planDetails?.supportTopUpType === 2 ? (
+          <Link href={`/my-esims/${iccid}/topup`} className="w-full sm:w-auto">
+            <Button 
+               className="h-14 px-8 text-lg font-black uppercase bg-primary text-black border-2 border-black rounded-none shadow-hard hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all w-full"
+            >
+               Top Up Now
+            </Button>
+          </Link>
+        ) : profile?.planDetails?.supportTopUpType === 1 ? (
+          <div className="w-full sm:w-auto">
+            <Button 
+               disabled
+               className="h-14 px-8 text-lg font-black uppercase bg-gray-200 text-gray-500 border-2 border-gray-400 rounded-none shadow-hard w-full cursor-not-allowed"
+            >
+               Top-Up Not Available
+            </Button>
+            <p className="text-xs text-gray-500 mt-2 font-mono font-bold uppercase text-center">
+              This plan does not support top-ups
+            </p>
+          </div>
+        ) : null}
       </div>
 
       {/* Data Usage History Graph */}

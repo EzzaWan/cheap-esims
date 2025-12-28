@@ -115,44 +115,6 @@ export function PlanListWithFilters<T extends PlanBase>({
             </div>
           </div>
 
-          <div className="h-6 w-0.5 bg-black hidden md:block" />
-
-          {/* Quick Filters (Desktop) */}
-          <div className="hidden md:flex items-center gap-3">
-             <Filter className="h-4 w-4 text-black" />
-             
-             <div className="relative">
-               <select 
-                  value={durationFilter} 
-                  onChange={(e) => setDurationFilter(e.target.value as DurationFilter)}
-                  className="appearance-none bg-white text-black text-sm font-bold uppercase border-2 border-black pl-3 pr-8 py-2 focus:outline-none focus:shadow-hard-sm cursor-pointer"
-               >
-                  <option value="all">All Durations</option>
-                  <option value="1-7">1 - 7 Days</option>
-                  <option value="8-15">8 - 15 Days</option>
-                  <option value="16-30">16 - 30 Days</option>
-                  <option value="30+">30+ Days</option>
-               </select>
-               <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-black pointer-events-none" />
-             </div>
-
-             <div className="relative">
-               <select 
-                  value={dataFilter} 
-                  onChange={(e) => setDataFilter(e.target.value as DataFilter)}
-                  className="appearance-none bg-white text-black text-sm font-bold uppercase border-2 border-black pl-3 pr-8 py-2 focus:outline-none focus:shadow-hard-sm cursor-pointer"
-               >
-                  <option value="all">All Data Sizes</option>
-                  <option value="under_3">&lt; 3 GB</option>
-                  <option value="3_10">3 GB - 10 GB</option>
-                  <option value="10_plus">10 GB+</option>
-                  <option value="20_plus">20 GB+</option>
-                  <option value="50_plus">50 GB+</option>
-               </select>
-               <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-black pointer-events-none" />
-             </div>
-          </div>
-          
           {/* Mobile Filter Toggle */}
           <Button 
             variant="outline" 

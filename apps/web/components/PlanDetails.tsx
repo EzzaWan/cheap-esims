@@ -21,6 +21,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { getPlanFlagLabels } from "@/lib/plan-flags";
+import { PlanFlags } from "./PlanFlags";
 
 export function PlanDetails({ plan }: { plan: any }) {
   const { selectedCurrency, convert, formatCurrency } = useCurrency();
@@ -41,6 +43,10 @@ export function PlanDetails({ plan }: { plan: any }) {
   const finalPriceUSD = calculateFinalPrice(basePriceUSD, discountPercent);
   const convertedPrice = convert(finalPriceUSD);
   const priceUSDCents = Math.round(finalPriceUSD * 100);
+
+  // Extract flags and get cleaned name
+  const flagInfo = getPlanFlagLabels(plan);
+  const displayName = flagInfo.cleanedName || plan.name;
 
   useEffect(() => {
     fetchDiscounts().catch(console.error);
@@ -125,7 +131,7 @@ export function PlanDetails({ plan }: { plan: any }) {
         currency: selectedCurrency,
         displayCurrency: selectedCurrency,
         amount: finalPriceUSD,
-        planName: plan.name,
+        planName: displayName, // Use cleaned name without flags
         referralCode: referralCode || undefined,
         paymentMethod: paymentMethod,
       };
@@ -157,9 +163,15 @@ export function PlanDetails({ plan }: { plan: any }) {
                 Spec Sheet
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-2">
-                {plan.name}
+            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4">
+                {displayName}
             </h1>
+            
+            {/* Plan Flags (IP type, FUP, etc.) */}
+            <div className="mb-6">
+              <PlanFlags plan={plan} />
+            </div>
+            
             <div className="flex flex-wrap gap-4 mb-8">
                 <span className="bg-primary text-black px-3 py-1 font-bold border border-black text-sm uppercase">
                     Data Only
@@ -167,6 +179,16 @@ export function PlanDetails({ plan }: { plan: any }) {
                 <span className="bg-secondary text-black px-3 py-1 font-bold border border-black text-sm uppercase">
                     eSIM
                 </span>
+                {plan.supportTopUpType === 2 && (
+                    <span className="bg-green-100 text-green-900 px-3 py-1 font-bold border border-green-600 text-sm uppercase">
+                        Top-Up Available
+                    </span>
+                )}
+                {plan.supportTopUpType === 1 && (
+                    <span className="bg-gray-100 text-gray-600 px-3 py-1 font-bold border border-gray-400 text-sm uppercase">
+                        Non-Reloadable
+                    </span>
+                )}
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -245,7 +267,7 @@ export function PlanDetails({ plan }: { plan: any }) {
              <div className="space-y-4 mb-6 font-mono text-sm">
                  <div className="flex justify-between">
                      <span>Item:</span>
-                     <span className="font-bold">{plan.name}</span>
+                     <span className="font-bold">{displayName}</span>
                  </div>
                  <div className="flex justify-between">
                      <span>Data:</span>

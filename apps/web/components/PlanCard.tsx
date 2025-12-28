@@ -4,6 +4,8 @@ import { useCurrency } from "./providers/CurrencyProvider";
 import { getDiscount } from "@/lib/admin-discounts";
 import { calculateFinalPrice, formatDataSize, calculateGB } from "@/lib/plan-utils";
 import { Button } from "@/components/ui/button";
+import { getPlanFlagLabels } from "@/lib/plan-flags";
+import { PlanFlags } from "./PlanFlags";
 
 export interface Plan {
   packageCode: string;
@@ -35,6 +37,10 @@ export function PlanCard({ plan }: PlanCardProps) {
   
   const convertedPrice = convert(finalPriceUSD);
 
+  // Extract flags and get cleaned name
+  const flagInfo = getPlanFlagLabels(plan);
+  const displayName = flagInfo.cleanedName || plan.name;
+
   return (
     <Link href={`/plans/${plan.packageCode}`} className="block h-full group">
       <div className="h-full flex flex-col bg-white border-2 border-black shadow-hard hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all relative">
@@ -64,8 +70,11 @@ export function PlanCard({ plan }: PlanCardProps) {
         {/* Middle Section: Details */}
         <div className="p-4 flex-grow flex flex-col justify-center text-center space-y-2">
            <p className="text-xs font-bold uppercase truncate px-2 bg-gray-100 py-1">
-              {plan.name}
+              {displayName}
            </p>
+           
+           {/* Plan Flags (IP type, FUP, etc.) - neutral variant for list page */}
+           <PlanFlags plan={plan} variant="neutral" />
            {plan.locationNetworkList && plan.locationNetworkList.length > 1 && (
              <p className="text-[10px] font-mono text-gray-500">
                + {plan.locationNetworkList.length} Regions

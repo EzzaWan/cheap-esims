@@ -62,9 +62,17 @@ export class EsimController {
       throw new NotFoundException('Profile not found');
     }
 
-    // 2. Get original plan details to find location
+    // 2. Get original plan details to find location and check top-up support
     const planId = profile.Order.planId;
     const planDetails = await this.esimService.getPlan(planId);
+    
+    // Check if the original plan supports top-ups
+    // supportTopUpType: 1 = non-reloadable, 2 = reloadable
+    if (planDetails.supportTopUpType === 1) {
+      // Plan is non-reloadable, return empty array
+      return [];
+    }
+    
     const locationCode = planDetails.location; // e.g. 'US'
 
     // 3. Fetch TOPUP-specific packages for that location
@@ -103,6 +111,7 @@ export class EsimController {
           volume: plan.volume,
           duration: plan.duration,
           durationUnit: plan.durationUnit,
+          supportTopUpType: plan.supportTopUpType, // Include top-up support flag
         };
       } catch (e) {}
     }

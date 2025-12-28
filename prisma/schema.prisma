@@ -406,6 +406,7 @@ model User {
   TopUp            TopUp[]
   SpareChangeBalance     SpareChangeBalance?
   SpareChangeTransaction SpareChangeTransaction[]
+  Review           Review[]
 }
 
 model SpareChangeBalance {
@@ -432,6 +433,22 @@ model SpareChangeTransaction {
   @@index([userId, createdAt])
   @@index([userId])
   @@map("VCashTransaction")
+}
+
+model Review {
+  id        String   @id
+  planId    String
+  userId    String
+  userName  String
+  rating    Int      // 1-5
+  comment   String   @db.VarChar(1000)
+  verified  Boolean  @default(false) // true if user has purchased this plan
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([planId])
+  @@index([userId])
+  @@index([createdAt])
 }
 
 model WebhookEvent {

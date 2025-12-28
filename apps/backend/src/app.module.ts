@@ -17,6 +17,7 @@ import { CommonModule } from './common/modules/common.module';
 import { LogModule } from './modules/log/log.module';
 import { SupportModule } from './modules/support/support.module';
 import { SpareChangeModule } from './modules/spare-change/spare-change.module';
+import { ReviewsModule } from './modules/reviews/reviews.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { SpareChangeModule } from './modules/spare-change/spare-change.module';
     LogModule,
     SupportModule,
     SpareChangeModule,
+    ReviewsModule,
   ],
 })
 export class AppModule {}

@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { getPlanFlagLabels } from "@/lib/plan-flags";
 import { PlanFlags } from "./PlanFlags";
+import { ReviewsSection } from "./ReviewsSection";
 
 export function PlanDetails({ plan }: { plan: any }) {
   const { selectedCurrency, convert, formatCurrency } = useCurrency();
@@ -264,6 +265,9 @@ export function PlanDetails({ plan }: { plan: any }) {
                 </Link>
             </div>
         </div>
+
+        {/* Reviews Section */}
+        <ReviewsSection planId={plan.packageCode} />
       </div>
 
       {/* Right: Receipt / Checkout */}

@@ -122,7 +122,9 @@ export function PlanDetails({ plan }: { plan: any }) {
       const referralCode = getStoredReferralCode();
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
       const headers: Record<string, string> = { "Content-Type": "application/json" };
-      if (paymentMethod === 'spare-change' && user?.primaryEmailAddress?.emailAddress) {
+      
+      // Always add user email header if logged in (for both Stripe and V-Cash)
+      if (user?.primaryEmailAddress?.emailAddress) {
         headers['x-user-email'] = user.primaryEmailAddress.emailAddress;
       }
 
@@ -134,6 +136,8 @@ export function PlanDetails({ plan }: { plan: any }) {
         planName: displayName, // Use cleaned name without flags
         referralCode: referralCode || undefined,
         paymentMethod: paymentMethod,
+        // Include email in request body for pending order creation
+        email: user?.primaryEmailAddress?.emailAddress || undefined,
       };
 
       const data = await safeFetch<{ url?: string; success?: boolean; orderId?: string; message?: string }>(
@@ -143,8 +147,13 @@ export function PlanDetails({ plan }: { plan: any }) {
 
       if (paymentMethod === 'spare-change' && data.success) {
         toast({ title: "Success", description: "Order placed via Spare Change." });
+        // Redirect to my-esims or order confirmation
         router.push('/my-esims');
+      } else if (data.orderId) {
+        // Stripe checkout - redirect to review page first
+        router.push(`/checkout/${data.orderId}`);
       } else if (data.url) {
+        // Fallback: Legacy flow - redirect directly to Stripe
         window.location.href = data.url;
       }
     } catch (error: any) {

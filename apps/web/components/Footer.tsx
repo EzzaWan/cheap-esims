@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Zap, Twitter, Instagram, Linkedin } from "lucide-react";
+import { Zap, Instagram, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -15,15 +15,6 @@ export function Footer() {
               We provide the cheapest possible data for travelers. No frills. No hidden fees. Just internet.
             </p>
             <div className="flex gap-4 mt-4">
-              <a 
-                href="https://twitter.com/cheapesims" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                aria-label="Follow us on Twitter"
-                className="text-gray-400 hover:text-primary transition-colors"
-              >
-                <Twitter className="h-5 w-5" />
-              </a>
               <a 
                 href="https://instagram.com/cheapesims" 
                 target="_blank" 

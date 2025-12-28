@@ -35,13 +35,14 @@ export class OrdersService {
   ) {}
   private readonly logger = new Logger(OrdersService.name);
 
-  async createStripeCheckout({ planCode, amount, currency, planName, displayCurrency, referralCode }: {
+  async createStripeCheckout({ planCode, amount, currency, planName, displayCurrency, referralCode, email }: {
     planCode: string;
     amount: number;
     currency: string;
     planName: string;
     displayCurrency?: string;
     referralCode?: string;
+    email?: string;
   }) {
     try {
       // amount is in USD (final price after discounts, calculated by frontend)
@@ -105,37 +106,60 @@ export class OrdersService {
         );
       }
       
-      const webUrl = this.config.get('WEB_URL') || 'http://localhost:3000';
-
-      const session = await this.stripe.stripe.checkout.sessions.create({
-        mode: 'payment',
-        payment_method_types: ['card'],
-
-        line_items: [
-          {
-            price_data: {
-              currency: targetCurrency.toLowerCase(), // Stripe expects lowercase
-              unit_amount: unit_amount_cents,  // Stripe requires cents
-              product_data: {
-                name: planName,
-              },
-            },
-            quantity: 1,
+      // Create pending order first (new flow)
+      // Get or create user if email provided, otherwise create guest user
+      let user;
+      if (email) {
+        const normalizedEmail = email.toLowerCase().trim();
+        user = await this.prisma.user.upsert({
+          where: { email: normalizedEmail },
+          create: {
+            id: crypto.randomUUID(),
+            email: normalizedEmail,
+            name: null,
           },
-        ],
+          update: {},
+        });
+        this.logger.log(`[CHECKOUT] User found/created: ${user.id} (${normalizedEmail})`);
+      } else {
+        // Create guest user
+        const guestId = crypto.randomUUID();
+        user = await this.prisma.user.create({
+          data: {
+            id: guestId,
+            email: `guest-${guestId}@cheap-esims.com`,
+            name: null,
+          },
+        });
+        this.logger.log(`[CHECKOUT] Created guest user: ${user.id}`);
+      }
 
-        success_url: `${webUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${webUrl}/checkout/cancel`,
-        metadata: {
-          planCode,
-          amountUSD: amount.toString(), // Store original USD amount in metadata
-          displayCurrency: displayCurrency || targetCurrency,
-          ...(referralCode ? { referralCode } : {}), // Include referral code if provided
+      // Calculate amounts
+      const amountUSDCents = Math.round(amount * 100);
+      const displayAmountCents = unit_amount_cents;
+
+      // Create pending order
+      const orderId = crypto.randomUUID();
+      const order = await this.prisma.order.create({
+        data: {
+          id: orderId,
+          userId: user.id,
+          planId: planCode,
+          amountCents: amountUSDCents,
+          currency: 'usd',
+          displayCurrency: targetCurrency,
+          displayAmountCents: displayAmountCents,
+          status: 'pending',
+          paymentMethod: 'stripe',
+          esimOrderNo: `PENDING-${orderId}`,
         },
       });
 
-      this.logger.log(`[CHECKOUT] Stripe session created: ${session.id}`);
-      return { url: session.url };
+      this.logger.log(`[CHECKOUT] Created pending order: ${orderId}`);
+      
+      // Return orderId instead of Stripe URL
+      // Frontend will redirect to /checkout/[orderId] which will create Stripe session
+      return { orderId: order.id };
     } catch (error) {
       this.logger.error('[CHECKOUT] Failed to create Stripe checkout session', error);
       
@@ -145,6 +169,120 @@ export class OrdersService {
       }
       
       // Otherwise, wrap it
+      throw new BadRequestException(
+        error instanceof Error 
+          ? `Failed to create checkout: ${error.message}` 
+          : 'Failed to create checkout. Please try again.'
+      );
+    }
+  }
+
+  /**
+   * Create Stripe checkout session for an existing order
+   */
+  async createStripeCheckoutForOrder(orderId: string, referralCode?: string) {
+    try {
+      this.logger.log(`[CHECKOUT] Creating Stripe session for order: ${orderId}`);
+      
+      // Get the order
+      const order = await this.prisma.order.findUnique({
+        where: { id: orderId },
+        include: { User: true },
+      });
+
+      if (!order) {
+        throw new NotFoundException(`Order ${orderId} not found`);
+      }
+
+      if (order.status !== 'pending') {
+        throw new BadRequestException(`Order ${orderId} is not in pending status`);
+      }
+
+      // Validate Stripe is configured
+      if (!this.stripe?.stripe) {
+        this.logger.error('[CHECKOUT] Stripe is not configured. STRIPE_SECRET is missing.');
+        throw new BadRequestException('Payment system is not configured. Please contact support.');
+      }
+
+      // Get amounts
+      const amountUSD = order.amountCents / 100;
+      const targetCurrency = (order.displayCurrency || order.currency || 'USD').toUpperCase();
+      const displayAmount = (order.displayAmountCents || order.amountCents) / 100;
+
+      // Convert to target currency for Stripe
+      let convertedAmount = amountUSD;
+      if (targetCurrency !== 'USD') {
+        try {
+          convertedAmount = await this.currencyService.convert(amountUSD, targetCurrency);
+        } catch (error) {
+          this.logger.warn('[CHECKOUT] Currency conversion failed, using USD', error);
+        }
+      }
+
+      // Convert to cents (Stripe requires cents)
+      const unit_amount_cents = Math.round(convertedAmount * 100);
+
+      // Stripe minimum check
+      const STRIPE_MINIMUM_USD = 0.50;
+      let minimumInTargetCurrency = STRIPE_MINIMUM_USD;
+      if (targetCurrency !== 'USD') {
+        try {
+          minimumInTargetCurrency = await this.currencyService.convert(STRIPE_MINIMUM_USD, targetCurrency);
+        } catch (error) {
+          minimumInTargetCurrency = STRIPE_MINIMUM_USD;
+        }
+      }
+      const STRIPE_MINIMUM_CENTS = Math.round(minimumInTargetCurrency * 100);
+
+      if (unit_amount_cents < STRIPE_MINIMUM_CENTS) {
+        throw new BadRequestException(
+          `Amount too low. Stripe requires a minimum charge equivalent to $${STRIPE_MINIMUM_USD.toFixed(2)} USD.`
+        );
+      }
+
+      const webUrl = this.config.get('WEB_URL') || 'http://localhost:3000';
+
+      // Get plan name from order (we stored planCode in planId)
+      const planName = order.planId; // This is actually the planCode
+
+      const session = await this.stripe.stripe.checkout.sessions.create({
+        mode: 'payment',
+        payment_method_types: ['card'],
+        customer_email: order.User.email !== `guest-${order.User.id}@cheap-esims.com` && !order.User.email.startsWith('guest-') ? order.User.email : undefined,
+
+        line_items: [
+          {
+            price_data: {
+              currency: targetCurrency.toLowerCase(),
+              unit_amount: unit_amount_cents,
+              product_data: {
+                name: planName,
+              },
+            },
+            quantity: 1,
+          },
+        ],
+
+        success_url: `${webUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${webUrl}/checkout/${orderId}`,
+        metadata: {
+          orderId: order.id, // Store orderId in metadata for webhook
+          planCode: order.planId,
+          amountUSD: amountUSD.toString(),
+          displayCurrency: targetCurrency,
+          ...(referralCode ? { referralCode } : {}),
+        },
+      });
+
+      this.logger.log(`[CHECKOUT] Stripe session created: ${session.id} for order ${orderId}`);
+      return { url: session.url };
+    } catch (error) {
+      this.logger.error('[CHECKOUT] Failed to create Stripe checkout session for order', error);
+      
+      if (error instanceof BadRequestException || error instanceof NotFoundException) {
+        throw error;
+      }
+      
       throw new BadRequestException(
         error instanceof Error 
           ? `Failed to create checkout: ${error.message}` 
@@ -263,9 +401,90 @@ export class OrdersService {
     const email = session.customer_details?.email || 'guest@voyage.app';
     const planCode = session.metadata?.planCode || null;
     const referralCode = session.metadata?.referralCode || null;
+    const existingOrderId = session.metadata?.orderId; // Check if order already exists
     
-    this.logger.log(`[CHECKOUT] Processing payment: email=${email}, planCode=${planCode}, referralCode=${referralCode || 'none'}`);
+    this.logger.log(`[CHECKOUT] Processing payment: email=${email}, planCode=${planCode}, referralCode=${referralCode || 'none'}, existingOrderId=${existingOrderId || 'none'}`);
 
+    // If order already exists (from pending order flow), update it instead of creating new one
+    if (existingOrderId) {
+      const existingOrder = await this.prisma.order.findUnique({
+        where: { id: existingOrderId },
+        include: { User: true },
+      });
+
+      if (!existingOrder) {
+        this.logger.error(`[CHECKOUT] Order ${existingOrderId} from metadata not found`);
+        throw new NotFoundException(`Order ${existingOrderId} not found`);
+      }
+
+      if (existingOrder.status !== 'pending') {
+        this.logger.warn(`[CHECKOUT] Order ${existingOrderId} is not in pending status, current status: ${existingOrder.status}`);
+      }
+
+      // Update user email if provided (for guest users)
+      let user = existingOrder.User;
+      if (email && email !== user.email && !user.email.startsWith('guest-')) {
+        // Update user email if it's a real email
+        user = await this.prisma.user.update({
+          where: { id: user.id },
+          data: { 
+            email: email.toLowerCase().trim(),
+            name: session.customer_details?.name || user.name,
+          },
+        });
+      } else if (email && user.email.startsWith('guest-')) {
+        // Update guest user with real email
+        user = await this.prisma.user.update({
+          where: { id: user.id },
+          data: { 
+            email: email.toLowerCase().trim(),
+            name: session.customer_details?.name || user.name,
+          },
+        });
+      }
+
+      // Get original USD amount from metadata, or convert from Stripe amount
+      let amountUSD = parseFloat(session.metadata?.amountUSD || '0');
+      
+      // If metadata doesn't have USD amount, we need to convert from Stripe amount
+      if (amountUSD === 0 && session.amount_total) {
+        const stripeCurrency = session.currency?.toUpperCase() || 'USD';
+        if (stripeCurrency !== 'USD') {
+          const stripeAmountDollars = (session.amount_total ?? 0) / 100;
+          const rate = await this.currencyService.getRate(stripeCurrency);
+          amountUSD = stripeAmountDollars / rate;
+          this.logger.log(`[CHECKOUT] Converted ${stripeAmountDollars} ${stripeCurrency} back to ${amountUSD.toFixed(2)} USD`);
+        } else {
+          amountUSD = (session.amount_total ?? 0) / 100;
+        }
+      }
+      
+      const amountUSDCents = Math.round(amountUSD * 100);
+      const displayCurrency = (session.metadata?.displayCurrency || session.currency?.toUpperCase() || 'USD').toUpperCase();
+      const displayAmountCents = session.amount_total || amountUSDCents;
+
+      // Update existing order
+      const order = await this.prisma.order.update({
+        where: { id: existingOrderId },
+        data: {
+          amountCents: amountUSDCents,
+          displayCurrency: displayCurrency,
+          displayAmountCents: displayAmountCents,
+          status: 'paid',
+          paymentRef: (session.payment_intent as string) || session.id,
+          esimOrderNo: `PENDING-${session.id}`,
+        },
+      });
+
+      // Handle referral and affiliate setup
+      await this.setupUserAffiliateAndReferral(user, referralCode);
+
+      // Continue with email sending and provisioning
+      await this.processOrderCompletion(order, user, planCode);
+      return;
+    }
+
+    // Legacy flow: Create new order (for backwards compatibility)
     // Check if user exists before upsert
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
@@ -564,6 +783,44 @@ export class OrdersService {
     } catch (err) {
       this.logger.warn(`[EMAIL] Failed to mark receipt as sent: ${err.message}`);
     }
+  }
+
+  // Helper method to setup affiliate and referral
+  private async setupUserAffiliateAndReferral(user: any, referralCode?: string | null) {
+    // Check if user has affiliate record
+    const existingAffiliate = await this.prisma.affiliate.findUnique({
+      where: { userId: user.id },
+    });
+
+    if (!existingAffiliate) {
+      // Create affiliate record for user
+      await this.affiliateService.createAffiliateForUser(user.id).catch((err) => {
+        this.logger.error(`[AFFILIATE] Failed to create affiliate for user ${user.id}:`, err);
+      });
+    }
+
+    // Handle referral if referral code provided
+    if (referralCode) {
+      this.logger.log(`[AFFILIATE] Processing referral code: ${referralCode} for user ${user.id}`);
+      await this.handleReferral(referralCode, user.id).catch((err) => {
+        this.logger.error(`[AFFILIATE] Failed to handle referral:`, err);
+      });
+    } else {
+      this.logger.log(`[AFFILIATE] No referral code provided for user ${user.id}`);
+    }
+  }
+
+  // Helper method to process order completion (emails and provisioning)
+  private async processOrderCompletion(order: any, user: any, planCode: string | null) {
+    // Send order confirmation email (fire and forget)
+    this.sendOrderConfirmationEmail(order, user, planCode).catch((err) => {
+      this.logger.error(`[EMAIL] Failed to send order confirmation email:`, err);
+    });
+
+    // Provision eSIM (fire and forget)
+    this.performEsimOrderForOrder(order, user, planCode, undefined as any).catch((err) => {
+      this.logger.error(`[ESIM] Failed to provision eSIM:`, err);
+    });
   }
 
   async retryPendingForPaymentRef(paymentRef: string) {

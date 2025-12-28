@@ -29,6 +29,7 @@ export class OrdersController {
       displayCurrency?: string;
       referralCode?: string;
       paymentMethod?: 'stripe' | 'spare-change';
+      email?: string;
     },
     @Req() req: any,
   ) {
@@ -56,23 +57,46 @@ export class OrdersController {
         throw new BadRequestException('Missing required field: currency is required');
       }
       
-      // If Spare Change payment, we need user email from headers
+      // Get email from body or header (prefer body, fallback to header)
+      const email = body.email || req.headers['x-user-email'] as string;
+      
+      // If Spare Change payment, we need user email
       if (paymentMethod === 'spare-change') {
-        const email = req.headers['x-user-email'] as string;
         if (!email) {
           throw new NotFoundException('User email required for Spare Change payment');
         }
         return this.ordersService.createSpareChangeOrder({ ...body, email });
       }
       
-      // Default to Stripe checkout
-      return await this.ordersService.createStripeCheckout(body);
+      // Default to Stripe checkout - pass email if provided
+      return await this.ordersService.createStripeCheckout({ ...body, email });
     } catch (error) {
       // Log the error for debugging
       console.error('[CREATE_ORDER_ERROR]', error);
       // Re-throw to let the exception filter handle it
       throw error;
     }
+  }
+
+  @Get(':id')
+  async getOrder(@Param('id') id: string) {
+    const order = await this.prisma.order.findUnique({
+      where: { id },
+      include: {
+        User: {
+          select: {
+            email: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    if (!order) {
+      throw new NotFoundException(`Order ${id} not found`);
+    }
+
+    return order;
   }
 
   @Get(':id/receipt')
@@ -175,6 +199,20 @@ export class OrdersController {
     }
 
     return allowedEmails.includes(normalizedEmail);
+  }
+
+  @Post(':id/checkout')
+  @RateLimit({ limit: 10, window: 60 })
+  async createCheckoutForOrder(
+    @Param('id') orderId: string,
+    @Body() body: { referralCode?: string },
+  ) {
+    try {
+      return await this.ordersService.createStripeCheckoutForOrder(orderId, body.referralCode);
+    } catch (error) {
+      console.error('[CREATE_CHECKOUT_FOR_ORDER_ERROR]', error);
+      throw error;
+    }
   }
 
   // ============================================

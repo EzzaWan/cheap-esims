@@ -93,23 +93,23 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
        {/* Deal Finder / Hero Section */}
-       <div className="bg-primary text-black border-b-4 border-black p-8 md:p-16">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-               <div className="inline-block bg-black text-white px-3 py-1 text-sm font-mono font-bold uppercase tracking-wider">
+       <div className="bg-primary text-black border-b-4 border-black p-6 md:p-10">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="space-y-4">
+               <div className="inline-block bg-black text-white px-3 py-1 text-xs font-mono font-bold uppercase tracking-wider">
                   Price Watch: Live
                 </div>
-                <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9]">
+                <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
                   Travel Data <br/>
                   Cheapest In <br/>
                   <span className="text-white drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] text-stroke-2">The World.</span>
                 </h1>
-                <p className="text-xl font-bold max-w-md">
+                <p className="text-lg font-bold max-w-md leading-tight">
                    Stop overpaying for roaming. Get instant eSIMs at wholesale prices.
                 </p>
-                <div className="bg-white border-2 border-black p-4 shadow-hard max-w-lg">
+                <div className="bg-white border-2 border-black p-3 shadow-hard max-w-lg">
                    <SearchBar value={search} onChange={setSearch} placeholder="Where are you going?" />
-                   <div className="mt-2 text-xs font-mono text-gray-500 uppercase flex justify-between">
+                   <div className="mt-2 text-[10px] font-mono text-gray-500 uppercase flex justify-between">
                       <span>Instant Delivery</span>
                       <span>No Contracts</span>
                    </div>
@@ -117,71 +117,71 @@ export default function Home() {
             </div>
 
             {/* Quick Region Links */}
-            <div className="hidden lg:grid grid-cols-2 gap-4">
+            <div className="hidden lg:grid grid-cols-2 gap-3">
                 {regionGroups.slice(0, 4).map(region => (
-                   <Link key={region} href={`/regions/${region}`} className="bg-white border-2 border-black p-4 shadow-hard hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex items-center justify-between group">
+                   <Link key={region} href={`/regions/${region}`} className="bg-white border-2 border-black p-3 shadow-hard hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex items-center justify-between group">
                       <div>
-                         <span className="block text-xs font-mono text-gray-500 uppercase">Region</span>
-                         <span className="font-black text-xl uppercase">{REGION_NAMES[region]}</span>
+                         <span className="block text-[10px] font-mono text-gray-500 uppercase">Region</span>
+                         <span className="font-black text-lg uppercase">{REGION_NAMES[region]}</span>
                       </div>
-                      <ArrowRight className="h-6 w-6 group-hover:text-primary transition-colors" />
+                      <ArrowRight className="h-5 w-5 group-hover:text-primary transition-colors" />
                    </Link>
                 ))}
             </div>
           </div>
        </div>
 
-       <div className="flex-1 bg-white max-w-7xl mx-auto w-full p-4 md:p-8 space-y-12">
+       <div className="bg-white max-w-7xl mx-auto w-full p-4 md:p-6 space-y-6 md:space-y-8">
           
           {/* Trust Badges & Guarantee Messaging */}
           {!search && (
-            <div className="space-y-8">
+            <div className="space-y-6">
               {/* Trust Badges - Neo-Brutalist Redesign */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white border-4 border-black p-6 shadow-hard flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
-                  <div className="mb-4 p-4 bg-yellow-300 border-2 border-black rounded-full shadow-hard-sm group-hover:shadow-none transition-shadow">
-                    <Lock className="h-8 w-8 text-black" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-white border-4 border-black p-4 shadow-hard flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
+                  <div className="mb-3 p-3 bg-yellow-300 border-2 border-black rounded-full shadow-hard-sm group-hover:shadow-none transition-shadow">
+                    <Lock className="h-6 w-6 text-black" />
                   </div>
-                  <h3 className="text-xl font-black uppercase text-black mb-2">SSL Secured</h3>
-                  <p className="text-sm font-mono font-bold text-gray-600">256-bit military-grade encryption protection.</p>
+                  <h3 className="text-lg font-black uppercase text-black mb-1">SSL Secured</h3>
+                  <p className="text-xs font-mono font-bold text-gray-600 leading-tight">256-bit military-grade encryption protection.</p>
                 </div>
                 
-                <div className="bg-white border-4 border-black p-6 shadow-hard flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
-                  <div className="mb-4 p-4 bg-cyan-300 border-2 border-black rounded-full shadow-hard-sm group-hover:shadow-none transition-shadow">
-                    <Shield className="h-8 w-8 text-black" />
+                <div className="bg-white border-4 border-black p-4 shadow-hard flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
+                  <div className="mb-3 p-3 bg-cyan-300 border-2 border-black rounded-full shadow-hard-sm group-hover:shadow-none transition-shadow">
+                    <Shield className="h-6 w-6 text-black" />
                   </div>
-                  <h3 className="text-xl font-black uppercase text-black mb-2">Money-Back</h3>
-                  <p className="text-sm font-mono font-bold text-gray-600">30-day satisfaction guarantee or full refund.</p>
+                  <h3 className="text-lg font-black uppercase text-black mb-1">Money-Back</h3>
+                  <p className="text-xs font-mono font-bold text-gray-600 leading-tight">30-day satisfaction guarantee or full refund.</p>
                 </div>
 
-                <div className="bg-white border-4 border-black p-6 shadow-hard flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
-                  <div className="mb-4 p-4 bg-pink-300 border-2 border-black rounded-full shadow-hard-sm group-hover:shadow-none transition-shadow">
-                    <Clock className="h-8 w-8 text-black" />
+                <div className="bg-white border-4 border-black p-4 shadow-hard flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
+                  <div className="mb-3 p-3 bg-pink-300 border-2 border-black rounded-full shadow-hard-sm group-hover:shadow-none transition-shadow">
+                    <Clock className="h-6 w-6 text-black" />
                   </div>
-                  <h3 className="text-xl font-black uppercase text-black mb-2">24/7 Support</h3>
-                  <p className="text-sm font-mono font-bold text-gray-600">Expert support team available round the clock.</p>
+                  <h3 className="text-lg font-black uppercase text-black mb-1">24/7 Support</h3>
+                  <p className="text-xs font-mono font-bold text-gray-600 leading-tight">Expert support team available round the clock.</p>
                 </div>
               </div>
 
               {/* Guarantee Messaging - Ticker Style */}
-              <div className="bg-black text-white border-4 border-black py-4 px-2 overflow-hidden relative">
-                <div className="flex items-center justify-around font-mono font-bold uppercase tracking-widest text-sm md:text-base">
+              <div className="bg-black text-white border-4 border-black py-3 px-2 overflow-hidden relative">
+                <div className="flex items-center justify-around font-mono font-bold uppercase tracking-widest text-xs md:text-sm">
                   <span className="flex items-center gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-primary" /> Instant Delivery
+                    <CheckCircle2 className="h-4 w-4 text-primary" /> Instant Delivery
                   </span>
                   <span className="text-primary hidden sm:inline">★</span>
                   <span className="flex items-center gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-primary" /> Satisfaction Guaranteed
+                    <CheckCircle2 className="h-4 w-4 text-primary" /> Satisfaction Guaranteed
                   </span>
                   <span className="text-primary hidden sm:inline">★</span>
                   <span className="flex items-center gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-primary" /> No Hidden Fees
+                    <CheckCircle2 className="h-4 w-4 text-primary" /> No Hidden Fees
                   </span>
                 </div>
               </div>
 
               {/* Security Indicators - "System Status" Look */}
-              <div className="border-2 border-dashed border-gray-400 bg-gray-50 p-4 font-mono text-xs uppercase tracking-wide text-gray-500 flex flex-wrap justify-center gap-x-8 gap-y-2">
+              <div className="border-2 border-dashed border-gray-400 bg-gray-50 p-3 font-mono text-[10px] uppercase tracking-wide text-gray-500 flex flex-wrap justify-center gap-x-6 gap-y-2">
                  <span className="flex items-center gap-2">
                     [ <Shield className="h-3 w-3" /> PCI DSS COMPLIANT ]
                  </span>

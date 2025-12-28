@@ -13,6 +13,7 @@ import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { ErrorToastProvider } from "@/components/ui/error-toast-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { KeyboardNavigationProvider } from "@/components/KeyboardNavigationProvider";
+import { ClarityTracker } from "@/components/ClarityTracker";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { LiveChat } from "@/components/LiveChat";
@@ -55,6 +56,7 @@ export default function RootLayout({
                   
                   <main className="flex-1 w-full">
                      <ReferralTracker />
+                     <ClarityTracker />
                      <SignedIn>
                        <SignupTracker />
                      </SignedIn>

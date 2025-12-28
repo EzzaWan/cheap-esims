@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Zap } from "lucide-react";
+import { Zap, Twitter, Instagram, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -14,6 +14,35 @@ export function Footer() {
             <p className="text-sm text-gray-400 max-w-xs font-mono">
               We provide the cheapest possible data for travelers. No frills. No hidden fees. Just internet.
             </p>
+            <div className="flex gap-4 mt-4">
+              <a 
+                href="https://twitter.com/cheapesims" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label="Follow us on Twitter"
+                className="text-gray-400 hover:text-primary transition-colors"
+              >
+                <Twitter className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://instagram.com/cheapesims" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label="Follow us on Instagram"
+                className="text-gray-400 hover:text-primary transition-colors"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://linkedin.com/company/cheapesims" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label="Follow us on LinkedIn"
+                className="text-gray-400 hover:text-primary transition-colors"
+              >
+                <Linkedin className="h-5 w-5" />
+              </a>
+            </div>
           </div>
           
           <div>

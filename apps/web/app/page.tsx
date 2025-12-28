@@ -5,7 +5,7 @@ import Link from "next/link";
 import { SearchBar } from "@/components/SearchBar";
 import { CountryCard } from "@/components/CountryCard";
 import { CountrySkeleton } from "@/components/skeletons";
-import { ArrowRight, Zap, Globe, Map } from "lucide-react";
+import { ArrowRight, Zap, Globe, Map, Shield, Lock, Clock, CheckCircle2, Star, Quote } from "lucide-react";
 import { safeFetch } from "@/lib/safe-fetch";
 import { getRegionForCountry, REGION_NAMES, Region } from "@/lib/regions";
 import { Button } from "@/components/ui/button";
@@ -133,6 +133,68 @@ export default function Home() {
 
        <div className="flex-1 bg-white max-w-7xl mx-auto w-full p-4 md:p-8 space-y-12">
           
+          {/* Trust Badges & Guarantee Messaging */}
+          {!search && (
+            <div className="space-y-8">
+              {/* Trust Badges - Neo-Brutalist Redesign */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-white border-4 border-black p-6 shadow-hard flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
+                  <div className="mb-4 p-4 bg-yellow-300 border-2 border-black rounded-full shadow-hard-sm group-hover:shadow-none transition-shadow">
+                    <Lock className="h-8 w-8 text-black" />
+                  </div>
+                  <h3 className="text-xl font-black uppercase text-black mb-2">SSL Secured</h3>
+                  <p className="text-sm font-mono font-bold text-gray-600">256-bit military-grade encryption protection.</p>
+                </div>
+                
+                <div className="bg-white border-4 border-black p-6 shadow-hard flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
+                  <div className="mb-4 p-4 bg-cyan-300 border-2 border-black rounded-full shadow-hard-sm group-hover:shadow-none transition-shadow">
+                    <Shield className="h-8 w-8 text-black" />
+                  </div>
+                  <h3 className="text-xl font-black uppercase text-black mb-2">Money-Back</h3>
+                  <p className="text-sm font-mono font-bold text-gray-600">30-day satisfaction guarantee or full refund.</p>
+                </div>
+
+                <div className="bg-white border-4 border-black p-6 shadow-hard flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
+                  <div className="mb-4 p-4 bg-pink-300 border-2 border-black rounded-full shadow-hard-sm group-hover:shadow-none transition-shadow">
+                    <Clock className="h-8 w-8 text-black" />
+                  </div>
+                  <h3 className="text-xl font-black uppercase text-black mb-2">24/7 Support</h3>
+                  <p className="text-sm font-mono font-bold text-gray-600">Expert support team available round the clock.</p>
+                </div>
+              </div>
+
+              {/* Guarantee Messaging - Ticker Style */}
+              <div className="bg-black text-white border-4 border-black py-4 px-2 overflow-hidden relative">
+                <div className="flex items-center justify-around font-mono font-bold uppercase tracking-widest text-sm md:text-base">
+                  <span className="flex items-center gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-primary" /> Instant Delivery
+                  </span>
+                  <span className="text-primary hidden sm:inline">★</span>
+                  <span className="flex items-center gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-primary" /> Satisfaction Guaranteed
+                  </span>
+                  <span className="text-primary hidden sm:inline">★</span>
+                  <span className="flex items-center gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-primary" /> No Hidden Fees
+                  </span>
+                </div>
+              </div>
+
+              {/* Security Indicators - "System Status" Look */}
+              <div className="border-2 border-dashed border-gray-400 bg-gray-50 p-4 font-mono text-xs uppercase tracking-wide text-gray-500 flex flex-wrap justify-center gap-x-8 gap-y-2">
+                 <span className="flex items-center gap-2">
+                    [ <Shield className="h-3 w-3" /> PCI DSS COMPLIANT ]
+                 </span>
+                 <span className="flex items-center gap-2">
+                    [ <Lock className="h-3 w-3" /> DATA ENCRYPTED ]
+                 </span>
+                 <span className="flex items-center gap-2">
+                    [ <CheckCircle2 className="h-3 w-3" /> PAYMENTS SECURE ]
+                 </span>
+              </div>
+            </div>
+          )}
+
           {/* Region Tabs (Mobile/Desktop) */}
           {!search && (
             <div className="space-y-4">
@@ -196,6 +258,84 @@ export default function Home() {
                 {filteredRegions.map((region) => (
                   <CountryCard key={region.code} country={region} />
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Testimonials Section - Bottom of Page */}
+          {!search && (
+            <div className="space-y-6 pt-8">
+              <div className="text-center">
+                <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-black mb-2">Trusted by Travelers Worldwide</h2>
+                <p className="text-sm font-mono font-bold text-gray-600 uppercase">See what our customers are saying</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Testimonial 1 */}
+                <div className="bg-white border-2 border-black p-6 shadow-hard hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <Quote className="h-6 w-6 text-black mb-3 opacity-50" />
+                  <p className="text-gray-700 mb-4 italic font-mono font-bold">
+                    "Perfect for my European trip! Activated instantly and worked flawlessly in 8 countries. No more expensive roaming charges!"
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-primary border-2 border-black flex items-center justify-center">
+                      <span className="text-sm font-black text-black">SM</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-black uppercase text-black">Sarah M.</p>
+                      <p className="text-xs font-mono font-bold text-gray-600">Verified Customer</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Testimonial 2 */}
+                <div className="bg-white border-2 border-black p-6 shadow-hard hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <Quote className="h-6 w-6 text-black mb-3 opacity-50" />
+                  <p className="text-gray-700 mb-4 italic font-mono font-bold">
+                    "Best eSIM service I've used. The setup was so easy with the QR code, and customer support helped me when I had questions."
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-primary border-2 border-black flex items-center justify-center">
+                      <span className="text-sm font-black text-black">JK</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-black uppercase text-black">James K.</p>
+                      <p className="text-xs font-mono font-bold text-gray-600">Verified Customer</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Testimonial 3 */}
+                <div className="bg-white border-2 border-black p-6 shadow-hard hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <Quote className="h-6 w-6 text-black mb-3 opacity-50" />
+                  <p className="text-gray-700 mb-4 italic font-mono font-bold">
+                    "Affordable prices and great coverage. I bought a global plan and it worked perfectly across Asia. Highly recommend!"
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-primary border-2 border-black flex items-center justify-center">
+                      <span className="text-sm font-black text-black">ML</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-black uppercase text-black">Maria L.</p>
+                      <p className="text-xs font-mono font-bold text-gray-600">Verified Customer</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}

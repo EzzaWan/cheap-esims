@@ -26,14 +26,14 @@ export function PlanFlags({ plan, className = "", variant = 'colored' }: PlanFla
 
   const isNeutral = variant === 'neutral';
   
-  // Neutral styling for list pages (no color coding) - adapted to Neo-Brutalist theme
+  // Neutral styling for list pages (no color coding) - adapted to Professional Rounded theme
   const ipBadgeClass = isNeutral
-    ? "border-2 border-black bg-transparent text-gray-600"
-    : "border-2 border-purple-500 bg-purple-50 text-purple-900 hover:bg-purple-100";
+    ? "border border-gray-200 bg-gray-50 text-gray-600 rounded-full px-2 py-0.5 text-xs font-bold"
+    : "border border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100 rounded-full px-2 py-0.5 text-xs font-bold";
   
   const fupBadgeClass = isNeutral
-    ? "border-2 border-black bg-transparent text-gray-600 cursor-help flex items-center gap-1 pointer-events-auto"
-    : "border-2 border-yellow-500 bg-yellow-50 text-yellow-900 hover:bg-yellow-100 cursor-help flex items-center gap-1 pointer-events-auto";
+    ? "border border-gray-200 bg-gray-50 text-gray-600 cursor-help flex items-center gap-1 pointer-events-auto rounded-full px-2 py-0.5 text-xs font-bold"
+    : "border border-yellow-200 bg-yellow-50 text-yellow-700 hover:bg-yellow-100 cursor-help flex items-center gap-1 pointer-events-auto rounded-full px-2 py-0.5 text-xs font-bold";
 
   return (
     <TooltipProvider delayDuration={200} skipDelayDuration={0}>
@@ -64,10 +64,10 @@ export function PlanFlags({ plan, className = "", variant = 'colored' }: PlanFla
             </TooltipTrigger>
             <TooltipContent 
               side="top"
-              className="max-w-sm bg-white border-2 border-black text-black p-3 z-[100] rounded-none shadow-hard"
+              className="max-w-sm bg-white border border-gray-200 text-gray-700 p-3 z-[100] rounded-xl shadow-lg font-medium"
               sideOffset={8}
             >
-              <p className="text-sm leading-relaxed whitespace-normal font-mono font-bold">{flagInfo.fup.description}</p>
+              <p className="text-sm leading-relaxed whitespace-normal">{flagInfo.fup.description}</p>
             </TooltipContent>
           </Tooltip>
         )}
@@ -75,4 +75,6 @@ export function PlanFlags({ plan, className = "", variant = 'colored' }: PlanFla
     </TooltipProvider>
   );
 }
+
+
 

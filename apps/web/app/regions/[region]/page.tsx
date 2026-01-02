@@ -117,34 +117,34 @@ export default function RegionPage({ params }: { params: { region: string } }) {
     <div className="space-y-8 max-w-6xl mx-auto px-4 md:px-8 py-8">
       <div className="flex items-center justify-between">
         <Link href="/">
-          <Button variant="ghost" className="pl-0 hover:pl-2 hover:bg-transparent text-gray-500 hover:text-black transition-all font-mono uppercase text-sm font-bold">
+          <Button variant="ghost" className="pl-0 hover:pl-2 hover:bg-transparent text-gray-500 hover:text-black transition-all font-medium text-sm rounded-full">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
           </Button>
         </Link>
       </div>
 
       {/* Region Header */}
-      <div className="bg-white border-2 border-black p-8 shadow-hard relative overflow-hidden">
-        <div className="absolute top-0 right-0 bg-black text-white px-4 py-2 font-mono text-xs uppercase font-bold">
+      <div className="bg-white border border-gray-200 p-8 shadow-lg rounded-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 bg-black text-white px-4 py-2 text-xs font-bold rounded-bl-xl">
             {regionCode ? "REGION" : "REGION GUIDE"}
         </div>
         
         <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center">
           {regionInfo?.locationLogo ? (
-            <div className="h-24 w-24 bg-white border-2 border-black flex items-center justify-center shadow-hard-sm overflow-hidden">
+            <div className="h-24 w-24 bg-white border border-gray-200 flex items-center justify-center shadow-sm overflow-hidden rounded-xl">
               <img src={regionInfo.locationLogo} alt={regionName} className="h-full w-full object-cover" />
             </div>
           ) : (
-            <div className="h-24 w-24 bg-white border-2 border-black flex items-center justify-center shadow-hard-sm">
+            <div className="h-24 w-24 bg-white border border-gray-200 flex items-center justify-center shadow-sm rounded-xl">
               <Globe className="h-12 w-12 text-black" />
             </div>
           )}
           
           <div className="text-center md:text-left space-y-2">
-            <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-black">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-black">
               {regionCode || regionName}
             </h1>
-            <div className="flex items-center gap-2 text-gray-600 font-mono font-bold uppercase text-sm">
+            <div className="flex items-center gap-2 text-gray-600 font-medium uppercase text-sm justify-center md:justify-start">
               <MapPin className="h-4 w-4" />
               <span>POPULAR DESTINATION</span>
             </div>
@@ -152,7 +152,7 @@ export default function RegionPage({ params }: { params: { region: string } }) {
           
           {regionCode && (
             <Link href="/" className="ml-auto">
-              <Button className="bg-black text-white hover:bg-gray-800 border-2 border-black rounded-none font-bold uppercase">
+              <Button className="bg-black text-white hover:bg-gray-800 border border-black rounded-full font-bold uppercase px-6">
                 DESTINATION GUIDE
               </Button>
             </Link>
@@ -201,16 +201,16 @@ export default function RegionPage({ params }: { params: { region: string } }) {
             {/* GL-120 Card */}
             <Link
               href="/countries/global-120-esim"
-              className="group bg-white border-2 border-black p-6 hover:shadow-hard transition-all flex items-center justify-between relative overflow-hidden"
+              className="group bg-white border border-gray-200 p-6 rounded-2xl hover:shadow-lg transition-all flex items-center justify-between relative overflow-hidden"
             >
               <div className="absolute top-0 left-0 bg-primary w-1 h-full opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="flex items-center gap-4">
-                <div className="h-12 w-16 bg-black text-white flex items-center justify-center font-black text-xl border border-black">
+                <div className="h-12 w-16 bg-black text-white flex items-center justify-center font-bold text-xl rounded-lg">
                   GL
                 </div>
                 <div>
-                  <h3 className="text-xl font-black uppercase mb-1">Global (120+ areas)</h3>
-                  <p className="text-xs font-mono text-gray-500 uppercase">Best for multi-continent trips</p>
+                  <h3 className="text-xl font-bold mb-1">Global (120+ areas)</h3>
+                  <p className="text-xs text-gray-500 uppercase font-medium">Best for multi-continent trips</p>
                 </div>
               </div>
               <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
@@ -219,16 +219,16 @@ export default function RegionPage({ params }: { params: { region: string } }) {
             {/* GL-139 Card */}
             <Link
               href="/countries/global-139-esim"
-              className="group bg-white border-2 border-black p-6 hover:shadow-hard transition-all flex items-center justify-between relative overflow-hidden"
+              className="group bg-white border border-gray-200 p-6 rounded-2xl hover:shadow-lg transition-all flex items-center justify-between relative overflow-hidden"
             >
               <div className="absolute top-0 left-0 bg-primary w-1 h-full opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="flex items-center gap-4">
-                <div className="h-12 w-16 bg-black text-white flex items-center justify-center font-black text-xl border border-black">
+                <div className="h-12 w-16 bg-black text-white flex items-center justify-center font-bold text-xl rounded-lg">
                   GL+
                 </div>
                 <div>
-                  <h3 className="text-xl font-black uppercase mb-1">Global (130+ areas)</h3>
-                  <p className="text-xs font-mono text-gray-500 uppercase">Maximum Coverage</p>
+                  <h3 className="text-xl font-bold mb-1">Global (130+ areas)</h3>
+                  <p className="text-xs text-gray-500 uppercase font-medium">Maximum Coverage</p>
                 </div>
               </div>
               <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
@@ -238,20 +238,20 @@ export default function RegionPage({ params }: { params: { region: string } }) {
       ) : (
         /* Countries Grid for other regions */
         <div className="space-y-6">
-          <div className="flex items-center justify-between border-b-2 border-black pb-4">
-            <h2 className="text-2xl font-black uppercase">
-              Countries in {regionName} <span className="text-gray-400 ml-2 text-lg font-mono">({countries.length})</span>
+          <div className="flex items-center justify-between border-b border-gray-200 pb-4">
+            <h2 className="text-2xl font-bold">
+              Countries in {regionName} <span className="text-gray-400 ml-2 text-lg font-normal">({countries.length})</span>
             </h2>
           </div>
           
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="h-16 border-2 border-gray-200 animate-pulse bg-gray-50"></div>
+                <div key={i} className="h-16 border border-gray-200 animate-pulse bg-gray-50 rounded-xl"></div>
               ))}
             </div>
           ) : countries.length === 0 ? (
-            <div className="text-center py-20 border-2 border-dashed border-gray-300 font-mono text-gray-400">
+            <div className="text-center py-20 border-2 border-dashed border-gray-300 rounded-xl text-gray-400">
               No countries found for this region
             </div>
           ) : (

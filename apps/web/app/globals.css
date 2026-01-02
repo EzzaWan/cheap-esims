@@ -33,7 +33,7 @@
     --input: 0 0% 100%;
     --ring: 0 0% 0%; /* Black Focus Rings */
 
-    --radius: 0px; /* Brutalist - No rounded corners */
+    --radius: 0.75rem; /* Modern Rounded Corners */
 
     /* Legacy Voyage Mappings (remapped to new theme) */
     --voyage-bg: #FFFFFF;

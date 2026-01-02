@@ -33,16 +33,18 @@ export function Navbar() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 bg-foreground text-background border-b-2 border-primary">
+    <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-black/5 shadow-sm">
       <div className="w-full max-w-7xl mx-auto px-4 h-16 grid grid-cols-[auto_1fr_auto] items-center gap-4">
         {/* Logo Area */}
-        <Link href="/" className="flex flex-col leading-none group">
-          <span className="text-2xl font-black tracking-tighter text-primary group-hover:text-white transition-colors uppercase italic">
-            Cheap eSIMs
-          </span>
-          <span className="text-[10px] font-mono tracking-widest text-muted-foreground group-hover:text-primary transition-colors">
-            DISCOUNT DATA
-          </span>
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="bg-primary text-black font-bold p-1 rounded-md transform group-hover:-rotate-3 transition-transform">
+             CE
+          </div>
+          <div className="flex flex-col leading-none">
+            <span className="text-xl font-bold tracking-tight text-foreground group-hover:text-primary-dark transition-colors">
+              Cheap eSIMs
+            </span>
+          </div>
         </Link>
 
         {/* Search Bar - Centered */}
@@ -56,12 +58,12 @@ export function Navbar() {
 
           <div className="flex items-center gap-2">
             <SignedOut>
-              <Button variant="ghost" asChild size="sm" className="text-background hover:text-primary hover:bg-transparent">
-                <Link href="/sign-in" className="font-bold">Login</Link>
+              <Button variant="ghost" asChild size="sm" className="text-muted-foreground hover:text-foreground font-medium rounded-full">
+                <Link href="/sign-in">Log in</Link>
               </Button>
-              <Button size="sm" asChild className="bg-primary text-black font-bold hover:bg-white hover:text-black border-none rounded-none">
+              <Button size="sm" asChild className="bg-black text-white hover:bg-primary hover:text-black font-bold rounded-full transition-colors">
                 <Link href="/sign-up">
-                  JOIN FREE
+                  Sign Up
                 </Link>
               </Button>
             </SignedOut>

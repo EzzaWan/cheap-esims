@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Check, Wifi, Globe, AlertTriangle, X, ExternalLink, Wallet, CreditCard, ChevronRight, Smartphone } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { Check, Wifi, Globe, AlertTriangle, X, ExternalLink, Wallet, CreditCard, ChevronRight, Smartphone, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FlagIcon } from "./FlagIcon";
 import { useCurrency } from "./providers/CurrencyProvider";
@@ -37,16 +37,22 @@ export function PlanDetails({ plan }: { plan: any }) {
   const [loadingSpareChange, setLoadingSpareChange] = useState(false);
   const [processing, setProcessing] = useState(false);
   
-  const planGB = calculateGB(plan.volume || 0);
-  const discountPercent = getDiscount(plan.packageCode, planGB);
+  const planGB = useMemo(() => calculateGB(plan.volume || 0), [plan.volume]);
+  
+  // Memoize discount calculation - getDiscount is safe to call during render as it only reads from cache
+  const discountPercent = useMemo(() => {
+    return getDiscount(plan.packageCode, planGB);
+  }, [plan.packageCode, planGB]);
+  
   const basePriceUSD = plan.price || 0;
-  const finalPriceUSD = calculateFinalPrice(basePriceUSD, discountPercent);
+  const finalPriceUSD = useMemo(() => calculateFinalPrice(basePriceUSD, discountPercent), [basePriceUSD, discountPercent]);
+  // Calculate converted price directly - convert function from hook should be stable
   const convertedPrice = convert(finalPriceUSD);
-  const priceUSDCents = Math.round(finalPriceUSD * 100);
+  const priceUSDCents = useMemo(() => Math.round(finalPriceUSD * 100), [finalPriceUSD]);
 
   // Extract flags and get cleaned name
-  const flagInfo = getPlanFlagLabels(plan);
-  const displayName = flagInfo.cleanedName || plan.name;
+  const flagInfo = useMemo(() => getPlanFlagLabels(plan), [plan]);
+  const displayName = useMemo(() => flagInfo.cleanedName || plan.name, [flagInfo.cleanedName, plan.name]);
 
   useEffect(() => {
     fetchDiscounts().catch(console.error);
@@ -164,15 +170,15 @@ export function PlanDetails({ plan }: { plan: any }) {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-3 max-w-7xl mx-auto items-start">
+    <div className="grid gap-8 lg:grid-cols-3 max-w-7xl mx-auto items-start py-8 px-4">
       {/* Left: Spec Sheet */}
       <div className="lg:col-span-2 space-y-8">
-        <div className="bg-white border-2 border-black p-8 shadow-hard relative">
-            <div className="absolute top-0 right-0 bg-black text-white px-4 py-2 font-mono font-bold uppercase text-sm">
+        <div className="bg-white border border-gray-200 p-8 shadow-lg rounded-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-black text-white px-4 py-2 font-bold uppercase text-xs rounded-bl-xl">
                 Spec Sheet
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-black">
                 {displayName}
             </h1>
             
@@ -181,69 +187,71 @@ export function PlanDetails({ plan }: { plan: any }) {
               <PlanFlags plan={plan} />
             </div>
             
-            <div className="flex flex-wrap gap-4 mb-8">
-                <span className="bg-primary text-black px-3 py-1 font-bold border border-black text-sm uppercase">
+            <div className="flex flex-wrap gap-3 mb-8">
+                <span className="bg-gray-100 text-gray-700 px-4 py-1.5 font-bold text-sm rounded-full">
                     Data Only
                 </span>
-                <span className="bg-secondary text-black px-3 py-1 font-bold border border-black text-sm uppercase">
+                <span className="bg-gray-100 text-gray-700 px-4 py-1.5 font-bold text-sm rounded-full">
                     eSIM
                 </span>
                 {plan.supportTopUpType === 2 && (
-                    <span className="bg-green-100 text-green-900 px-3 py-1 font-bold border border-green-600 text-sm uppercase">
+                    <span className="bg-green-100 text-green-700 px-4 py-1.5 font-bold text-sm rounded-full border border-green-200">
                         Top-Up Available
                     </span>
                 )}
                 {plan.supportTopUpType === 1 && (
-                    <span className="bg-gray-100 text-gray-600 px-3 py-1 font-bold border border-gray-400 text-sm uppercase">
+                    <span className="bg-gray-100 text-gray-500 px-4 py-1.5 font-bold text-sm rounded-full">
                         Non-Reloadable
                     </span>
                 )}
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <div className="border-2 border-black p-4 text-center">
-                    <div className="text-xs font-mono text-gray-500 uppercase mb-1">Total Data</div>
-                    <div className="text-3xl font-black">{sizeValue} {sizeUnit}</div>
+                <div className="border border-gray-200 p-4 text-center rounded-xl bg-gray-50">
+                    <div className="text-xs font-bold text-gray-500 uppercase mb-1">Total Data</div>
+                    <div className="text-3xl font-bold text-black">{sizeValue} {sizeUnit}</div>
                 </div>
-                <div className="border-2 border-black p-4 text-center">
-                    <div className="text-xs font-mono text-gray-500 uppercase mb-1">Duration</div>
-                    <div className="text-3xl font-black">{plan.duration} Days</div>
+                <div className="border border-gray-200 p-4 text-center rounded-xl bg-gray-50">
+                    <div className="text-xs font-bold text-gray-500 uppercase mb-1">Duration</div>
+                    <div className="text-3xl font-bold text-black">{plan.duration} Days</div>
                 </div>
-                <div className="border-2 border-black p-4 text-center">
-                    <div className="text-xs font-mono text-gray-500 uppercase mb-1">Speed</div>
-                    <div className="text-2xl font-bold">{plan.speed}</div>
+                <div className="border border-gray-200 p-4 text-center rounded-xl bg-gray-50">
+                    <div className="text-xs font-bold text-gray-500 uppercase mb-1">Speed</div>
+                    <div className="text-2xl font-bold text-black">{plan.speed}</div>
                 </div>
-                <div className="border-2 border-black p-4 text-center">
-                    <div className="text-xs font-mono text-gray-500 uppercase mb-1">Activation</div>
-                    <div className="text-xl font-bold">Auto</div>
+                <div className="border border-gray-200 p-4 text-center rounded-xl bg-gray-50">
+                    <div className="text-xs font-bold text-gray-500 uppercase mb-1">Activation</div>
+                    <div className="text-xl font-bold text-black">Auto</div>
                 </div>
             </div>
 
-            <div className="border-t-2 border-black pt-8">
-                <h3 className="font-black uppercase text-xl mb-4 flex items-center gap-2">
+            <div className="border-t border-gray-100 pt-8">
+                <h3 className="font-bold uppercase text-lg mb-4 flex items-center gap-2 text-gray-900">
                     <Globe className="h-5 w-5" /> Coverage Region
                 </h3>
                 
                 {plan.location && plan.location.includes(',') ? (
                     <div>
-                        <p className="mb-4 font-mono text-sm">
-                            This plan covers {plan.location.split(',').length} countries.
+                        <p className="mb-4 text-sm text-gray-600 leading-relaxed">
+                            This plan provides high-speed data coverage in {plan.location.split(',').length} countries. Perfect for regional travel.
                         </p>
                         <Dialog>
                             <DialogTrigger asChild>
-                                <Button variant="outline" className="border-2 border-black rounded-none hover:bg-black hover:text-white font-bold uppercase">
+                                <Button variant="outline" className="border border-gray-300 rounded-full hover:bg-black hover:text-white font-bold uppercase px-6">
                                     View Country List
                                 </Button>
                             </DialogTrigger>
-                            <DialogContent className="border-2 border-black rounded-none">
+                            <DialogContent className="border border-gray-200 rounded-xl max-w-2xl">
                                 <DialogHeader>
-                                    <DialogTitle className="uppercase font-black">Coverage List</DialogTitle>
+                                    <DialogTitle className="uppercase font-bold">Coverage List</DialogTitle>
                                 </DialogHeader>
-                                <div className="grid grid-cols-2 gap-2 mt-4 max-h-[60vh] overflow-y-auto">
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4 max-h-[60vh] overflow-y-auto pr-2">
                                     {plan.location.split(',').map((code: string) => (
-                                        <div key={code} className="flex items-center gap-2 border border-gray-200 p-2">
-                                            <FlagIcon logoUrl={`https://flagcdn.com/w320/${code.trim().toLowerCase().split('-')[0]}.png`} alt={code} className="h-4 w-6 object-cover border border-black" />
-                                            <span className="font-mono text-xs uppercase">{getCountryName(code.trim())}</span>
+                                        <div key={code} className="flex items-center gap-3 border border-gray-100 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <div className="w-8 h-5 rounded overflow-hidden border border-gray-200 flex-shrink-0">
+                                                 <FlagIcon logoUrl={`https://flagcdn.com/w320/${code.trim().toLowerCase().split('-')[0]}.png`} alt={code} className="h-full w-full object-cover" />
+                                            </div>
+                                            <span className="font-bold text-xs uppercase text-gray-700">{getCountryName(code.trim())}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -251,15 +259,17 @@ export function PlanDetails({ plan }: { plan: any }) {
                         </Dialog>
                     </div>
                 ) : (
-                    <div className="flex items-center gap-3 bg-secondary p-4 border border-black w-fit">
-                        <FlagIcon logoUrl={`https://flagcdn.com/w320/${plan.location.toLowerCase().split('-')[0]}.png`} alt={plan.location} className="h-6 w-9 object-cover border border-black" />
-                        <span className="font-bold text-lg uppercase">{getCountryName(plan.location)}</span>
+                    <div className="flex items-center gap-4 bg-gray-50 p-4 border border-gray-200 w-fit rounded-xl">
+                        <div className="w-12 h-8 rounded-md overflow-hidden border border-gray-200 shadow-sm">
+                            <FlagIcon logoUrl={`https://flagcdn.com/w320/${plan.location.toLowerCase().split('-')[0]}.png`} alt={plan.location} className="h-full w-full object-cover" />
+                        </div>
+                        <span className="font-bold text-lg uppercase text-black">{getCountryName(plan.location)}</span>
                     </div>
                 )}
             </div>
             
-             <div className="mt-8 pt-4 border-t-2 border-black flex items-center justify-between">
-                <Link href="/device-check" className="flex items-center gap-2 text-sm font-bold hover:underline">
+             <div className="mt-8 pt-6 border-t border-gray-100 flex items-center justify-between">
+                <Link href="/device-check" className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-primary-dark hover:underline">
                     <Smartphone className="h-4 w-4" /> Check Device Compatibility
                 </Link>
             </div>
@@ -268,41 +278,41 @@ export function PlanDetails({ plan }: { plan: any }) {
 
       {/* Right: Receipt / Checkout */}
       <div className="lg:col-span-1 sticky top-24">
-         <div className="bg-white border-2 border-black p-6 shadow-hard-lg">
-             <div className="text-center border-b-2 border-dashed border-black pb-4 mb-4">
-                 <h2 className="font-mono font-bold uppercase tracking-widest text-gray-500">Order Summary</h2>
+         <div className="bg-white border border-gray-200 p-6 shadow-xl rounded-2xl">
+             <div className="text-center border-b border-dashed border-gray-200 pb-4 mb-4">
+                 <h2 className="font-bold uppercase tracking-widest text-gray-400 text-xs">Order Summary</h2>
              </div>
              
-             <div className="space-y-4 mb-6 font-mono text-sm">
+             <div className="space-y-4 mb-6 text-sm">
                  <div className="flex justify-between">
-                     <span>Item:</span>
-                     <span className="font-bold">{displayName}</span>
+                     <span className="text-gray-500">Item:</span>
+                     <span className="font-bold text-gray-900">{displayName}</span>
                  </div>
                  <div className="flex justify-between">
-                     <span>Data:</span>
-                     <span>{sizeValue} {sizeUnit}</span>
+                     <span className="text-gray-500">Data:</span>
+                     <span className="font-bold text-gray-900">{sizeValue} {sizeUnit}</span>
                  </div>
                  <div className="flex justify-between">
-                     <span>Validity:</span>
-                     <span>{plan.duration} Days</span>
+                     <span className="text-gray-500">Validity:</span>
+                     <span className="font-bold text-gray-900">{plan.duration} Days</span>
                  </div>
              </div>
 
-             <div className="border-t-2 border-black pt-4 mb-6">
+             <div className="border-t border-gray-200 pt-4 mb-6">
                  {discountPercent > 0 && (
-                     <div className="flex justify-between text-gray-500 text-sm mb-1 line-through">
+                     <div className="flex justify-between text-gray-400 text-sm mb-1 line-through">
                          <span>Original Price:</span>
                          <span>{formatCurrency(convert(basePriceUSD))}</span>
                      </div>
                  )}
                  <div className="flex justify-between items-end">
-                     <span className="font-black uppercase text-xl">Total:</span>
+                     <span className="font-bold uppercase text-lg text-gray-900">Total:</span>
                      <div className="text-right">
-                         <span className="block text-4xl font-black tracking-tighter text-primary bg-black px-2">
+                         <span className="block text-4xl font-bold tracking-tight text-black">
                              {formatCurrency(convertedPrice)}
                          </span>
                          {discountPercent > 0 && (
-                             <span className="text-xs font-bold text-red-600 uppercase mt-1 block">
+                             <span className="inline-block bg-green-100 text-green-700 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full mt-1">
                                  {discountPercent}% Savings Applied
                              </span>
                          )}
@@ -311,23 +321,23 @@ export function PlanDetails({ plan }: { plan: any }) {
              </div>
 
              {userLoaded && user && (
-                 <div className="bg-secondary p-4 border border-black mb-6">
+                 <div className="bg-gray-50 p-4 border border-gray-200 mb-6 rounded-xl">
                      <div className="flex justify-between items-center mb-2">
-                         <span className="font-bold text-sm">Spare Change Balance:</span>
-                         <span className="font-mono">${spareChangeBalance !== null ? (spareChangeBalance / 100).toFixed(2) : '...'}</span>
+                         <span className="font-bold text-xs text-gray-600 uppercase">Spare Change:</span>
+                         <span className="font-bold text-gray-900">${spareChangeBalance !== null ? (spareChangeBalance / 100).toFixed(2) : '...'}</span>
                      </div>
                      
-                     <div className="grid grid-cols-2 gap-2 mt-4">
+                     <div className="grid grid-cols-2 gap-2 mt-3">
                         <button
                             onClick={() => setPaymentMethod('spare-change')}
                             disabled={!spareChangeBalance || spareChangeBalance < priceUSDCents}
-                            className={`p-2 border-2 text-center text-xs font-bold uppercase ${paymentMethod === 'spare-change' ? 'border-primary bg-black text-primary' : 'border-gray-300 text-gray-400'}`}
+                            className={`p-2 border text-center text-xs font-bold uppercase rounded-lg transition-all ${paymentMethod === 'spare-change' ? 'border-primary bg-primary/10 text-primary-dark ring-1 ring-primary' : 'border-gray-200 text-gray-400 hover:border-gray-300'}`}
                         >
-                            Pay w/ Spare Change
+                            Pay w/ Balance
                         </button>
                         <button
                             onClick={() => setPaymentMethod('stripe')}
-                            className={`p-2 border-2 text-center text-xs font-bold uppercase ${paymentMethod === 'stripe' ? 'border-black bg-black text-white' : 'border-gray-300'}`}
+                            className={`p-2 border text-center text-xs font-bold uppercase rounded-lg transition-all ${paymentMethod === 'stripe' ? 'border-black bg-black text-white' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}
                         >
                             Pay w/ Card
                         </button>
@@ -338,14 +348,14 @@ export function PlanDetails({ plan }: { plan: any }) {
              <Button 
                 onClick={buyNow}
                 disabled={processing}
-                className="w-full h-14 bg-primary hover:bg-primary-dark text-black text-xl font-black uppercase tracking-tight border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                className="w-full h-14 bg-primary hover:bg-primary-dark text-black text-lg font-bold uppercase tracking-tight rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
              >
                 {processing ? 'Processing...' : 'Complete Order'}
              </Button>
 
              <div className="mt-4 text-center">
-                 <span className="text-[10px] text-gray-500 uppercase font-mono">
-                     Secure Checkout • Instant Delivery
+                 <span className="text-[10px] text-gray-400 uppercase font-bold flex items-center justify-center gap-2">
+                     <Shield className="h-3 w-3" /> Secure Checkout • Instant Delivery
                  </span>
              </div>
          </div>
@@ -354,19 +364,19 @@ export function PlanDetails({ plan }: { plan: any }) {
       {/* Device Warning */}
       {showDeviceWarning && deviceCompatibility && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-white border-4 border-accent p-6 max-w-md w-full shadow-hard-lg">
-            <div className="flex items-center gap-4 mb-4 text-accent">
-                <AlertTriangle className="h-8 w-8 fill-black" />
-                <h2 className="text-2xl font-black uppercase text-black">Warning</h2>
+          <div className="bg-white border border-gray-200 p-8 max-w-md w-full shadow-2xl rounded-2xl text-center">
+            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <AlertTriangle className="h-8 w-8 text-yellow-600" />
             </div>
-            <p className="font-bold mb-4">
-                Your <span className="underline decoration-4 decoration-accent">{deviceCompatibility.brand} {deviceCompatibility.model}</span> might not work with eSIMs.
+            <h2 className="text-2xl font-bold text-black mb-2">Compatibility Warning</h2>
+            <p className="font-medium text-gray-600 mb-6 leading-relaxed">
+                Your <span className="font-bold text-black">{deviceCompatibility.brand} {deviceCompatibility.model}</span> might not support eSIM technology. Proceeding may result in a non-functional plan.
             </p>
-            <div className="flex gap-4 mt-8">
-                <Button onClick={() => setShowDeviceWarning(false)} variant="outline" className="flex-1 border-2 border-black rounded-none font-bold">Cancel</Button>
+            <div className="flex gap-4">
+                <Button onClick={() => setShowDeviceWarning(false)} variant="outline" className="flex-1 border-gray-300 rounded-full font-bold">Cancel</Button>
                 <Button 
                     onClick={() => { setShowDeviceWarning(false); setProceedWithCheckout(true); buyNow(); }} 
-                    className="flex-1 bg-black text-white hover:bg-gray-800 rounded-none font-bold"
+                    className="flex-1 bg-black text-white hover:bg-gray-800 rounded-full font-bold"
                 >
                     I Understand
                 </Button>

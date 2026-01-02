@@ -55,23 +55,24 @@ export default function AccountPage() {
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Account' }]} />
       
       <div>
-        <h1 className="text-3xl font-black uppercase text-black mb-2">ACCOUNT</h1>
-        <p className="text-sm font-mono font-bold text-gray-600 uppercase">Manage your account settings</p>
+        <h1 className="text-3xl font-bold tracking-tight text-black mb-2">Account</h1>
+        <p className="text-sm font-medium text-gray-500">Manage your account settings</p>
       </div>
 
       {/* Continue Shopping Link */}
       <Link href="/" className="block group">
-        <div className="bg-black text-white p-4 shadow-hard hover:bg-primary hover:text-black hover:shadow-hard-lg transition-all border-2 border-black flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="bg-white/10 group-hover:bg-black/10 p-2 rounded-none">
+        <div className="bg-black text-white p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-between overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl group-hover:bg-white/10 transition-colors"></div>
+          <div className="flex items-center gap-4 relative z-10">
+            <div className="bg-white/10 group-hover:bg-white/20 p-3 rounded-xl transition-colors">
               <ShoppingBag className="h-6 w-6" />
             </div>
             <div>
-              <h3 className="font-black uppercase tracking-tighter text-lg">Continue Shopping</h3>
-              <p className="text-xs font-mono opacity-80 group-hover:opacity-100 uppercase">Browse more destinations</p>
+              <h3 className="font-bold text-lg">Continue Shopping</h3>
+              <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">Browse more destinations</p>
             </div>
           </div>
-          <ArrowRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" />
+          <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform relative z-10" />
         </div>
       </Link>
 
@@ -79,34 +80,34 @@ export default function AccountPage() {
       <RecentlyViewed />
 
       {/* Spare Change Balance Card */}
-      <div className="bg-white border-2 border-black p-8 shadow-hard relative overflow-hidden group hover:shadow-hard-lg transition-all">
-        <div className="absolute top-0 right-0 bg-black text-white px-4 py-1 font-mono text-xs uppercase font-bold">
+      <div className="bg-white border border-gray-200 p-8 shadow-sm rounded-2xl relative overflow-hidden group hover:shadow-md transition-all">
+        <div className="absolute top-0 right-0 bg-black text-white px-4 py-1.5 text-xs font-bold uppercase rounded-bl-xl">
             Wallet
         </div>
         <div className="flex flex-col md:flex-row gap-8 items-start md:items-center justify-between">
             <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                    <div className="p-3 border-2 border-black bg-secondary">
+                    <div className="p-3 bg-gray-100 rounded-xl">
                         <Wallet className="h-6 w-6 text-black" />
                     </div>
-                    <h2 className="text-2xl font-black uppercase">Spare Change Balance</h2>
+                    <h2 className="text-2xl font-bold text-black">Spare Change Balance</h2>
                 </div>
                 <div>
                     {loadingSpareChange ? (
-                        <div className="h-12 w-48 bg-gray-100 animate-pulse border border-gray-200"></div>
+                        <div className="h-12 w-48 bg-gray-100 animate-pulse rounded-lg"></div>
                     ) : (
-                        <p className="text-5xl font-black tracking-tighter text-primary drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] text-stroke-1">
+                        <p className="text-5xl font-bold tracking-tight text-black">
                             {spareChangeBalance ? formatCurrency(spareChangeBalance.balanceCents) : "$0.00"}
                         </p>
                     )}
-                    <p className="text-sm font-mono text-gray-500 mt-2 max-w-md">
+                    <p className="text-sm font-medium text-gray-500 mt-2 max-w-md">
                         Store credit for future purchases. Non-expiring.
                     </p>
                 </div>
             </div>
-            <Link href="/account/spare-change" className="inline-block">
-                <Button variant="outline" className="border-[var(--voyage-border)] w-full sm:w-auto">
-                    View V-Cash Details
+            <Link href="/account/spare-change" className="inline-block w-full md:w-auto">
+                <Button variant="outline" className="border-gray-300 rounded-full font-bold w-full md:w-auto hover:bg-black hover:text-white transition-all px-6">
+                    View Spare Change Details
                     <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
             </Link>
@@ -115,22 +116,22 @@ export default function AccountPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Affiliate Program Card */}
-        <div className="bg-white border-2 border-black p-8 shadow-hard hover:shadow-hard-lg transition-all flex flex-col justify-between">
+        <div className="bg-white border border-gray-200 p-8 shadow-sm rounded-2xl hover:shadow-md transition-all flex flex-col justify-between">
             <div className="space-y-6">
                 <div className="flex items-center gap-3">
-                    <div className="p-3 border-2 border-black bg-primary">
-                        <DollarSign className="h-6 w-6 text-white" />
+                    <div className="p-3 bg-primary/10 rounded-xl">
+                        <DollarSign className="h-6 w-6 text-primary-dark" />
                     </div>
-                    <h2 className="text-2xl font-black uppercase text-black">AFFILIATE PROGRAM</h2>
+                    <h2 className="text-2xl font-bold text-black">Affiliate Program</h2>
                 </div>
-                <p className="font-mono text-sm text-gray-600">
-                    Earn <span className="font-black text-black bg-primary px-1">10% COMMISSION</span> on all referrals. Share your link and start earning real cash today.
+                <p className="font-medium text-sm text-gray-600 leading-relaxed">
+                    Earn <span className="font-bold text-primary-dark bg-primary/10 px-1.5 py-0.5 rounded">10% COMMISSION</span> on all referrals. Share your link and start earning real cash today.
                 </p>
             </div>
             <div className="mt-8">
                 <Link href="/account/affiliate" className="inline-block w-full">
-                    <Button className="bg-black text-white hover:bg-gray-800 border-2 border-black rounded-none font-bold uppercase w-full">
-                        AFFILIATE DASHBOARD
+                    <Button className="bg-black text-white hover:bg-gray-800 rounded-full font-bold w-full h-12 shadow-md hover:shadow-lg transition-all">
+                        Affiliate Dashboard
                         <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>
                 </Link>
@@ -138,27 +139,27 @@ export default function AccountPage() {
         </div>
 
         {/* Support Tickets Card */}
-        <div className="bg-white border-2 border-black p-8 shadow-hard hover:shadow-hard-lg transition-all flex flex-col justify-between">
+        <div className="bg-white border border-gray-200 p-8 shadow-sm rounded-2xl hover:shadow-md transition-all flex flex-col justify-between">
             <div className="space-y-6">
                 <div className="flex items-center gap-3">
-                    <div className="p-3 border-2 border-black bg-white">
+                    <div className="p-3 bg-gray-100 rounded-xl">
                         <MessageSquare className="h-6 w-6 text-black" />
                     </div>
-                    <h2 className="text-2xl font-black uppercase text-black">SUPPORT TICKETS</h2>
+                    <h2 className="text-2xl font-bold text-black">Support Tickets</h2>
                 </div>
-                <p className="font-mono text-sm text-gray-600">
+                <p className="font-medium text-sm text-gray-600 leading-relaxed">
                     Need help? Track your existing requests or submit a new inquiry to our support team.
                 </p>
             </div>
             <div className="mt-8 flex gap-3">
                 <Link href="/account/support" className="flex-1">
-                    <Button variant="outline" className="border-2 border-black bg-white text-black hover:bg-gray-100 rounded-none font-bold uppercase w-full">
-                        MY TICKETS
+                    <Button variant="outline" className="border-gray-300 bg-white text-black hover:bg-gray-50 rounded-full font-bold w-full h-12">
+                        My Tickets
                     </Button>
                 </Link>
                 <Link href="/support/contact" className="flex-1">
-                    <Button className="bg-black text-white hover:bg-gray-800 border-2 border-black rounded-none font-bold uppercase w-full">
-                        NEW TICKET
+                    <Button className="bg-black text-white hover:bg-gray-800 rounded-full font-bold w-full h-12 shadow-md hover:shadow-lg transition-all">
+                        New Ticket
                     </Button>
                 </Link>
             </div>

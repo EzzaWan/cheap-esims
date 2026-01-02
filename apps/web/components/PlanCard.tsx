@@ -44,102 +44,70 @@ export function PlanCard({ plan }: PlanCardProps) {
 
   return (
     <Link href={`/plans/${plan.packageCode}`} className="block h-full group">
-      <div className="h-full flex flex-col bg-white border-2 border-black shadow-hard hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all relative">
+      <div className="h-full flex flex-col bg-white border-2 border-black rounded-xl overflow-hidden shadow-hard hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all relative">
         
-        {/* Discount Badge - Top Right */}
-        {hasDiscount && (
-           <div className="absolute -top-3 -right-3 bg-accent text-black border-2 border-black px-2 py-1 font-black text-xs transform rotate-3 shadow-sm z-10 animate-pulse">
-              SAVE {discountPercent}%
-           </div>
-        )}
-
-        {/* Top Section: Data Amount */}
-        <div className="bg-secondary border-b-2 border-black p-4 text-center relative overflow-hidden">
+        {/* Top Section: Data Amount & Validity */}
+        <div className="bg-white p-6 text-center relative">
+           {/* Hot Deal Badge */}
            {hasDiscount && (
-             <div className="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 transform -rotate-2">
+             <div className="absolute top-4 left-0 bg-red-600 text-white text-[10px] font-black px-2 py-1 uppercase transform -rotate-2 shadow-sm z-10">
                HOT DEAL
              </div>
            )}
-           <h3 className="text-4xl font-black tracking-tighter">
-              {isUnlimited ? "UL" : sizeValue}<span className="text-xl">{sizeUnit}</span>
+
+           {/* Save Percentage Badge */}
+           {hasDiscount && (
+             <div className="absolute -top-1 -right-1 bg-yellow-400 text-black border-2 border-black px-2 py-1 font-black text-xs transform rotate-3 z-10">
+               SAVE {discountPercent}%
+             </div>
+           )}
+
+           <h3 className="text-5xl font-black tracking-tighter text-black mb-1">
+              {isUnlimited ? "UL" : sizeValue}<span className="text-2xl ml-1">{sizeUnit}</span>
            </h3>
-           <span className="text-xs font-mono uppercase text-gray-500 block mt-1">
-              {plan.duration} {plan.durationUnit}s Validity
+           <span className="text-xs font-bold uppercase text-gray-400 tracking-widest">
+              {plan.duration} Days Validity
            </span>
         </div>
 
-        {/* Middle Section: Details */}
-        <div className="p-4 flex-grow flex flex-col justify-center text-center space-y-2">
-           <p className="text-xs font-bold uppercase truncate px-2 bg-gray-100 py-1">
+        {/* Middle Section: Plan Name */}
+        <div className="bg-gray-100 py-3 px-4 border-y-2 border-black/5 flex items-center justify-center">
+           <p className="text-sm font-black uppercase truncate tracking-tight text-black">
               {displayName}
            </p>
-           
-           {/* Plan Flags (IP type, FUP, etc.) - neutral variant for list page */}
-           <PlanFlags plan={plan} variant="neutral" />
-           {/* Flags mini-list if multi-region */}
-           {plan.locationNetworkList && plan.locationNetworkList.length > 1 && (
-             <div className="flex -space-x-2 overflow-hidden py-1">
-               {plan.locationNetworkList.slice(0, 5).map((net, i) => {
-                 const locationCode = net.locationCode?.trim().toLowerCase().split('-')[0] || '';
-                 return (
-                   <div key={i} className="relative h-6 w-6 rounded-full border-2 border-[var(--voyage-card)] bg-[var(--voyage-bg)] overflow-hidden flex-shrink-0 shadow-sm">
-                     <FlagIcon 
-                       logoUrl={`https://flagcdn.com/w320/${locationCode}.png`}
-                       alt={net.locationCode || ''}
-                       className="h-full w-full object-cover"
-                     />
-                   </div>
-                 );
-               })}
-               {plan.locationNetworkList.length > 5 && (
-                 <div className="relative h-6 w-6 rounded-full border-2 border-[var(--voyage-card)] bg-[var(--voyage-bg-light)] flex items-center justify-center text-[8px] font-semibold text-[var(--voyage-muted)] flex-shrink-0">
-                   +{plan.locationNetworkList.length - 5}
-                 </div>
-               )}
-             </div>
-           )}
         </div>
 
         {/* Bottom Section: Price & Action */}
-        <div className="p-4 bg-black text-white group-hover:bg-primary group-hover:text-black transition-colors flex items-center justify-between relative overflow-hidden">
-           {/* Background Pattern for Deal */}
-           {hasDiscount && (
-             <div className="absolute inset-0 bg-red-600 opacity-0 group-hover:opacity-10 transition-opacity" />
-           )}
-           
-           <div className="flex flex-col leading-none relative z-10 w-full">
+        <div className={`p-4 ${hasDiscount ? 'bg-primary' : 'bg-black'} transition-colors flex items-center justify-between mt-auto`}>
+           <div className="flex flex-col leading-none">
               {hasDiscount ? (
-                <div className="flex flex-col items-start w-full">
-                  <div className="flex items-center gap-2 mb-1 w-full justify-between">
-                    <div className="flex items-center gap-2">
-                        <span className="text-[10px] line-through opacity-60">
-                        {formatCurrency(convert(basePriceUSD))}
-                        </span>
-                        <span className="bg-accent text-black text-[9px] font-black px-1.5 rounded-sm uppercase tracking-tighter animate-bounce">
-                        SALE
-                        </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between w-full">
-                    <span className="text-xl font-bold text-white group-hover:text-black">
-                        {formatCurrency(convertedPrice)}
+                <>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className={`text-[10px] line-through font-bold ${hasDiscount ? 'text-black/60' : 'text-gray-500'}`}>
+                      {formatCurrency(convert(basePriceUSD))}
                     </span>
-                    <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black uppercase bg-white text-black px-1 border border-black transform rotate-2 group-hover:rotate-0 transition-transform">
-                            -{discountPercent}%
-                        </span>
-                        <ArrowRight className="h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
-                    </div>
+                    <span className="bg-black text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wider">
+                      SALE
+                    </span>
                   </div>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between w-full">
-                    <span className="text-xl font-bold">
+                  <span className={`text-2xl font-black ${hasDiscount ? 'text-black' : 'text-white'}`}>
                     {formatCurrency(convertedPrice)}
-                    </span>
-                    <ArrowRight className="h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
-                </div>
+                  </span>
+                </>
+              ) : (
+                 <span className="text-2xl font-black text-white">
+                    {formatCurrency(convertedPrice)}
+                 </span>
               )}
+           </div>
+
+           <div className="flex items-center gap-3">
+              {hasDiscount && (
+                <span className="bg-white border border-black text-black text-[10px] font-black px-1.5 py-0.5 transform -rotate-2">
+                    -{discountPercent}%
+                </span>
+              )}
+              <ArrowRight className={`h-6 w-6 ${hasDiscount ? 'text-black' : 'text-white'} transform group-hover:translate-x-1 transition-transform`} />
            </div>
         </div>
       </div>

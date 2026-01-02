@@ -2,7 +2,7 @@ import { SignIn } from "@clerk/nextjs";
 
 export default function SignInPage() {
   return (
-    <div className="flex items-center justify-center min-h-[80vh] bg-primary/10 px-4 py-10">
+    <div className="flex items-center justify-center min-h-[80vh] bg-gray-50 px-4 py-10">
       <div className="w-full max-w-md">
         <SignIn
           appearance={{
@@ -12,41 +12,41 @@ export default function SignInPage() {
               colorInputBackground: "#ffffff",
               colorInputText: "#111827",
               colorText: "#000000",
-              colorTextSecondary: "#4b5563",
-              borderRadius: "0.5rem",
+              colorTextSecondary: "#6b7280",
+              borderRadius: "1rem",
               fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
             },
             elements: {
               rootBox: "w-full",
-              card: "bg-white border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] px-6 py-8",
+              card: "bg-white border border-gray-200 shadow-xl rounded-3xl p-8",
               headerTitle:
-                "text-3xl font-black uppercase tracking-tight text-black mb-2",
+                "text-2xl font-bold tracking-tight text-black mb-2",
               headerSubtitle:
-                "text-gray-700 font-mono text-xs uppercase tracking-wide mb-4",
+                "text-gray-500 font-medium text-sm mb-6",
               socialButtonsBlockButton:
-                "bg-white border-2 border-black text-black font-bold uppercase tracking-wide shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all",
+                "bg-white border border-gray-200 text-black font-bold rounded-full hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm h-12",
               socialButtonsBlockButtonText: "text-black font-bold",
               formButtonPrimary:
-                "bg-primary text-black font-black uppercase tracking-wide border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-lime-300 hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all",
+                "bg-black text-white font-bold rounded-full hover:bg-gray-800 transition-all h-12 shadow-md hover:shadow-lg",
               formFieldInput:
-                "bg-white border-2 border-black text-black placeholder:text-gray-500 rounded-none focus:outline-none focus:ring-0 focus:border-black",
+                "bg-white border border-gray-300 text-black placeholder:text-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary h-12 px-4",
               formFieldLabel:
-                "font-mono text-xs uppercase tracking-wide text-gray-700 mb-1",
-              dividerLine: "bg-black",
+                "font-bold text-xs uppercase tracking-wide text-gray-700 mb-1.5",
+              dividerLine: "bg-gray-200",
               dividerText:
-                "font-mono text-[10px] uppercase tracking-[0.15em] text-gray-600",
+                "font-medium text-xs uppercase tracking-wide text-gray-400 bg-white px-3",
               footerAction__signIn:
-                "font-mono text-xs uppercase text-gray-700",
+                "font-medium text-sm text-gray-600",
               footerActionLink:
-                "font-mono text-xs uppercase text-black underline underline-offset-4",
-              identityPreviewText: "text-gray-800",
+                "font-bold text-primary-dark hover:underline underline-offset-4 ml-1",
+              identityPreviewText: "text-gray-700 font-medium",
               identityPreviewEditButton:
-                "text-black font-mono text-xs uppercase underline",
+                "text-primary-dark font-bold text-sm hover:underline ml-2",
               formResendCodeLink:
-                "text-black font-mono text-xs uppercase underline",
+                "text-primary-dark font-bold text-sm hover:underline",
               alert:
-                "bg-red-50 border-2 border-black text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]",
-              alertText: "text-black text-sm",
+                "bg-red-50 border border-red-100 text-red-800 rounded-xl p-4",
+              alertText: "text-red-800 text-sm font-medium",
             },
           }}
         />

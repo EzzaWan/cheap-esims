@@ -114,14 +114,14 @@ export function HomeReviewsSection() {
     : 0;
 
   return (
-    <div className="bg-white border-2 border-black p-8 shadow-hard">
-      <div className="flex items-center justify-between mb-6 border-b-2 border-black pb-4">
+    <div className="bg-gray-50 border border-gray-100 rounded-xl p-8 shadow-sm">
+      <div className="flex items-center justify-between mb-6 border-b border-gray-200 pb-4">
         <div className="flex items-center gap-4">
-          <div className="bg-primary p-3 border-2 border-black">
-            <MessageSquare className="h-6 w-6 text-black" />
+          <div className="bg-white p-3 border border-gray-200 rounded-full shadow-sm">
+            <MessageSquare className="h-6 w-6 text-primary-dark" />
           </div>
           <div>
-            <h2 className="text-3xl font-black uppercase tracking-tighter">Customer Reviews</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900">Customer Reviews</h2>
             {reviews.length > 0 && (
               <div className="flex items-center gap-2 mt-1">
                 <div className="flex items-center">
@@ -130,13 +130,13 @@ export function HomeReviewsSection() {
                       key={star}
                       className={`h-4 w-4 ${
                         star <= Math.round(averageRating)
-                          ? "fill-primary text-primary"
+                          ? "fill-yellow-400 text-yellow-400"
                           : "text-gray-300"
                       }`}
                     />
                   ))}
                 </div>
-                <span className="text-sm font-bold text-gray-600">
+                <span className="text-sm font-medium text-gray-600">
                   {averageRating.toFixed(1)} ({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})
                 </span>
               </div>
@@ -148,39 +148,39 @@ export function HomeReviewsSection() {
           {isLoaded && user && (
             <Dialog open={showReviewDialog} onOpenChange={setShowReviewDialog}>
               <DialogTrigger asChild>
-                <Button className="bg-black text-white hover:bg-primary hover:text-black border-2 border-black rounded-none font-bold uppercase">
+                <Button className="bg-black text-white hover:bg-primary-dark hover:text-white rounded-lg font-bold">
                   Write Review
                 </Button>
               </DialogTrigger>
-              <DialogContent className="bg-white border-2 border-black shadow-hard max-w-md">
+              <DialogContent className="bg-white border border-gray-200 shadow-xl rounded-xl max-w-md sm:rounded-xl">
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-black uppercase">Write a Review</DialogTitle>
+                  <DialogTitle className="text-2xl font-bold">Write a Review</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-bold uppercase mb-2 block">Plan ID</label>
+                    <label className="text-sm font-semibold mb-2 block text-gray-700">Plan ID</label>
                     <input
                       type="text"
                       value={planId}
                       onChange={(e) => setPlanId(e.target.value)}
                       placeholder="Enter plan package code..."
-                      className="w-full px-4 py-2 border-2 border-black rounded-none font-mono text-sm"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm"
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-bold uppercase mb-2 block">Rating</label>
+                    <label className="text-sm font-semibold mb-2 block text-gray-700">Rating</label>
                     <div className="flex gap-2">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
                           key={star}
                           type="button"
                           onClick={() => setRating(star)}
-                          className="focus:outline-none"
+                          className="focus:outline-none transform hover:scale-110 transition-transform"
                         >
                           <Star
                             className={`h-8 w-8 ${
                               star <= rating
-                                ? "fill-primary text-primary"
+                                ? "fill-yellow-400 text-yellow-400"
                                 : "text-gray-300"
                             } transition-colors`}
                           />
@@ -189,22 +189,22 @@ export function HomeReviewsSection() {
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-bold uppercase mb-2 block">Comment</label>
+                    <label className="text-sm font-semibold mb-2 block text-gray-700">Comment</label>
                     <Textarea
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
                       placeholder="Share your experience with this plan..."
-                      className="min-h-[120px] border-2 border-black rounded-none font-mono"
+                      className="min-h-[120px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
                       maxLength={1000}
                     />
-                    <p className="text-xs text-gray-500 mt-1 font-mono">
+                    <p className="text-xs text-gray-500 mt-1">
                       {comment.length}/1000 characters
                     </p>
                   </div>
                   <Button
                     onClick={handleSubmitReview}
                     disabled={submitting || !comment.trim() || !planId.trim()}
-                    className="w-full bg-primary hover:bg-black hover:text-white text-black border-2 border-black rounded-none font-bold uppercase"
+                    className="w-full bg-primary hover:bg-primary-dark text-black font-bold rounded-lg"
                   >
                     {submitting ? "Submitting..." : "Submit Review"}
                   </Button>
@@ -213,7 +213,7 @@ export function HomeReviewsSection() {
             </Dialog>
           )}
           <Link href="/reviews">
-            <Button variant="outline" className="border-2 border-black rounded-none font-bold uppercase hover:bg-black hover:text-white">
+            <Button variant="outline" className="border border-gray-300 rounded-lg font-bold hover:bg-gray-50 text-gray-700">
               View All <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </Link>
@@ -221,21 +221,21 @@ export function HomeReviewsSection() {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-gray-500 font-mono">Loading reviews...</div>
+        <div className="text-center py-12 text-gray-500">Loading reviews...</div>
       ) : reviews.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500 font-bold uppercase text-lg">No reviews yet</p>
-          <p className="text-sm text-gray-400 mt-2 font-mono">Be the first to leave a review!</p>
+          <p className="text-gray-500 font-bold text-lg">No reviews yet</p>
+          <p className="text-sm text-gray-400 mt-2">Be the first to leave a review!</p>
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {reviews.map((review) => (
-            <div key={review.id} className="border-2 border-black p-6 hover:shadow-hard-sm transition-all bg-white">
+            <div key={review.id} className="bg-white border border-gray-200 p-6 rounded-xl hover:shadow-md transition-all">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-black text-lg uppercase">{review.userName}</span>
+                  <span className="font-bold text-lg text-gray-900">{review.userName}</span>
                   {review.verified && (
-                    <span className="flex items-center gap-1 text-xs bg-primary/20 text-black px-2 py-0.5 border border-primary font-bold uppercase">
+                    <span className="flex items-center gap-1 text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full border border-green-100 font-medium">
                       <CheckCircle2 className="h-3 w-3" />
                       Verified
                     </span>
@@ -247,19 +247,19 @@ export function HomeReviewsSection() {
                       key={star}
                       className={`h-4 w-4 ${
                         star <= review.rating
-                          ? "fill-primary text-primary"
+                          ? "fill-yellow-400 text-yellow-400"
                           : "text-gray-300"
                       }`}
                     />
                   ))}
                 </div>
               </div>
-              <p className="text-sm font-mono text-gray-700 mb-3 line-clamp-4">{review.comment}</p>
-              <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
-                <p className="text-xs text-gray-400 font-mono uppercase">
+              <p className="text-sm text-gray-600 mb-3 line-clamp-4 leading-relaxed">{review.comment}</p>
+              <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+                <p className="text-xs text-gray-400 font-medium">
                   {new Date(review.date).toLocaleDateString()}
                 </p>
-                <p className="text-xs text-gray-500 font-mono uppercase truncate max-w-[100px]">Plan: {review.planId}</p>
+                <p className="text-xs text-gray-500 font-medium truncate max-w-[100px]">Plan: {review.planId}</p>
               </div>
             </div>
           ))}
@@ -268,4 +268,6 @@ export function HomeReviewsSection() {
     </div>
   );
 }
+
+
 

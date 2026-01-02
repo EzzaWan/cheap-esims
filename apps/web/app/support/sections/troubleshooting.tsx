@@ -281,23 +281,27 @@ export function Troubleshooting() {
   return (
     <div className="space-y-6">
       <div className="relative group">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary-dark transition-colors" />
         <Input
           type="text"
           placeholder="Search troubleshooting topics..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10 h-12 bg-white border-2 border-black rounded-none shadow-hard-sm focus-visible:ring-0 focus-visible:border-primary text-black placeholder:text-gray-400 font-mono"
+          className="pl-12 h-14 bg-white border border-gray-200 rounded-full shadow-sm focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary text-black placeholder:text-gray-400 font-medium text-base transition-all"
         />
       </div>
 
       {filteredItems.length === 0 ? (
-        <Card className="bg-white border-2 border-black rounded-none shadow-hard">
-          <CardContent className="p-8 text-center border-dashed">
-            <p className="text-gray-500 font-mono font-bold uppercase">No troubleshooting topics found matching your search.</p>
-            <Link href="/support/contact" className="inline-block mt-4">
-              <Button variant="link" className="text-primary font-bold uppercase">
-                Contact Support for help →
+        <Card className="bg-white border border-gray-200 rounded-2xl shadow-sm">
+          <CardContent className="p-12 text-center">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="h-8 w-8 text-gray-400" />
+            </div>
+            <p className="text-gray-500 font-medium text-lg mb-2">No results found for "{searchQuery}"</p>
+            <p className="text-gray-400 text-sm mb-6">Try different keywords or browse the topics below.</p>
+            <Link href="/support/contact">
+              <Button className="bg-black hover:bg-gray-800 text-white rounded-full font-bold px-6">
+                Contact Support
               </Button>
             </Link>
           </CardContent>
@@ -305,11 +309,11 @@ export function Troubleshooting() {
       ) : (
         <Accordion type="single" collapsible className="w-full space-y-4">
           {filteredItems.map((item) => (
-            <AccordionItem key={item.id} value={item.id} className="border-2 border-black bg-white shadow-hard-sm hover:shadow-hard transition-all">
-              <AccordionTrigger className="text-black font-black uppercase text-left hover:no-underline px-6 py-4 [&[data-state=open]]:bg-secondary [&[data-state=open]]:border-b-2 [&[data-state=open]]:border-black">
+            <AccordionItem key={item.id} value={item.id} className="border border-gray-200 bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all">
+              <AccordionTrigger className="text-black font-bold text-left hover:bg-gray-50 hover:no-underline px-6 py-5 [&[data-state=open]]:bg-gray-50 text-base md:text-lg">
                 {item.title}
               </AccordionTrigger>
-              <AccordionContent className="bg-white px-6 py-6">
+              <AccordionContent className="bg-white px-6 py-6 border-t border-gray-100">
                  {item.content}
               </AccordionContent>
             </AccordionItem>

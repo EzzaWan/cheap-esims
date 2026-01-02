@@ -4,8 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { SearchBar } from "@/components/SearchBar";
 import { CountryCard } from "@/components/CountryCard";
-import { CountrySkeleton } from "@/components/skeletons";
-import { ArrowRight, Zap, Globe, Map, Shield, Lock, Clock, CheckCircle2, Star, Quote, Smartphone, Wifi, Plane, HelpCircle } from "lucide-react";
+import { ArrowRight, Zap, Globe, Map, Shield, Lock, Clock, CheckCircle2, Star, Smartphone, Wifi, Plane, HelpCircle, ChevronRight } from "lucide-react";
 import { safeFetch } from "@/lib/safe-fetch";
 import { getRegionForCountry, REGION_NAMES, Region } from "@/lib/regions";
 import { Button } from "@/components/ui/button";
@@ -36,15 +35,11 @@ export default function Home() {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
         const data = await safeFetch<any>(`${apiUrl}/countries`, { showToast: false });
-        console.log('[HOME] Received countries data:', data);
-        // Handle both array and { locationList: [...] } formats
-        const locationArray = Array.isArray(data) ? data : (data.locationList || []);
-        console.log('[HOME] Locations array:', locationArray.slice(0, 3));
         
-        // Separate countries (type === 1) from regions (type === 2)
-        // Explicitly filter: countries must be type === 1, regions must be type === 2
-        const countriesList = locationArray.filter((item: Country) => item.type === 1); // Only countries
-        const regionsList = locationArray.filter((item: Country) => item.type === 2); // Only regions
+        const locationArray = Array.isArray(data) ? data : (data.locationList || []);
+        
+        const countriesList = locationArray.filter((item: Country) => item.type === 1);
+        const regionsList = locationArray.filter((item: Country) => item.type === 2);
         
         const sortedCountries = countriesList.sort((a: Country, b: Country) => a.name.localeCompare(b.name));
         const sortedRegions = regionsList.sort((a: Country, b: Country) => a.name.localeCompare(b.name));
@@ -62,24 +57,20 @@ export default function Home() {
     fetchCountries();
   }, []);
 
-  // Fetch popular plans from popular countries
   useEffect(() => {
-    if (search) return; // Don't fetch if searching
+    if (search) return;
     
     const fetchPopularPlans = async () => {
       setLoadingPlans(true);
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
-        // Popular countries: US, UK, France, Japan, Australia
         const popularCountries = ['US', 'GB', 'FR', 'JP', 'AU'];
         const allPlans: Plan[] = [];
         
-        // Fetch plans from each popular country (limit to first 2 plans per country)
         for (const countryCode of popularCountries) {
           try {
             const data = await safeFetch<Plan[]>(`${apiUrl}/countries/${countryCode}/plans`, { showToast: false });
             if (Array.isArray(data) && data.length > 0) {
-              // Filter visible plans and take first 2
               const visiblePlans = filterVisiblePlans(data).slice(0, 2);
               allPlans.push(...visiblePlans);
             }
@@ -88,7 +79,6 @@ export default function Home() {
           }
         }
         
-        // Sort by price and take top 6
         const sorted = allPlans
           .sort((a, b) => a.price - b.price)
           .slice(0, 6);
@@ -104,27 +94,6 @@ export default function Home() {
     fetchPopularPlans();
   }, [search]);
 
-  const countriesByRegion = useMemo(() => {
-    const grouped: Record<Region, Country[]> = {
-      "asia": [],
-      "europe": [],
-      "north-america": [],
-      "south-america": [],
-      "africa": [],
-      "oceania": [],
-      "global": [],
-    };
-
-    countries.forEach((country) => {
-      const region = getRegionForCountry(country.code);
-      if (region) {
-        grouped[region].push(country);
-      }
-    });
-
-    return grouped;
-  }, [countries]);
-
   useEffect(() => {
     if (!search) {
       setFiltered(countries);
@@ -139,162 +108,84 @@ export default function Home() {
   const regionGroups: Region[] = ["asia", "europe", "north-america", "south-america", "africa", "oceania", "global"];
 
   return (
-    <div className="flex flex-col min-h-screen">
-       {/* Deal Finder / Hero Section */}
-       <div className="bg-primary text-black border-b-4 border-black p-6 md:p-10">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+    <div className="flex flex-col min-h-screen bg-white">
+       {/* Hero Section - Cleaner, Friendlier, Professional */}
+       <div className="relative bg-secondary/30 border-b border-black/10 pt-16 pb-20 md:pt-24 md:pb-32 px-4 md:px-6 overflow-hidden">
+          <div className="max-w-5xl mx-auto text-center relative z-10 space-y-8">
+            
             <div className="space-y-4">
-               <div className="inline-block bg-black text-white px-3 py-1 text-xs font-mono font-bold uppercase tracking-wider">
-                  Price Watch: Live
-                </div>
-                <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
-                  Travel Data <br/>
-                  Cheapest In <br/>
-                  <span className="text-white drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] text-stroke-2">The World.</span>
-                </h1>
-                <p className="text-lg font-bold max-w-md leading-tight">
-                   Stop overpaying for roaming. Get instant eSIMs at wholesale prices.
-                </p>
-                <div className="bg-white border-2 border-black p-3 shadow-hard max-w-lg">
-                   <SearchBar value={search} onChange={setSearch} placeholder="Where are you going?" />
-                   <div className="mt-2 text-[10px] font-mono text-gray-500 uppercase flex justify-between">
-                      <span>Instant Delivery</span>
-                      <span>No Contracts</span>
-                   </div>
-                </div>
+              <div className="inline-flex items-center gap-2 bg-primary/20 text-primary-dark px-4 py-1.5 rounded-full text-sm font-bold tracking-wide border border-primary/20">
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                Instant Activation
+              </div>
+              
+              <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-black leading-[1.1]">
+                Travel Data. <br className="hidden md:block" />
+                Cheapest In <br className="hidden md:block" />
+                <span className="relative inline-block px-2">
+                   <span className="absolute inset-0 bg-primary transform -rotate-2 translate-y-2 opacity-100 -z-10 rounded-sm"></span>
+                   The World.
+                </span>
+              </h1>
+              
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                 Connect instantly in 190+ countries. No physical SIMs, no contracts, just affordable data for your travels.
+              </p>
             </div>
 
-            {/* Quick Region Links */}
-            <div className="hidden lg:grid grid-cols-2 gap-3">
-                {regionGroups.slice(0, 4).map(region => (
-                   <Link key={region} href={`/regions/${region}`} className="bg-white border-2 border-black p-3 shadow-hard hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex items-center justify-between group">
-                      <div>
-                         <span className="block text-[10px] font-mono text-gray-500 uppercase">Region</span>
-                         <span className="font-black text-lg uppercase">{REGION_NAMES[region]}</span>
-                      </div>
-                      <ArrowRight className="h-5 w-5 group-hover:text-primary transition-colors" />
-                   </Link>
-                ))}
+            <div className="max-w-xl mx-auto transform hover:-translate-y-1 transition-transform duration-300">
+               <div className="bg-white p-2 rounded-2xl border border-gray-200 shadow-lg">
+                  <SearchBar value={search} onChange={setSearch} placeholder="Where are you traveling to?" className="rounded-xl" />
+               </div>
+               <div className="mt-4 flex items-center justify-center gap-6 text-xs font-bold uppercase tracking-widest text-gray-500">
+                  <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-green-600" /> Instant Delivery</span>
+                  <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-green-600" /> Keep Your Number</span>
+               </div>
             </div>
+
+          </div>
+
+          {/* Decorative Background Elements */}
+          <div className="absolute top-10 left-10 opacity-10 animate-bounce duration-[3000ms]">
+            <Globe className="w-24 h-24" />
+          </div>
+          <div className="absolute bottom-10 right-10 opacity-10 animate-bounce duration-[4000ms]">
+             <Wifi className="w-32 h-32" />
           </div>
        </div>
 
-       <div className="bg-white max-w-7xl mx-auto w-full p-4 md:p-6 space-y-6 md:space-y-8">
+       <div className="max-w-7xl mx-auto w-full px-4 md:px-8 py-12 md:py-20 space-y-20">
           
-          {/* Trust Badges & Guarantee Messaging */}
+          {/* Trust Badges - Modern & Clean */}
           {!search && (
-            <div className="space-y-6">
-              {/* Trust Badges - Neo-Brutalist Redesign */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white border-4 border-black p-4 shadow-hard flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
-                  <div className="mb-3 p-3 bg-yellow-300 border-2 border-black rounded-full shadow-hard-sm group-hover:shadow-none transition-shadow">
-                    <Lock className="h-6 w-6 text-black" />
-                  </div>
-                  <h3 className="text-lg font-black uppercase text-black mb-1">SSL Secured</h3>
-                  <p className="text-xs font-mono font-bold text-gray-600 leading-tight">256-bit military-grade encryption protection.</p>
-                </div>
-                
-                <div className="bg-white border-4 border-black p-4 shadow-hard flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
-                  <div className="mb-3 p-3 bg-cyan-300 border-2 border-black rounded-full shadow-hard-sm group-hover:shadow-none transition-shadow">
-                    <Shield className="h-6 w-6 text-black" />
-                  </div>
-                  <h3 className="text-lg font-black uppercase text-black mb-1">Money-Back</h3>
-                  <p className="text-xs font-mono font-bold text-gray-600 leading-tight">30-day satisfaction guarantee or full refund.</p>
-                </div>
-
-                <div className="bg-white border-4 border-black p-4 shadow-hard flex flex-col items-center text-center group hover:-translate-y-1 transition-transform">
-                  <div className="mb-3 p-3 bg-pink-300 border-2 border-black rounded-full shadow-hard-sm group-hover:shadow-none transition-shadow">
-                    <Clock className="h-6 w-6 text-black" />
-                  </div>
-                  <h3 className="text-lg font-black uppercase text-black mb-1">24/7 Support</h3>
-                  <p className="text-xs font-mono font-bold text-gray-600 leading-tight">Expert support team available round the clock.</p>
-                </div>
-              </div>
-
-              {/* Guarantee Messaging - Ticker Style */}
-              <div className="bg-black text-white border-4 border-black py-3 px-2 overflow-hidden relative">
-                <div className="flex items-center justify-around font-mono font-bold uppercase tracking-widest text-xs md:text-sm">
-                  <span className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary" /> Instant Delivery
-                  </span>
-                  <span className="text-primary hidden sm:inline">★</span>
-                  <span className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary" /> Satisfaction Guaranteed
-                  </span>
-                  <span className="text-primary hidden sm:inline">★</span>
-                  <span className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary" /> No Hidden Fees
-                  </span>
-                </div>
-              </div>
-
-              {/* Security Indicators - "System Status" Look */}
-              <div className="border-2 border-dashed border-gray-400 bg-gray-50 p-3 font-mono text-[10px] uppercase tracking-wide text-gray-500 flex flex-wrap justify-center gap-x-6 gap-y-2">
-                 <span className="flex items-center gap-2">
-                    [ <Shield className="h-3 w-3" /> PCI DSS COMPLIANT ]
-                 </span>
-                 <span className="flex items-center gap-2">
-                    [ <Lock className="h-3 w-3" /> DATA ENCRYPTED ]
-                 </span>
-                 <span className="flex items-center gap-2">
-                    [ <CheckCircle2 className="h-3 w-3" /> PAYMENTS SECURE ]
-                 </span>
-              </div>
-            </div>
-          )}
-
-          {/* Why Choose Cheap eSIMs Section */}
-          {!search && (
-            <div className="space-y-6 pt-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-primary border-2 border-black p-2">
-                  <Zap className="h-6 w-6 text-black" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-gray-100 pb-8">
+              <div className="flex items-start gap-4 group p-4 rounded-xl hover:bg-gray-50 transition-colors">
+                <div className="p-3 bg-yellow-50 rounded-full shrink-0 group-hover:bg-yellow-100 transition-colors">
+                  <Shield className="h-6 w-6 text-yellow-600" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-black uppercase tracking-tighter text-black">Why Choose Us?</h2>
-                  <p className="text-sm font-mono font-bold text-gray-600 uppercase">Everything you need for seamless global connectivity</p>
+                  <h3 className="text-base font-bold text-black">Secure Payment</h3>
+                  <p className="text-sm text-gray-500 mt-1 leading-snug">Your data is protected with bank-level encryption.</p>
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-2 border-black bg-black gap-[2px]">
-                <div className="bg-white p-6 hover:bg-gray-50 transition-colors group h-full">
-                  <div className="p-3 bg-secondary border-2 border-black w-fit mb-4 shadow-hard-sm group-hover:shadow-none transition-shadow">
-                    <Zap className="h-6 w-6 text-black" />
-                  </div>
-                  <h3 className="text-lg font-black uppercase text-black mb-2">Instant Activation</h3>
-                  <p className="text-sm font-mono text-gray-600">
-                    Get your eSIM activated within minutes. No waiting, no physical SIM cards needed.
-                  </p>
+              <div className="flex items-start gap-4 group p-4 rounded-xl hover:bg-gray-50 transition-colors">
+                <div className="p-3 bg-green-50 rounded-full shrink-0 group-hover:bg-green-100 transition-colors">
+                  <Zap className="h-6 w-6 text-green-600" />
                 </div>
-                
-                <div className="bg-white p-6 hover:bg-gray-50 transition-colors group h-full">
-                  <div className="p-3 bg-primary border-2 border-black w-fit mb-4 shadow-hard-sm group-hover:shadow-none transition-shadow">
-                    <Smartphone className="h-6 w-6 text-black" />
-                  </div>
-                  <h3 className="text-lg font-black uppercase text-black mb-2">Easy Setup</h3>
-                  <p className="text-sm font-mono text-gray-600">
-                    Simple QR code installation. Works on all eSIM-compatible devices worldwide.
-                  </p>
+                <div>
+                  <h3 className="text-base font-bold text-black">Instant Activation</h3>
+                  <p className="text-sm text-gray-500 mt-1 leading-snug">Receive your QR code immediately via email.</p>
                 </div>
-                
-                <div className="bg-white p-6 hover:bg-gray-50 transition-colors group h-full">
-                  <div className="p-3 bg-secondary border-2 border-black w-fit mb-4 shadow-hard-sm group-hover:shadow-none transition-shadow">
-                    <Wifi className="h-6 w-6 text-black" />
-                  </div>
-                  <h3 className="text-lg font-black uppercase text-black mb-2">Global Coverage</h3>
-                  <p className="text-sm font-mono text-gray-600">
-                    Connect in 190+ countries with high-speed 4G/LTE networks. Stay connected everywhere.
-                  </p>
+              </div>
+
+              <div className="flex items-start gap-4 group p-4 rounded-xl hover:bg-gray-50 transition-colors">
+                <div className="p-3 bg-purple-50 rounded-full shrink-0 group-hover:bg-purple-100 transition-colors">
+                  <Headset className="h-6 w-6 text-purple-600" />
                 </div>
-                
-                <div className="bg-white p-6 hover:bg-gray-50 transition-colors group h-full">
-                  <div className="p-3 bg-primary border-2 border-black w-fit mb-4 shadow-hard-sm group-hover:shadow-none transition-shadow">
-                    <Plane className="h-6 w-6 text-black" />
-                  </div>
-                  <h3 className="text-lg font-black uppercase text-black mb-2">Travel-Friendly</h3>
-                  <p className="text-sm font-mono text-gray-600">
-                    No roaming charges, no contracts. Perfect for travelers, digital nomads, and business trips.
-                  </p>
+                <div>
+                  <h3 className="text-base font-bold text-black">24/7 Support</h3>
+                  <p className="text-sm text-gray-500 mt-1 leading-snug">Real humans ready to help you, anytime.</p>
                 </div>
               </div>
             </div>
@@ -302,185 +193,160 @@ export default function Home() {
 
           {/* Popular Plans Section */}
           {!search && (
-            <div className="space-y-6 pt-8">
-              <div className="bg-yellow-50 border-2 border-black p-6 md:p-8 relative overflow-hidden">
-                <div className="absolute top-0 right-0 bg-black text-white px-4 py-1 text-xs font-mono font-bold uppercase">Hot Deals</div>
-                <div className="flex items-center justify-between border-b-2 border-black pb-4 mb-6">
-                  <div>
-                    <h2 className="text-3xl font-black uppercase tracking-tighter text-black">Popular Plans</h2>
-                    <p className="text-sm font-mono font-bold text-gray-600 uppercase">Best-selling eSIM plans</p>
-                  </div>
-                  <Link href="/regions/global">
-                    <Button variant="outline" className="border-2 border-black bg-white text-black hover:bg-black hover:text-white rounded-none font-bold uppercase shadow-hard-sm hover:shadow-none transition-all">
-                      View All <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
+            <div className="space-y-8">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div className="space-y-2">
+                  <span className="text-primary-dark font-bold tracking-wide uppercase text-sm">Top Picks</span>
+                  <h2 className="text-3xl md:text-4xl font-bold text-black tracking-tight">Trending Destinations</h2>
+                  <p className="text-gray-500 max-w-md">Our most popular eSIM packages for travelers this week.</p>
                 </div>
-                
-                {loadingPlans ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[...Array(6)].map((_, i) => (
-                      <div key={i} className="bg-white border-2 border-gray-200 h-64 animate-pulse"></div>
-                    ))}
-                  </div>
-                ) : popularPlans.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {popularPlans.map((plan) => (
-                      <PlanCard key={plan.packageCode} plan={plan} />
-                    ))}
-                  </div>
-                ) : null}
+                <Link href="/regions/global">
+                  <Button variant="outline" className="group border-2 border-black rounded-lg hover:bg-black hover:text-white transition-all">
+                    View All Plans <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
               </div>
+              
+              {loadingPlans ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="h-64 bg-gray-100 animate-pulse rounded-lg"></div>
+                  ))}
+                </div>
+              ) : popularPlans.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {popularPlans.map((plan) => (
+                     <PlanCard key={plan.packageCode} plan={plan} />
+                  ))}
+                </div>
+              ) : null}
             </div>
           )}
 
-          {/* Region Tabs (Mobile/Desktop) */}
+          {/* Shop by Region */}
           {!search && (
-            <div className="space-y-4">
-               <div className="flex items-center justify-between border-b-2 border-black pb-2">
-                  <h2 className="text-2xl font-black uppercase flex items-center gap-2">
-                     <Map className="h-6 w-6" /> Shop by Region
-                  </h2>
+            <div className="space-y-8">
+               <div className="space-y-2">
+                  <h2 className="text-3xl font-bold text-black tracking-tight">Shop by Region</h2>
+                  <p className="text-gray-500">Visiting multiple countries? Choose a regional plan.</p>
                </div>
-               <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+               <div className="flex flex-wrap gap-3">
                   {regionGroups.map((region) => (
                     <Link 
                       key={region} 
                       href={`/regions/${region}`}
-                      className="flex-shrink-0 bg-secondary border-2 border-black px-6 py-3 font-bold uppercase hover:bg-black hover:text-white transition-colors shadow-hard-sm hover:shadow-none whitespace-nowrap"
+                      className="group flex items-center gap-2 bg-white border border-gray-200 px-5 py-3 rounded-full font-bold hover:bg-black hover:text-white hover:border-black transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
                     >
                       {REGION_NAMES[region]}
+                      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity -ml-2 group-hover:ml-0" />
                     </Link>
                   ))}
                </div>
             </div>
           )}
 
-          {/* All Countries Grid (type 1 only) */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between border-b-2 border-black pb-2">
-               <h2 className="text-2xl font-black uppercase flex items-center gap-2">
-                 <Globe className="h-6 w-6" /> 
-                 {search ? `Search Results` : "All Countries"}
+          {/* All Countries Grid */}
+          <div className="space-y-8">
+            <div className="flex items-center justify-between border-b border-black/10 pb-4">
+               <h2 className="text-2xl md:text-3xl font-bold flex items-center gap-3">
+                 <Globe className="h-6 w-6 text-primary-dark" /> 
+                 {search ? `Results for "${search}"` : "All Destinations"}
                </h2>
-               <span className="font-mono text-sm bg-black text-white px-2 py-1">
-                 {filtered.length} AVAILABLE
+               <span className="text-sm font-bold bg-gray-100 px-3 py-1 rounded-full text-gray-600">
+                 {filtered.length} Countries
                </span>
             </div>
 
             {loading ? (
                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                  {[...Array(10)].map((_, i) => (
-                   <div key={i} className="h-24 bg-gray-100 animate-pulse border-2 border-gray-200"></div>
+                   <div key={i} className="h-24 bg-gray-50 animate-pulse rounded-lg border border-gray-100"></div>
                  ))}
                </div>
             ) : (
-               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                  {filtered.map((country) => (
                     <CountryCard key={country.code} country={country} />
                  ))}
                  
                  {filtered.length === 0 && !loading && (
-                    <div className="col-span-full text-center py-20 border-2 border-dashed border-gray-300">
-                      {search ? `No countries found matching "${search}"` : "No countries available"}
+                    <div className="col-span-full text-center py-20 bg-gray-50 rounded-xl border-dashed border-2 border-gray-200">
+                      <p className="text-gray-500 font-medium">No countries found matching "{search}"</p>
+                      <Button variant="link" onClick={() => setSearch("")} className="mt-2 text-primary-dark">Clear Search</Button>
                     </div>
                  )}
                </div>
             )}
           </div>
 
-          {/* Regions List (type 2) */}
-          {!search && filteredRegions.length > 0 && (
-            <div className="space-y-4">
-              <h2 className="text-2xl font-black uppercase">Regions</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 animate-in fade-in duration-1000">
-                {filteredRegions.map((region) => (
-                  <CountryCard key={region.code} country={region} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* FAQ Section */}
+          {/* FAQ Section - Clean & Modern */}
           {!search && (
-            <div className="space-y-6 pt-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-black text-white border-2 border-black p-2">
-                  <HelpCircle className="h-6 w-6" />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-10">
+              <div className="lg:col-span-1 space-y-4">
+                <div className="inline-block p-3 bg-primary/20 rounded-xl">
+                  <HelpCircle className="h-8 w-8 text-primary-dark" />
                 </div>
-                <div>
-                  <h2 className="text-3xl font-black uppercase tracking-tighter text-black">FAQ</h2>
-                  <p className="text-sm font-mono font-bold text-gray-600 uppercase">Common questions answered</p>
-                </div>
+                <h2 className="text-3xl font-bold tracking-tight">Frequently Asked Questions</h2>
+                <p className="text-gray-500 leading-relaxed">
+                  Everything you need to know about getting connected with eSIMs. 
+                  Can't find the answer? <Link href="/support" className="text-black font-bold underline decoration-primary decoration-2 underline-offset-2">Contact our support.</Link>
+                </p>
               </div>
               
-              <div className="border-2 border-black">
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="item-1" className="border-b-2 border-black bg-white data-[state=open]:bg-secondary transition-all last:border-0">
-                    <AccordionTrigger className="px-6 py-5 text-left font-black uppercase hover:bg-primary hover:text-black hover:no-underline [&[data-state=open]]:bg-black [&[data-state=open]]:text-white">
-                      What is an eSIM and how does it work?
-                    </AccordionTrigger>
-                    <AccordionContent className="px-6 py-5 text-gray-800 font-mono text-sm border-t-2 border-black bg-white">
-                      An eSIM (embedded SIM) is a digital SIM card that's built into your device. Instead of a physical SIM card, you download a profile directly to your phone. Simply scan the QR code we provide, and your eSIM will be activated instantly. It works just like a regular SIM card but without the hassle of swapping physical cards.
-                    </AccordionContent>
-                  </AccordionItem>
-                  
-                  <AccordionItem value="item-2" className="border-b-2 border-black bg-white data-[state=open]:bg-secondary transition-all last:border-0">
-                    <AccordionTrigger className="px-6 py-5 text-left font-black uppercase hover:bg-primary hover:text-black hover:no-underline [&[data-state=open]]:bg-black [&[data-state=open]]:text-white">
-                      Which devices support eSIM?
-                    </AccordionTrigger>
-                    <AccordionContent className="px-6 py-5 text-gray-800 font-mono text-sm border-t-2 border-black bg-white">
-                      Most modern smartphones support eSIM, including iPhone XS and newer, Google Pixel 3 and newer, Samsung Galaxy S20 and newer, and many other devices. Check your device compatibility using our <Link href="/support/device-check" className="font-bold underline">device checker</Link> before purchasing.
-                    </AccordionContent>
-                  </AccordionItem>
-                  
-                  <AccordionItem value="item-3" className="border-b-2 border-black bg-white data-[state=open]:bg-secondary transition-all last:border-0">
-                    <AccordionTrigger className="px-6 py-5 text-left font-black uppercase hover:bg-primary hover:text-black hover:no-underline [&[data-state=open]]:bg-black [&[data-state=open]]:text-white">
-                      How quickly will I receive my eSIM?
-                    </AccordionTrigger>
-                    <AccordionContent className="px-6 py-5 text-gray-800 font-mono text-sm border-t-2 border-black bg-white">
-                      Your eSIM is delivered instantly via email after payment confirmation. You'll receive a QR code and activation instructions within minutes of your purchase. No waiting, no shipping delays!
-                    </AccordionContent>
-                  </AccordionItem>
-                  
-                  <AccordionItem value="item-4" className="border-b-2 border-black bg-white data-[state=open]:bg-secondary transition-all last:border-0">
-                    <AccordionTrigger className="px-6 py-5 text-left font-black uppercase hover:bg-primary hover:text-black hover:no-underline [&[data-state=open]]:bg-black [&[data-state=open]]:text-white">
-                      Can I use my regular SIM and eSIM at the same time?
-                    </AccordionTrigger>
-                    <AccordionContent className="px-6 py-5 text-gray-800 font-mono text-sm border-t-2 border-black bg-white">
-                      Yes! Most eSIM-compatible devices support dual SIM functionality, allowing you to use both your regular SIM and eSIM simultaneously. This is perfect for keeping your home number active while using data from your eSIM abroad.
-                    </AccordionContent>
-                  </AccordionItem>
-                  
-                  <AccordionItem value="item-5" className="border-b-2 border-black bg-white data-[state=open]:bg-secondary transition-all last:border-0">
-                    <AccordionTrigger className="px-6 py-5 text-left font-black uppercase hover:bg-primary hover:text-black hover:no-underline [&[data-state=open]]:bg-black [&[data-state=open]]:text-white">
-                      What happens if I don't use all my data?
-                    </AccordionTrigger>
-                    <AccordionContent className="px-6 py-5 text-gray-800 font-mono text-sm border-t-2 border-black bg-white">
-                      Unused data expires at the end of your plan's validity period. However, many of our plans are valid for 30 days, giving you plenty of time to use your data. Some plans also support top-ups if you need more data before expiry.
-                    </AccordionContent>
-                  </AccordionItem>
-                  
-                  <AccordionItem value="item-6" className="border-b-2 border-black bg-white data-[state=open]:bg-secondary transition-all last:border-0">
-                    <AccordionTrigger className="px-6 py-5 text-left font-black uppercase hover:bg-primary hover:text-black hover:no-underline [&[data-state=open]]:bg-black [&[data-state=open]]:text-white">
-                      Do you offer refunds?
-                    </AccordionTrigger>
-                    <AccordionContent className="px-6 py-5 text-gray-800 font-mono text-sm border-t-2 border-black bg-white">
-                      Yes, we offer a 30-day money-back guarantee. If you're not satisfied with your eSIM service, you can request a refund within 30 days of purchase. See our <Link href="/support?tab=refund" className="font-bold underline">refund policy</Link> for full details.
-                    </AccordionContent>
-                  </AccordionItem>
+              <div className="lg:col-span-2">
+                <Accordion type="single" collapsible className="w-full space-y-4">
+                  {[
+                    { q: "What is an eSIM?", a: "An eSIM (embedded SIM) is a digital SIM card built directly into your phone. It allows you to activate a cellular plan instantly without inserting a physical card." },
+                    { q: "Will I keep my number?", a: "Yes! Your primary number remains active for calls and texts. The eSIM simply handles your data connection while you travel, saving you from expensive roaming fees." },
+                    { q: "When will I receive it?", a: "Instantly. As soon as your payment is processed, you'll receive a QR code via email. Scan it in your phone settings, and you're ready to go." },
+                    { q: "Is my device compatible?", a: "Most smartphones from 2018 onwards are compatible. This includes iPhone XR/XS and newer, Samsung Galaxy S20 and newer, and Google Pixel 3 and newer." }
+                  ].map((item, i) => (
+                    <AccordionItem key={i} value={`item-${i}`} className="border border-gray-200 rounded-xl px-2 data-[state=open]:border-black/20 data-[state=open]:bg-gray-50 transition-all overflow-hidden mb-2">
+                      <AccordionTrigger className="px-4 py-4 text-left font-bold text-lg hover:text-primary-dark hover:no-underline rounded-xl">
+                        {item.q}
+                      </AccordionTrigger>
+                      <AccordionContent className="px-4 pb-4 text-gray-600 leading-relaxed">
+                        {item.a}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
                 </Accordion>
               </div>
             </div>
           )}
 
-          {/* Reviews Section - Bottom of Page */}
+          {/* Reviews Section */}
           {!search && (
-            <div className="pt-8">
+            <div className="pt-10 border-t border-gray-100">
               <HomeReviewsSection />
             </div>
           )}
        </div>
     </div>
+  );
+}
+
+// Icon component needed for the new design
+function Headset({ className }: { className?: string }) {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width="24" 
+      height="24" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      className={className}
+    >
+      <path d="M3 11v3a8 8 0 0 0 16 0v-3" />
+      <path d="M12 6a8 8 0 0 0-6 2.5" />
+      <path d="M18 8.5A8 8 0 0 0 12 6" />
+      <path d="M21 15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3" />
+      <path d="M3 11h2" />
+      <path d="M19 11h2" />
+    </svg>
   );
 }

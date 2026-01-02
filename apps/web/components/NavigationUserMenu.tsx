@@ -43,7 +43,7 @@ export function NavigationUserMenu() {
       {esimCount !== null && esimCount > 0 && (
         <Badge 
           variant="outline" 
-          className="border-2 border-black bg-primary text-black text-xs font-bold uppercase"
+          className="border border-green-200 bg-green-50 text-green-700 text-xs font-bold uppercase rounded-full px-3 py-1"
         >
           <Smartphone className="h-3 w-3 mr-1" />
           {esimCount} eSIM{esimCount !== 1 ? "s" : ""}

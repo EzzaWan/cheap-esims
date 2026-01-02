@@ -145,12 +145,12 @@ export default function MyEsimsPage() {
     <div className="space-y-8 max-w-7xl mx-auto px-4 md:px-8 py-8">
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'My eSIMs' }]} />
       
-      <div className="flex items-center justify-between border-b-2 border-black pb-4">
-        <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-black">My eSIMs</h1>
+      <div className="flex items-center justify-between border-b border-gray-200 pb-4">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-black">My eSIMs</h1>
         <Button 
           variant="outline" 
           size="icon" 
-          className="border-2 border-black rounded-none shadow-hard-sm hover:shadow-none hover:bg-black hover:text-white transition-all"
+          className="border border-gray-200 rounded-full shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
           onClick={async () => {
             setLoading(true);
             const userEmail = user?.primaryEmailAddress?.emailAddress;
@@ -174,17 +174,18 @@ export default function MyEsimsPage() {
 
       {/* Continue Shopping Link */}
       <Link href="/" className="block group">
-        <div className="bg-black text-white p-4 shadow-hard hover:bg-primary hover:text-black hover:shadow-hard-lg transition-all border-2 border-black flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="bg-white/10 group-hover:bg-black/10 p-2 rounded-none">
+        <div className="bg-black text-white p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-between overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl group-hover:bg-white/10 transition-colors"></div>
+          <div className="flex items-center gap-4 relative z-10">
+            <div className="bg-white/10 group-hover:bg-white/20 p-3 rounded-xl transition-colors">
               <ShoppingBag className="h-6 w-6" />
             </div>
             <div>
-              <h3 className="font-black uppercase tracking-tighter text-lg">Continue Shopping</h3>
-              <p className="text-xs font-mono opacity-80 group-hover:opacity-100 uppercase">Browse more destinations</p>
+              <h3 className="font-bold text-lg">Continue Shopping</h3>
+              <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">Browse more destinations</p>
             </div>
           </div>
-          <ArrowRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" />
+          <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform relative z-10" />
         </div>
       </Link>
 
@@ -194,19 +195,23 @@ export default function MyEsimsPage() {
       {loading ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
            {[...Array(3)].map((_, i) => (
-             <Skeleton key={i} className="h-96 w-full rounded-none bg-gray-200" />
+             <Skeleton key={i} className="h-96 w-full rounded-2xl bg-gray-100" />
            ))}
         </div>
       ) : esims.length === 0 ? (
-        <EmptyState
-          title="NO ESIMS FOUND"
-          description="Get your first travel data plan today and stay connected anywhere in the world."
-          icon={Signal}
-          action={{
-            label: "BROWSE PLANS",
-            onClick: () => window.location.href = "/countries"
-          }}
-        />
+        <div className="bg-white border border-gray-200 rounded-2xl p-12 text-center shadow-sm">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Signal className="h-8 w-8 text-gray-400" />
+          </div>
+          <h3 className="text-lg font-bold text-black mb-2">No eSIMs Found</h3>
+          <p className="text-gray-500 mb-6 max-w-md mx-auto">Get your first travel data plan today and stay connected anywhere in the world.</p>
+          <Button 
+            className="bg-black text-white hover:bg-gray-800 rounded-full font-bold px-8 shadow-lg hover:shadow-xl transition-all"
+            onClick={() => window.location.href = "/countries"}
+          >
+            Browse Plans
+          </Button>
+        </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
            {esims.map((esim) => {
@@ -216,73 +221,64 @@ export default function MyEsimsPage() {
              const isExpired = timeRemaining === null || timeRemaining.totalMs <= 0;
              
              return (
-               <Link key={esim.id} href={`/my-esims/${esim.iccid}`} className="block h-full">
-                 <div className="h-full bg-white border-2 border-black shadow-hard hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all flex flex-col justify-between">
-                    <div className="bg-secondary border-b-2 border-black p-4 flex items-center justify-between">
-                       <Badge className={`rounded-none border-2 px-2 py-0.5 font-bold uppercase ${status.color}`}>
+               <Link key={esim.id} href={`/my-esims/${esim.iccid}`} className="block h-full group">
+                 <div className="h-full bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md hover:border-gray-300 transition-all flex flex-col justify-between overflow-hidden p-6">
+                    {/* Header: Status & Expiry */}
+                    <div className="flex items-center justify-between mb-6">
+                       <Badge className={`rounded-full px-4 py-1 font-bold uppercase text-xs border-0 shadow-none ${
+                         status.label === 'Ready' || status.label === 'Active' ? 'bg-green-400 text-black hover:bg-green-500' : 
+                         status.label === 'Expired' ? 'bg-red-100 text-red-600 hover:bg-red-200' : 
+                         'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                       }`}>
                           {status.label}
                        </Badge>
+                       
                        {esim.expiredTime && (
-                           isExpired ? (
-                                <span className="text-xs font-mono font-bold text-red-600 uppercase flex items-center gap-1 bg-red-100 px-2 py-0.5 border border-red-600">
-                                  <AlertCircle className="h-3 w-3" /> Expired
-                                </span>
-                           ) : (
-                                <span className="text-xs font-mono font-bold text-gray-600 uppercase flex items-center gap-1 bg-white px-2 py-0.5 border border-black">
-                                  <Calendar className="h-3 w-3" />
-                                  <ExpiryCountdown expiry={esim.expiredTime} iccid={esim.iccid} className="text-xs" />
-                                </span>
-                           )
+                           <span className="text-xs font-medium text-green-600 border border-green-200 bg-green-50 px-3 py-1 rounded-full flex items-center gap-1.5">
+                             <Calendar className="h-3 w-3" />
+                             <ExpiryCountdown expiry={esim.expiredTime} iccid={esim.iccid} className="text-xs" />
+                           </span>
                        )}
                     </div>
 
-                    <div className="p-6 space-y-4 flex-grow">
+                    {/* Body: Plan Info */}
+                    <div className="space-y-4 mb-6">
                         <div>
-                          <p className="text-xs font-mono font-bold text-gray-500 uppercase mb-1">Plan</p>
-                          <h3 className="font-black text-2xl uppercase leading-none mb-1">
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">PLAN</p>
+                          <h3 className="font-bold text-2xl text-black leading-tight mb-3">
                             {formatPlanName(esim.planDetails, esim.order?.planId)}
                           </h3>
                           {esim.planDetails?.locationCode && (
-                            <p className="text-sm font-bold bg-black text-white inline-block px-1 uppercase">
-                              {esim.planDetails.locationCode}
-                            </p>
+                            <div className="bg-black text-white h-8 w-8 rounded-full flex items-center justify-center font-bold text-xs">
+                              {esim.planDetails.locationCode.substring(0, 2).toUpperCase()}
+                            </div>
                           )}
-                        </div>
-
-                        <div className="space-y-4 pt-4 border-t-2 border-dashed border-gray-300">
-                           <div className="flex items-center justify-between">
-                              <div>
-                                <p className="text-xs font-mono text-gray-500 uppercase">ICCID</p>
-                                <p className="font-mono text-xs font-bold truncate max-w-[150px]">{esim.iccid}</p>
-                              </div>
-                              <div className="text-right">
-                                <p className="text-xs font-mono text-gray-500 uppercase">Data</p>
-                                <p className="font-black text-lg">{formatBytes(esim.totalVolume)}</p>
-                              </div>
-                           </div>
-
-                           {/* Usage Bar */}
-                           {esim.orderUsage !== null && esim.orderUsage !== undefined && esim.totalVolume && (
-                              <div className="space-y-1">
-                                <div className="flex justify-between text-[10px] font-mono font-bold uppercase">
-                                   <span>Used: {formatBytes(esim.orderUsage)}</span>
-                                   <span>Remaining: {formatBytes(Number(esim.totalVolume) - Number(esim.orderUsage))}</span>
-                                </div>
-                                <div className="h-3 w-full border-2 border-black bg-white p-0.5">
-                                   <div 
-                                      className="h-full bg-primary"
-                                      style={{ width: `${Math.min(100, (Number(esim.orderUsage) / Number(esim.totalVolume)) * 100)}%` }}
-                                   />
-                                </div>
-                              </div>
-                           )}
                         </div>
                     </div>
 
-                    <div className="p-4 bg-gray-50 border-t-2 border-black grid grid-cols-2 gap-3">
+                    {/* Divider */}
+                    <div className="border-t border-dashed border-gray-200 my-4"></div>
+
+                    {/* Details: ICCID & Data */}
+                    <div className="flex items-end justify-between mb-6">
+                        <div>
+                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">ICCID</p>
+                           <p className="font-mono text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded w-fit max-w-[140px] truncate">
+                             {esim.iccid}
+                           </p>
+                        </div>
+                        <div className="text-right">
+                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">DATA</p>
+                           <p className="font-bold text-xl text-black">{formatBytes(esim.totalVolume)}</p>
+                        </div>
+                    </div>
+
+                    {/* Footer: Actions */}
+                    <div className="grid grid-cols-2 gap-3 mt-auto pt-2">
                         {esim.qrCodeUrl ? (
                            <Button 
-                             className="w-full bg-black text-white hover:bg-white hover:text-black border-2 border-black rounded-none font-bold uppercase text-xs"
+                             variant="outline"
+                             className="w-full border-gray-200 hover:bg-gray-50 hover:border-gray-300 text-black rounded-xl font-bold uppercase text-[10px] h-10 tracking-wide"
                              onClick={(e) => {
                                e.preventDefault();
                                e.stopPropagation();
@@ -294,7 +290,7 @@ export default function MyEsimsPage() {
                         ) : <div />}
                         
                         <Button 
-                           className="w-full bg-primary text-black hover:bg-black hover:text-white border-2 border-black rounded-none font-bold uppercase text-xs"
+                           className="w-full bg-black text-white hover:bg-gray-800 border border-transparent rounded-xl font-bold uppercase text-[10px] h-10 tracking-wide shadow-md hover:shadow-lg transition-all"
                            onClick={(e) => {
                              e.preventDefault();
                              e.stopPropagation();
@@ -314,47 +310,45 @@ export default function MyEsimsPage() {
       {/* QR Code Modal */}
       {selectedEsim && selectedEsim.qrCodeUrl && (
         <div 
-          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedEsim(null)}
         >
           <div 
-            className="bg-white border-4 border-black p-6 max-w-md w-full shadow-hard relative"
+            className="bg-white border border-gray-200 p-6 max-w-md w-full shadow-2xl rounded-3xl relative overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="absolute top-0 left-0 w-full h-2 bg-primary" />
-            
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-black uppercase">Install eSIM</h2>
+              <h2 className="text-xl font-bold uppercase text-black">Install eSIM</h2>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setSelectedEsim(null)}
-                className="hover:bg-red-500 hover:text-white rounded-none h-8 w-8 border border-black"
+                className="hover:bg-gray-100 rounded-full h-8 w-8"
               >
                 ×
               </Button>
             </div>
             
             <div className="space-y-6">
-              <p className="text-sm font-mono text-gray-600 border-l-4 border-black pl-3 py-1 bg-gray-50">
+              <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-xl border border-gray-100">
                 Scan this QR code with your device settings to install the eSIM profile.
               </p>
               
-              <div className="bg-white p-4 border-2 border-black flex items-center justify-center">
+              <div className="bg-white p-4 border border-gray-200 rounded-2xl flex items-center justify-center shadow-inner">
                 <Image
                   src={selectedEsim.qrCodeUrl}
                   alt="eSIM QR Code"
                   width={300}
                   height={300}
-                  className="w-full h-auto"
+                  className="w-full h-auto rounded-lg"
                 />
               </div>
               
               {selectedEsim.ac && (
                 <div className="space-y-2">
-                   <p className="text-xs font-bold uppercase">Manual Activation Code:</p>
-                   <div className="p-3 bg-gray-100 border-2 border-black flex items-center justify-between">
-                      <code className="font-mono text-xs break-all">{selectedEsim.ac}</code>
+                   <p className="text-xs font-bold text-gray-500 uppercase ml-1">Manual Activation Code:</p>
+                   <div className="p-3 bg-gray-50 border border-gray-200 rounded-xl flex items-center justify-between group hover:border-gray-300 transition-colors">
+                      <code className="font-mono text-xs break-all text-gray-700">{selectedEsim.ac}</code>
                       <Button
                          size="sm"
                          variant="ghost"
@@ -365,16 +359,16 @@ export default function MyEsimsPage() {
                              setTimeout(() => setCopied(false), 2000);
                            }
                          }}
-                         className="h-6 px-2 hover:bg-black hover:text-white"
+                         className="h-8 w-8 p-0 rounded-full hover:bg-white shadow-sm"
                       >
-                         {copied ? <CheckCircle2 className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                         {copied ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-gray-500" />}
                       </Button>
                    </div>
                 </div>
               )}
               
               <Button
-                className="w-full bg-black text-white hover:bg-primary hover:text-black border-2 border-black rounded-none font-bold uppercase py-6"
+                className="w-full bg-black text-white hover:bg-gray-800 rounded-full font-bold uppercase py-6 shadow-lg"
                 onClick={() => setSelectedEsim(null)}
               >
                 Close

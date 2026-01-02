@@ -19,8 +19,8 @@ export function CountryCard({ country }: { country: Country }) {
   
   return (
     <Link href={href} className="block group h-full">
-      <div className="h-full bg-white border-2 border-black p-3 hover:bg-black hover:text-primary transition-all flex items-center gap-3 shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none">
-        <div className="shrink-0 border border-black group-hover:border-primary">
+      <div className="h-full bg-white border-2 border-black p-3 rounded-xl hover:bg-black hover:text-primary transition-all flex items-center gap-3 shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none">
+        <div className="shrink-0 border border-black rounded-md overflow-hidden group-hover:border-primary">
            <FlagIcon logoUrl={country.locationLogo} alt={country.name} className="h-6 w-8 object-cover block" />
         </div>
         <span className="font-bold text-sm uppercase leading-tight truncate">

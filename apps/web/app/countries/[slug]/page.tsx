@@ -153,36 +153,36 @@ export default function CountryPlansPageSlug({ params }: { params: { slug: strin
     <div className="max-w-6xl mx-auto px-4 md:px-8 py-8 space-y-8">
       <div className="flex items-center justify-between">
         <Link href="/">
-          <Button variant="ghost" className="pl-0 hover:pl-2 hover:bg-transparent text-gray-500 hover:text-black transition-all font-mono uppercase text-sm font-bold">
+          <Button variant="ghost" className="pl-0 hover:pl-2 hover:bg-transparent text-gray-500 hover:text-black transition-all font-medium text-sm rounded-full">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Store
           </Button>
         </Link>
       </div>
 
-      {/* Country Header - Neo-Brutalist Style */}
-      <div className="bg-white border-2 border-black p-8 shadow-hard relative overflow-hidden">
+      {/* Country Header - Professional Rounded Style */}
+      <div className="bg-white border border-gray-200 p-8 shadow-lg rounded-2xl relative overflow-hidden">
         {/* Decorative 'Tag' */}
-        <div className="absolute top-0 right-0 bg-black text-white px-4 py-2 font-mono text-xs uppercase font-bold">
+        <div className="absolute top-0 right-0 bg-black text-white px-4 py-2 text-xs font-bold rounded-bl-xl">
             Destination Guide
         </div>
         
         <div className="relative z-10 flex flex-col md:flex-row gap-8 items-start md:items-center">
-          <div className="h-24 w-36 md:h-32 md:w-48 border-2 border-black p-1 bg-white shadow-hard-sm shrink-0 transform -rotate-2 hover:rotate-0 transition-transform">
-            <div className="h-full w-full border border-black overflow-hidden relative">
+          <div className="h-24 w-36 md:h-32 md:w-48 border border-gray-200 p-1 bg-white shadow-sm shrink-0 rounded-xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
+            <div className="h-full w-full rounded-lg overflow-hidden relative">
               <FlagIcon logoUrl={flagUrl} alt={countryCode} className="h-full w-full object-cover" />
             </div>
           </div>
           
           <div className="space-y-3">
-            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-black leading-none">
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-black leading-none">
               {countryName}
             </h1>
-            <div className="flex items-center gap-2 text-gray-600 font-mono text-sm uppercase font-bold">
-              <MapPin className="h-4 w-4 text-primary" />
+            <div className="flex items-center gap-2 text-gray-600 font-medium text-sm">
+              <MapPin className="h-4 w-4 text-primary-dark" />
               <span>Popular Destination</span>
             </div>
             {lowestPriceUSD > 0 && (
-              <div className="inline-block px-4 py-1.5 bg-primary text-black font-black uppercase text-sm border border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+              <div className="inline-block px-4 py-1.5 bg-primary/10 text-primary-dark font-bold text-sm border border-primary/20 rounded-full">
                 Plans starting from {formatCurrency(lowestPriceConverted)}
               </div>
             )}
@@ -213,28 +213,28 @@ export default function CountryPlansPageSlug({ params }: { params: { slug: strin
         ) : (
           <>
             {/* Sort Filter - Matching PlanListWithFilters style exactly */}
-            <div className="bg-white border-2 border-black rounded-none p-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-hard">
+            <div className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm">
               <div className="flex items-center gap-4 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 no-scrollbar">
                 {/* Sort Control */}
                 <div className="flex items-center gap-2 min-w-fit">
-                  <ArrowDownUp className="h-4 w-4 text-black" />
-                  <span className="text-sm font-bold uppercase hidden sm:inline">Sort by:</span>
+                  <ArrowDownUp className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm font-bold text-gray-700 hidden sm:inline">Sort by:</span>
                   <div className="relative">
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value as "days" | "price" | "dataSize" | "name")}
-                      className="appearance-none bg-white text-black text-sm font-bold uppercase border-2 border-black pl-3 pr-8 py-2 focus:outline-none focus:shadow-hard-sm cursor-pointer"
+                      className="appearance-none bg-gray-50 text-black text-sm font-medium border border-gray-200 rounded-lg pl-3 pr-8 py-2 focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer hover:bg-gray-100 transition-colors"
                     >
                       <option value="price">Price: Low to High</option>
                       <option value="dataSize">Data: Low to High</option>
                       <option value="days">Duration: Short to Long</option>
                       <option value="name">Plan Name</option>
                     </select>
-                    <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-black pointer-events-none" />
+                    <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
                   </div>
                 </div>
               </div>
-              <div className="font-mono text-sm font-bold uppercase text-gray-500">
+              <div className="text-sm font-medium text-gray-500">
                 {sortedPlans.length} plan{sortedPlans.length !== 1 ? 's' : ''} available
               </div>
             </div>

@@ -3,15 +3,17 @@ import { Zap, Instagram, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-black text-white border-t-4 border-primary mt-auto">
+    <footer className="bg-black text-white border-t border-gray-900 mt-auto">
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center gap-2 mb-4 text-primary">
-                <Zap className="h-6 w-6 fill-current" />
-                <span className="text-xl font-black italic uppercase">Cheap eSIMs</span>
+                <div className="bg-primary text-black font-bold p-1 rounded-md">
+                   CE
+                </div>
+                <span className="text-xl font-bold tracking-tight text-white">Cheap eSIMs</span>
             </div>
-            <p className="text-sm text-gray-400 max-w-xs font-mono">
+            <p className="text-sm text-gray-400 max-w-xs leading-relaxed">
               We provide the cheapest possible data for travelers. No frills. No hidden fees. Just internet.
             </p>
             <div className="flex gap-4 mt-4">

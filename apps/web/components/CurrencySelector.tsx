@@ -77,7 +77,7 @@ export function CurrencySelector() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-1.5 border border-white/30 hover:border-white text-white bg-transparent hover:bg-white/10 transition-colors font-mono text-sm font-bold"
+        className="flex items-center gap-2 px-3 py-1.5 border border-gray-200 hover:border-black text-black bg-transparent hover:bg-gray-50 transition-colors font-medium text-sm rounded-full"
         aria-label="Select currency"
       >
         <span>{mounted ? selectedCurrency : 'USD'}</span>
@@ -90,7 +90,7 @@ export function CurrencySelector() {
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 top-full mt-2 w-56 bg-white border-2 border-black shadow-hard z-20 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-black scrollbar-track-gray-100">
+          <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-gray-200 shadow-xl rounded-xl z-20 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
             {SUPPORTED_CURRENCIES.map((currency) => (
               <button
                 key={currency.code}
@@ -98,20 +98,20 @@ export function CurrencySelector() {
                   setCurrency(currency.code);
                   setIsOpen(false);
                 }}
-                className={`w-full text-left px-4 py-3 hover:bg-secondary flex items-center justify-between group border-b border-gray-100 last:border-0 ${
+                className={`w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center justify-between group border-b border-gray-50 last:border-0 transition-colors ${
                   selectedCurrency === currency.code
-                    ? 'bg-secondary text-black'
+                    ? 'bg-gray-50 text-black'
                     : 'text-gray-600'
                 }`}
               >
                 <div className="flex flex-col">
-                  <span className={`font-bold font-mono ${selectedCurrency === currency.code ? 'text-black' : 'text-gray-900'}`}>
+                  <span className={`font-bold ${selectedCurrency === currency.code ? 'text-black' : 'text-gray-900'}`}>
                     {currency.code}
                   </span>
-                  <span className="text-xs text-gray-500 uppercase">{currency.name}</span>
+                  <span className="text-xs text-gray-500">{currency.name}</span>
                 </div>
                 {selectedCurrency === currency.code && (
-                  <Check className="w-4 h-4 text-primary" strokeWidth={4} />
+                  <Check className="w-4 h-4 text-primary-dark" strokeWidth={3} />
                 )}
               </button>
             ))}

@@ -64,11 +64,13 @@ export default function PlanPage() {
   if (!plan) {
     return (
       <div className="container mx-auto px-4 py-20 text-center">
-        <h1 className="text-3xl font-bold text-black mb-4">Plan Not Found</h1>
-        <p className="text-gray-500 mb-6">The plan you're looking for doesn't exist or has been removed.</p>
-        <Link href="/">
-          <Button className="font-bold uppercase rounded-none border-2 border-black shadow-hard hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">Browse Plans</Button>
-        </Link>
+        <div className="max-w-md mx-auto bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
+          <h1 className="text-2xl font-bold text-black mb-4">Plan Not Found</h1>
+          <p className="text-gray-500 mb-6">The plan you're looking for doesn't exist or has been removed.</p>
+          <Link href="/">
+            <Button className="font-bold uppercase rounded-full bg-black hover:bg-gray-800 text-white px-8">Browse Plans</Button>
+          </Link>
+        </div>
       </div>
     );
   }

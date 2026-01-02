@@ -428,22 +428,6 @@ export function QRDisplay({
     );
   }
 
-  const defaultTrigger = (
-    <Button className="bg-white border border-gray-200 text-gray-900 font-bold hover:bg-gray-50 transition-all rounded-full shadow-sm flex items-center gap-2">
-      <QrCode className="h-4 w-4" />
-      How to Install
-    </Button>
-  );
-
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        {trigger || defaultTrigger}
-      </DialogTrigger>
-// ... (rest of the file is handled by the Dialog component in install-steps-dialog.tsx, wait, this is QRDisplay, which uses InstallStepsDialog? No, QRDisplay is a separate component)
-// Ah, I am editing QRDisplay.tsx. Let me look at the content again.
-// It renders a div, not a Dialog.
-
   return (
     <div
       ref={qrContainerRef}

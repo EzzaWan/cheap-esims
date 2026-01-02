@@ -117,23 +117,23 @@ export default function SupportDeviceCheckPage() {
   return (
     <div className="min-h-screen py-10 bg-background text-foreground">
       <div className="max-w-4xl mx-auto px-4">
-        <Link href="/support" className="inline-flex items-center gap-2 text-gray-500 hover:text-black transition-colors mb-8 font-mono font-bold uppercase text-sm">
+        <Link href="/support" className="inline-flex items-center gap-2 text-gray-500 hover:text-black transition-colors mb-8 font-medium text-sm">
           <ArrowLeft className="h-4 w-4" />
           Back to Support
         </Link>
 
         <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-black mb-4 leading-none">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 mb-4 leading-none">
             Device Check
           </h1>
-          <p className="text-gray-500 font-mono font-bold uppercase">
+          <p className="text-gray-500 text-lg">
             Check if your device supports eSIM before purchasing
           </p>
         </div>
 
-        <Card className="bg-white border-2 border-black rounded-none shadow-hard mb-8">
-          <CardHeader className="bg-secondary border-b-2 border-black p-6">
-            <CardTitle className="text-black font-black uppercase text-2xl">Search Your Device</CardTitle>
+        <Card className="bg-white rounded-2xl border border-gray-200 shadow-lg mb-8 overflow-hidden">
+          <CardHeader className="bg-gray-50/50 border-b border-gray-200 p-6">
+            <CardTitle className="text-gray-900 font-bold text-2xl">Search Your Device</CardTitle>
           </CardHeader>
           <CardContent className="p-8 space-y-6">
             <div className="relative" ref={suggestionsRef}>
@@ -150,16 +150,16 @@ export default function SupportDeviceCheckPage() {
                   onFocus={() => {
                     if (suggestions.length > 0) setShowSuggestions(true);
                   }}
-                  className="pl-10 h-12 bg-white border-2 border-black rounded-none shadow-sm focus-visible:ring-0 focus-visible:border-primary text-black placeholder:text-gray-400 font-mono"
+                  className="pl-10 h-12 bg-white border-gray-200 rounded-lg shadow-sm focus-visible:ring-primary focus-visible:border-primary text-gray-900 placeholder:text-gray-400"
                 />
               </div>
               {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute z-50 w-full mt-1 bg-white border-2 border-black rounded-none shadow-hard max-h-60 overflow-y-auto">
+                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto">
                   {suggestions.map((model) => (
                     <button
                       key={model}
                       onClick={() => handleSuggestionClick(model)}
-                      className="w-full text-left px-4 py-3 hover:bg-secondary text-black font-mono text-sm border-b border-gray-100 last:border-0 transition-colors uppercase"
+                      className="w-full text-left px-4 py-3 hover:bg-gray-50 text-gray-900 text-sm border-b border-gray-100 last:border-0 transition-colors"
                     >
                       {model}
                     </button>
@@ -173,7 +173,7 @@ export default function SupportDeviceCheckPage() {
               <select
                 value={selectedCountry}
                 onChange={(e) => setSelectedCountry(e.target.value)}
-                className="w-full h-12 pl-10 pr-3 rounded-none border-2 border-black bg-white text-black font-mono focus:outline-none focus:border-primary shadow-sm appearance-none cursor-pointer"
+                className="w-full h-12 pl-10 pr-3 rounded-lg border border-gray-200 bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm appearance-none cursor-pointer"
               >
                 <option value="">Select country (optional)</option>
                 {countries.map((country) => (
@@ -187,7 +187,7 @@ export default function SupportDeviceCheckPage() {
             <Button
               onClick={handleCheckCompatibility}
               disabled={!selectedDevice || loading}
-              className="w-full h-12 bg-primary hover:bg-black hover:text-white text-black border-2 border-black rounded-none font-black uppercase tracking-wider text-lg shadow-hard-sm hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-12 bg-black hover:bg-gray-800 text-white rounded-full font-bold tracking-wide text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Checking..." : "Check Compatibility"}
             </Button>
@@ -195,25 +195,25 @@ export default function SupportDeviceCheckPage() {
         </Card>
 
         {result && (
-          <Card className="bg-white border-2 border-black rounded-none shadow-hard overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <CardHeader className="bg-secondary border-b-2 border-black p-6">
+          <Card className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <CardHeader className="bg-gray-50/50 border-b border-gray-200 p-6">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-black font-black uppercase text-xl">Compatibility Result</CardTitle>
+                <CardTitle className="text-gray-900 font-bold text-xl">Compatibility Result</CardTitle>
                 <Badge
-                  className={`rounded-none border-2 border-black px-3 py-1 font-black uppercase text-xs ${
+                  className={`rounded-full px-4 py-1.5 font-bold text-xs ${
                     result.supported
-                      ? "bg-green-400 text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-                      : "bg-red-500 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      ? "bg-green-100 text-green-700 hover:bg-green-200 border border-green-200"
+                      : "bg-red-100 text-red-700 hover:bg-red-200 border border-red-200"
                   }`}
                 >
                   {result.supported ? (
                     <>
-                      <CheckCircle2 className="h-4 w-4 mr-1 inline" />
+                      <CheckCircle2 className="h-4 w-4 mr-1.5 inline" />
                       SUPPORTED
                     </>
                   ) : (
                     <>
-                      <XCircle className="h-4 w-4 mr-1 inline" />
+                      <XCircle className="h-4 w-4 mr-1.5 inline" />
                       NOT SUPPORTED
                     </>
                   )}
@@ -222,15 +222,15 @@ export default function SupportDeviceCheckPage() {
             </CardHeader>
             <CardContent className="p-8 space-y-6">
               <div>
-                <p className="text-xs font-mono font-bold text-gray-500 uppercase mb-1">Device Model</p>
-                <p className="text-2xl font-black text-black uppercase tracking-tight">
+                <p className="text-xs font-bold text-gray-500 uppercase mb-1">Device Model</p>
+                <p className="text-2xl font-bold text-gray-900 tracking-tight">
                   {result.brand} {result.model}
                 </p>
               </div>
 
               {result.notes && result.notes.length > 0 && (
-                <div className="bg-yellow-50 border-2 border-black p-4 shadow-sm relative">
-                  <div className="absolute -top-3 left-4 bg-yellow-400 text-black text-[10px] font-black uppercase px-2 py-0.5 border border-black">
+                <div className="bg-yellow-50 rounded-xl border border-yellow-200 p-4 relative">
+                  <div className="absolute -top-3 left-4 bg-yellow-400 text-black text-[10px] font-bold uppercase px-2 py-0.5 rounded-full">
                     Important Notes
                   </div>
                   <div className="space-y-2 mt-2">
@@ -239,8 +239,8 @@ export default function SupportDeviceCheckPage() {
                         key={index}
                         className="flex items-start gap-3"
                       >
-                        <AlertTriangle className="h-5 w-5 text-black flex-shrink-0 mt-0.5" />
-                        <p className="text-sm font-mono text-black">{note}</p>
+                        <AlertTriangle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                        <p className="text-sm text-gray-800">{note}</p>
                       </div>
                     ))}
                   </div>
@@ -249,26 +249,26 @@ export default function SupportDeviceCheckPage() {
 
               {selectedCountry && result.regionalNotes?.[selectedCountry.toUpperCase()] && (
                 <div>
-                  <p className="text-xs font-mono font-bold text-gray-500 uppercase mb-2">Country-Specific Info</p>
-                  <div className="p-4 bg-blue-50 border-2 border-black shadow-sm">
-                    <p className="text-sm font-mono text-black font-bold">
+                  <p className="text-xs font-bold text-gray-500 uppercase mb-2">Country-Specific Info</p>
+                  <div className="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                    <p className="text-sm text-blue-900 font-medium">
                       {result.regionalNotes[selectedCountry.toUpperCase()]}
                     </p>
                   </div>
                 </div>
               )}
 
-              <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t-2 border-black">
+              <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
                 {result.supported ? (
                   <>
                     <Link href="/countries" className="flex-1">
-                      <Button className="w-full bg-black text-white hover:bg-primary hover:text-black border-2 border-black rounded-none font-bold uppercase shadow-hard-sm hover:shadow-none transition-all">
+                      <Button className="w-full bg-black text-white hover:bg-gray-800 rounded-full font-bold shadow-lg hover:shadow-xl transition-all h-12">
                         Browse Plans
                         <ExternalLink className="h-4 w-4 ml-2" />
                       </Button>
                     </Link>
                     <Link href="/support" className="flex-1">
-                      <Button variant="outline" className="w-full border-2 border-black rounded-none font-bold uppercase hover:bg-secondary transition-all">
+                      <Button variant="outline" className="w-full border-gray-200 text-gray-900 rounded-full font-bold hover:bg-gray-50 transition-all h-12">
                         View Installation Guide
                         <ExternalLink className="h-4 w-4 ml-2" />
                       </Button>
@@ -277,13 +277,13 @@ export default function SupportDeviceCheckPage() {
                 ) : (
                   <>
                     <Link href="/support/contact" className="flex-1">
-                      <Button className="w-full bg-black text-white hover:bg-primary hover:text-black border-2 border-black rounded-none font-bold uppercase shadow-hard-sm hover:shadow-none transition-all">
+                      <Button className="w-full bg-black text-white hover:bg-gray-800 rounded-full font-bold shadow-lg hover:shadow-xl transition-all h-12">
                         Contact Support
                         <ExternalLink className="h-4 w-4 ml-2" />
                       </Button>
                     </Link>
                     <Link href="/support" className="flex-1">
-                      <Button variant="outline" className="w-full border-2 border-black rounded-none font-bold uppercase hover:bg-secondary transition-all">
+                      <Button variant="outline" className="w-full border-gray-200 text-gray-900 rounded-full font-bold hover:bg-gray-50 transition-all h-12">
                         How to check eSIM support
                         <ExternalLink className="h-4 w-4 ml-2" />
                       </Button>

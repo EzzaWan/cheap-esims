@@ -18,16 +18,16 @@ import { toast } from "@/components/ui/use-toast";
 
 // Helper function to format user-friendly status
 function getStatusDisplay(esimStatus: string | undefined): { label: string; color: string } {
-  if (!esimStatus) return { label: "Pending", color: "bg-gray-100 text-gray-800 border-gray-600" };
+  if (!esimStatus) return { label: "Pending", color: "bg-gray-100 text-gray-700 border-gray-200" };
   
   const statusMap: Record<string, { label: string; color: string }> = {
-    GOT_RESOURCE: { label: "Ready", color: "bg-green-100 text-green-800 border-green-600" },
-    IN_USE: { label: "Active", color: "bg-blue-100 text-blue-800 border-blue-600" },
-    EXPIRED: { label: "Expired", color: "bg-red-100 text-red-800 border-red-600" },
-    SUSPENDED: { label: "Suspended", color: "bg-yellow-100 text-yellow-800 border-yellow-600" },
+    GOT_RESOURCE: { label: "Ready", color: "bg-green-100 text-green-700 border-green-200" },
+    IN_USE: { label: "Active", color: "bg-blue-100 text-blue-700 border-blue-200" },
+    EXPIRED: { label: "Expired", color: "bg-red-100 text-red-700 border-red-200" },
+    SUSPENDED: { label: "Suspended", color: "bg-yellow-100 text-yellow-700 border-yellow-200" },
   };
   
-  return statusMap[esimStatus] || { label: esimStatus, color: "bg-gray-100 text-gray-800 border-gray-600" };
+  return statusMap[esimStatus] || { label: esimStatus, color: "bg-gray-100 text-gray-700 border-gray-200" };
 }
 
 // Helper function to format bytes to readable format
@@ -165,7 +165,7 @@ export default function EsimDetailPage() {
     return (
       <div className="container mx-auto px-4 py-20 text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
-        <p className="text-black font-mono uppercase font-bold">Loading details...</p>
+        <p className="text-gray-500 font-bold">Loading details...</p>
       </div>
     );
   }
@@ -173,8 +173,8 @@ export default function EsimDetailPage() {
   if (!profile) {
     return (
       <div className="container mx-auto px-4 py-20 text-center">
-        <div className="text-red-500 font-black uppercase text-xl mb-2">Error</div>
-        <p className="text-black font-mono font-bold uppercase">Profile not found</p>
+        <div className="text-red-500 font-bold text-xl mb-2">Error</div>
+        <p className="text-gray-500 font-bold">Profile not found</p>
       </div>
     );
   }
@@ -203,43 +203,43 @@ export default function EsimDetailPage() {
   return (
     <div className="container mx-auto px-4 py-8 space-y-8 max-w-5xl">
       {/* Back Button */}
-      <Link href="/my-esims" className="inline-flex items-center text-black hover:bg-black hover:text-white border-2 border-transparent hover:border-black transition-all px-2 py-1 font-mono uppercase font-bold text-sm mb-4">
+      <Link href="/my-esims" className="inline-flex items-center text-gray-500 hover:text-black transition-colors px-2 py-1 font-bold text-sm mb-4">
         <ArrowLeft className="h-4 w-4 mr-2" /> Back to My eSIMs
       </Link>
 
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-black text-black uppercase tracking-tighter">eSIM Details</h1>
-        <Button variant="outline" size="icon" onClick={fetchData} className="bg-white border-2 border-black rounded-none shadow-hard hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all text-black">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">eSIM Details</h1>
+        <Button variant="outline" size="icon" onClick={fetchData} className="bg-white border-gray-200 rounded-full shadow-sm hover:bg-gray-50 transition-all text-gray-700">
            <RefreshCw className="h-4 w-4" />
         </Button>
       </div>
 
       {/* Header Card */}
-      <div className="bg-white border-2 border-black rounded-none p-8 shadow-hard relative overflow-hidden">
+      <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 p-8 opacity-5">
               <Wifi className="h-64 w-64 text-black" />
           </div>
           
           <div className="relative z-10">
               <div className="flex items-center gap-3 mb-6">
-                  <Badge className={`${getStatusDisplay(profile.esimStatus).color} border-2 rounded-none font-bold uppercase px-3 py-1 shadow-hard-sm`}>
+                  <Badge className={`${getStatusDisplay(profile.esimStatus).color} border rounded-full font-bold px-3 py-1`}>
                       {getStatusDisplay(profile.esimStatus).label}
                   </Badge>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-900 border-2 border-purple-600 text-sm font-bold uppercase rounded-none shadow-hard-sm">
+                  <span className="px-3 py-1 bg-purple-50 text-purple-700 border border-purple-200 text-sm font-bold rounded-full">
                       eSIM
                   </span>
               </div>
-              <h1 className="text-3xl md:text-5xl font-black text-black uppercase mb-6 leading-tight">
+              <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                 {profile.planDetails?.name || profile.iccid}
               </h1>
-              <div className="flex flex-wrap gap-6">
-                 <div className="flex items-center gap-2 bg-white border-2 border-black px-3 py-1.5 shadow-hard-sm">
-                    <Globe className="h-4 w-4 text-black" />
-                    <span className="text-black font-bold uppercase text-sm">{profile.planDetails?.location || "Global"} Region</span>
+              <div className="flex flex-wrap gap-4">
+                 <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full">
+                    <Globe className="h-4 w-4 text-gray-700" />
+                    <span className="text-gray-900 font-bold text-sm">{profile.planDetails?.location || "Global"} Region</span>
                  </div>
-                 <div className="flex items-center gap-2 bg-white border-2 border-black px-3 py-1.5 shadow-hard-sm">
-                    <Wifi className="h-4 w-4 text-black" />
-                    <span className="text-black font-bold uppercase text-sm">4G/LTE Speed</span>
+                 <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full">
+                    <Wifi className="h-4 w-4 text-gray-700" />
+                    <span className="text-gray-900 font-bold text-sm">4G/LTE Speed</span>
                  </div>
               </div>
           </div>
@@ -247,41 +247,41 @@ export default function EsimDetailPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-         <div className="bg-white rounded-none p-5 border-2 border-black shadow-hard flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors">
-            <HardDrive className="h-6 w-6 text-black mb-3" />
-            <span className="text-gray-500 font-mono uppercase text-xs font-bold mb-1">Data Balance</span>
-            <span className="text-xl md:text-2xl font-black text-black uppercase">{sizeGB}</span>
+         <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors">
+            <HardDrive className="h-6 w-6 text-gray-900 mb-3" />
+            <span className="text-gray-500 text-xs font-bold mb-1 uppercase">Data Balance</span>
+            <span className="text-xl md:text-2xl font-bold text-gray-900">{sizeGB}</span>
          </div>
-         <div className="bg-white rounded-none p-5 border-2 border-black shadow-hard flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors">
-            <Calendar className="h-6 w-6 text-black mb-3" />
-            <span className="text-gray-500 font-mono uppercase text-xs font-bold mb-1">Expires</span>
+         <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors">
+            <Calendar className="h-6 w-6 text-gray-900 mb-3" />
+            <span className="text-gray-500 text-xs font-bold mb-1 uppercase">Expires</span>
             <ExpiryCountdown 
               expiry={profile.expiredTime} 
               iccid={profile.iccid}
               onExpired={fetchData}
-              className="text-xl md:text-2xl font-black text-black uppercase !text-black"
+              className="text-xl md:text-2xl font-bold text-gray-900 !text-gray-900"
             />
          </div>
-         <div className="bg-white rounded-none p-5 border-2 border-black shadow-hard flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors">
-            <span className="text-gray-500 font-mono uppercase text-xs font-bold mb-1">Status</span>
-            <span className="text-xl md:text-2xl font-black text-black uppercase">{statusDisplay.label}</span>
+         <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors">
+            <span className="text-gray-500 text-xs font-bold mb-1 uppercase">Status</span>
+            <span className="text-xl md:text-2xl font-bold text-gray-900">{statusDisplay.label}</span>
          </div>
-         <div className="bg-white rounded-none p-5 border-2 border-black shadow-hard flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors">
-            <span className="text-gray-500 font-mono uppercase text-xs font-bold mb-1">ICCID</span>
-            <span className="text-xs md:text-sm font-mono font-bold text-black truncate max-w-full px-2 bg-gray-100 py-1 border border-black">{profile.iccid}</span>
+         <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors">
+            <span className="text-gray-500 text-xs font-bold mb-1 uppercase">ICCID</span>
+            <span className="text-xs md:text-sm font-mono font-bold text-gray-900 truncate max-w-full px-2 bg-gray-50 py-1 rounded-md border border-gray-200">{profile.iccid}</span>
          </div>
       </div>
 
       {/* QR Code Display Section */}
       {(profile.qrCodeUrl || profile.ac || polling) && (
-        <div className="bg-white rounded-none p-8 border-2 border-black shadow-hard">
+        <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
             <div>
-              <h3 className="text-2xl font-black text-black uppercase mb-2 flex items-center gap-2">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2">
                 <QrCode className="h-6 w-6" />
                 Install eSIM
               </h3>
-              <p className="text-gray-600 font-mono font-bold text-sm uppercase">
+              <p className="text-gray-600 font-medium text-sm">
                 {polling && !profile.qrCodeUrl && !profile.ac
                   ? "Your eSIM is being prepared. This may take a few moments..."
                   : "Scan the QR code with your device to install the eSIM profile"}
@@ -296,12 +296,12 @@ export default function EsimDetailPage() {
           </div>
           
           {polling && !profile.qrCodeUrl && !profile.ac ? (
-            <div className="bg-gray-50 border-2 border-black border-dashed p-12 rounded-none">
+            <div className="bg-gray-50 border border-gray-200 border-dashed p-12 rounded-xl">
               <div className="flex flex-col items-center justify-center text-center space-y-6">
-                <RefreshCw className="h-12 w-12 animate-spin text-black" />
+                <RefreshCw className="h-12 w-12 animate-spin text-gray-400" />
                 <div>
-                  <h4 className="text-xl font-black text-black uppercase mb-2">Preparing Your eSIM</h4>
-                  <p className="text-gray-600 font-mono text-sm font-bold">
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">Preparing Your eSIM</h4>
+                  <p className="text-gray-600 font-medium text-sm">
                     We're preparing your eSIM QR code. This usually takes less than a minute.
                     <br />
                     The page will update automatically when ready.
@@ -328,7 +328,7 @@ export default function EsimDetailPage() {
         {profile.order?.id && (
           <Button 
             variant="secondary"
-            className="h-14 px-8 text-lg font-black uppercase bg-white text-black border-2 border-black rounded-none shadow-hard hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all w-full sm:w-auto"
+            className="h-14 px-8 text-lg font-bold bg-white text-gray-900 border border-gray-200 rounded-full shadow-sm hover:shadow-md hover:bg-gray-50 transition-all w-full sm:w-auto"
             onClick={async () => {
               const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
               const userEmail = user?.primaryEmailAddress?.emailAddress || '';
@@ -362,7 +362,7 @@ export default function EsimDetailPage() {
         {profile?.planDetails?.supportTopUpType === 2 ? (
           <Link href={`/my-esims/${iccid}/topup`} className="w-full sm:w-auto">
             <Button 
-               className="h-14 px-8 text-lg font-black uppercase bg-primary text-black border-2 border-black rounded-none shadow-hard hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all w-full"
+               className="h-14 px-8 text-lg font-bold bg-primary text-primary-foreground border-0 rounded-full shadow-lg hover:shadow-xl hover:bg-primary/90 transition-all w-full"
             >
                Top Up Now
             </Button>
@@ -371,11 +371,11 @@ export default function EsimDetailPage() {
           <div className="w-full sm:w-auto">
             <Button 
                disabled
-               className="h-14 px-8 text-lg font-black uppercase bg-gray-200 text-gray-500 border-2 border-gray-400 rounded-none shadow-hard w-full cursor-not-allowed"
+               className="h-14 px-8 text-lg font-bold bg-gray-100 text-gray-400 border-0 rounded-full shadow-none w-full cursor-not-allowed"
             >
                Top-Up Not Available
             </Button>
-            <p className="text-xs text-gray-500 mt-2 font-mono font-bold uppercase text-center">
+            <p className="text-xs text-gray-500 mt-2 font-medium text-center">
               This plan does not support top-ups
             </p>
           </div>
@@ -384,8 +384,8 @@ export default function EsimDetailPage() {
 
       {/* Data Usage History Graph */}
       {usageHistory.length > 0 && (
-        <div className="bg-white rounded-none p-8 border-2 border-black shadow-hard">
-          <h3 className="text-xl font-black text-black uppercase mb-6 border-b-2 border-black pb-4">Data Usage History</h3>
+        <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
+          <h3 className="text-xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-4">Data Usage History</h3>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={usageHistory.map((record) => ({
@@ -396,37 +396,35 @@ export default function EsimDetailPage() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis 
                   dataKey="date" 
-                  stroke="#000"
-                  style={{ fontSize: '12px', fontWeight: 'bold', fontFamily: 'monospace' }}
+                  stroke="#6b7280"
+                  style={{ fontSize: '12px', fontWeight: '500' }}
                   tickLine={false}
                 />
                 <YAxis 
-                  stroke="#000"
-                  style={{ fontSize: '12px', fontWeight: 'bold', fontFamily: 'monospace' }}
-                  label={{ value: 'GB Used', angle: -90, position: 'insideLeft', style: { fill: '#000', fontWeight: 'bold', textTransform: 'uppercase' } }}
+                  stroke="#6b7280"
+                  style={{ fontSize: '12px', fontWeight: '500' }}
+                  label={{ value: 'GB Used', angle: -90, position: 'insideLeft', style: { fill: '#6b7280', fontWeight: '500' } }}
                   tickLine={false}
                 />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: '#fff',
-                    border: '2px solid #000',
-                    borderRadius: '0px',
-                    boxShadow: '4px 4px 0px 0px #000',
-                    color: '#000',
-                    fontWeight: 'bold',
-                    fontFamily: 'monospace',
-                    textTransform: 'uppercase'
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '12px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    color: '#1f2937',
+                    fontWeight: '500',
                   }}
-                  itemStyle={{ color: '#000' }}
-                  formatter={(value: any) => [`${value} GB`, 'DATA USED']}
+                  itemStyle={{ color: '#1f2937' }}
+                  formatter={(value: any) => [`${value} GB`, 'Data Used']}
                 />
                 <Line 
-                  type="step" 
+                  type="monotone" 
                   dataKey="usedGB" 
-                  stroke="#000" 
+                  stroke="var(--primary)" 
                   strokeWidth={3}
-                  dot={{ fill: '#000', r: 4, strokeWidth: 0 }}
-                  activeDot={{ r: 6, fill: 'var(--primary)', stroke: '#000', strokeWidth: 2 }}
+                  dot={{ fill: '#fff', r: 4, stroke: 'var(--primary)', strokeWidth: 2 }}
+                  activeDot={{ r: 6, fill: 'var(--primary)', stroke: '#fff', strokeWidth: 2 }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -435,8 +433,8 @@ export default function EsimDetailPage() {
       )}
 
       {/* Top-Up History */}
-      <div className="bg-white rounded-none p-8 border-2 border-black shadow-hard">
-         <h3 className="text-xl font-black text-black uppercase mb-6 border-b-2 border-black pb-4">Top-Up History</h3>
+      <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
+         <h3 className="text-xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-4">Top-Up History</h3>
          {history.length > 0 ? (
              <div className="space-y-4">
                  {history.map((item: any) => {
@@ -444,14 +442,14 @@ export default function EsimDetailPage() {
                    const planName = planDetails?.name || item.planCode;
                    
                    return (
-                     <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border-2 border-black shadow-hard-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all gap-4">
+                     <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all gap-4">
                          <div className="flex items-center gap-4">
-                             <div className="h-12 w-12 bg-primary border-2 border-black flex items-center justify-center shrink-0">
-                                 <Clock className="h-6 w-6 text-black" />
+                             <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
+                                 <Clock className="h-6 w-6 text-primary" />
                              </div>
                              <div>
-                               <p className="font-black text-black uppercase text-lg leading-tight">{planName}</p>
-                               <p className="text-xs font-mono font-bold text-gray-500 uppercase">
+                               <p className="font-bold text-gray-900 text-lg leading-tight">{planName}</p>
+                               <p className="text-xs font-medium text-gray-500">
                                  {(() => {
                                    if (!item.createdAt) return 'N/A';
                                    try {
@@ -470,12 +468,12 @@ export default function EsimDetailPage() {
                              </div>
                          </div>
                          <div className="text-right flex items-center justify-between sm:block w-full sm:w-auto mt-2 sm:mt-0">
-                             <PriceTag price={item.amountCents / 100} currencyCode={item.currency} className="text-xl font-black text-black block" />
+                             <PriceTag price={item.amountCents / 100} currencyCode={item.currency} className="text-xl font-bold text-gray-900 block" />
                              <Badge variant="outline" className={`
-                               ${item.status === 'completed' ? 'bg-green-100 text-green-800 border-green-600' : 
-                                 item.status === 'pending' ? 'bg-yellow-100 text-yellow-800 border-yellow-600' : 
-                                 'bg-red-100 text-red-800 border-red-600'}
-                               border-2 rounded-none font-bold uppercase px-2 py-0.5 mt-1
+                               ${item.status === 'completed' ? 'bg-green-100 text-green-700 border-green-200' : 
+                                 item.status === 'pending' ? 'bg-yellow-100 text-yellow-700 border-yellow-200' : 
+                                 'bg-red-100 text-red-700 border-red-200'}
+                               border rounded-full font-bold px-2 py-0.5 mt-1
                              `}>
                                {item.status}
                              </Badge>
@@ -485,7 +483,7 @@ export default function EsimDetailPage() {
                  })}
              </div>
          ) : (
-             <div className="flex items-center justify-center p-12 bg-gray-50 border-2 border-dashed border-gray-300 text-gray-500 font-mono uppercase font-bold">
+             <div className="flex items-center justify-center p-12 bg-gray-50 border border-dashed border-gray-200 rounded-xl text-gray-500 font-medium">
                 No top-up history found.
              </div>
          )}

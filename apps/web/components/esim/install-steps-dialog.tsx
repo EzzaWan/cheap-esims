@@ -78,7 +78,7 @@ export function InstallStepsDialog({
   const displaySmdp = smdpAddress || smdpFromAc || "Not available";
 
   const defaultTrigger = (
-    <Button className="bg-white border-2 border-black text-black font-black uppercase hover:bg-black hover:text-white transition-all rounded-none shadow-hard-sm hover:shadow-none flex items-center gap-2">
+    <Button className="bg-white border border-gray-200 text-gray-900 font-bold hover:bg-gray-50 transition-all rounded-full shadow-sm flex items-center gap-2">
       <QrCode className="h-4 w-4" />
       How to Install
     </Button>
@@ -89,23 +89,24 @@ export function InstallStepsDialog({
       <DialogTrigger asChild>
         {trigger || defaultTrigger}
       </DialogTrigger>
-      <DialogOverlay className="bg-black/60" />
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-white border-2 border-black rounded-none shadow-hard p-0 [&>button]:text-black [&>button]:hover:bg-black [&>button]:hover:text-white [&>button]:border-2 [&>button]:border-black [&>button]:rounded-none">
-        <DialogHeader className="p-6 border-b-2 border-black">
-          <DialogTitle className="text-3xl font-black uppercase text-black">eSIM Installation Guide</DialogTitle>
-          <DialogDescription className="text-gray-600 font-mono font-bold uppercase text-sm mt-2">
+      <DialogOverlay className="bg-black/60 backdrop-blur-sm" />
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-white border border-gray-200 rounded-2xl shadow-xl p-0 [&>button]:text-gray-500 [&>button]:hover:text-black [&>button]:rounded-full">
+        <DialogHeader className="p-6 border-b border-gray-100">
+          <DialogTitle className="text-2xl font-bold text-gray-900 tracking-tight">eSIM Installation Guide</DialogTitle>
+          <DialogDescription className="text-gray-500 text-sm mt-2">
             Follow these step-by-step instructions to install your eSIM on your device.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 p-6">
-          <div className="flex gap-4">
+          <div className="flex gap-4 p-1 bg-gray-100 rounded-full">
             <Button
               onClick={() => setActiveDevice("ios")}
-              className={`flex-1 border-2 border-black font-black uppercase rounded-none shadow-hard-sm hover:shadow-none transition-all ${
-                activeDevice === "ios" 
-                  ? "bg-primary text-black" 
-                  : "bg-white text-black hover:bg-black hover:text-white"
+              variant="ghost"
+              className={`flex-1 rounded-full font-bold transition-all ${
+                activeDevice === "ios" || !activeDevice
+                  ? "bg-white text-black shadow-sm" 
+                  : "text-gray-500 hover:text-black hover:bg-gray-200"
               }`}
             >
               <Smartphone className="h-4 w-4 mr-2" />
@@ -113,10 +114,11 @@ export function InstallStepsDialog({
             </Button>
             <Button
               onClick={() => setActiveDevice("android")}
-              className={`flex-1 border-2 border-black font-black uppercase rounded-none shadow-hard-sm hover:shadow-none transition-all ${
+              variant="ghost"
+              className={`flex-1 rounded-full font-bold transition-all ${
                 activeDevice === "android" 
-                  ? "bg-primary text-black" 
-                  : "bg-white text-black hover:bg-black hover:text-white"
+                  ? "bg-white text-black shadow-sm" 
+                  : "text-gray-500 hover:text-black hover:bg-gray-200"
               }`}
             >
               <Smartphone className="h-4 w-4 mr-2" />
@@ -125,60 +127,64 @@ export function InstallStepsDialog({
           </div>
 
           {(!activeDevice || activeDevice === "ios") && (
-            <Card className="bg-white border-2 border-black rounded-none shadow-hard-sm">
-              <CardContent className="p-6 space-y-6">
+            <Card className="bg-white border border-gray-200 rounded-xl shadow-sm">
+              <CardContent className="p-6 space-y-8">
                 <div className="flex items-center gap-3 mb-4">
-                  <Smartphone className="h-6 w-6 text-primary" />
-                  <h3 className="text-2xl font-black uppercase text-black">iPhone Installation</h3>
+                  <div className="p-2 bg-gray-100 rounded-lg">
+                    <Smartphone className="h-6 w-6 text-gray-900" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">iPhone Installation</h3>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-8 relative before:absolute before:left-[19px] before:top-2 before:h-[calc(100%-40px)] before:w-0.5 before:bg-gray-100">
                   {/* Step 1 */}
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
+                  <div className="flex gap-4 relative">
+                    <div className="flex-shrink-0 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
                       1
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Access Cellular Settings</h4>
-                      <p className="text-gray-600 font-mono font-bold">
-                        Go to <strong className="text-black">Settings</strong> &gt; <strong className="text-black">Cellular</strong> (or Mobile Data) &gt; <strong className="text-black">Add eSIM</strong>.
+                    <div className="flex-1 space-y-2 pt-1">
+                      <h4 className="text-gray-900 font-bold text-lg">Access Cellular Settings</h4>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        Go to <strong className="text-gray-900">Settings</strong> &gt; <strong className="text-gray-900">Cellular</strong> (or Mobile Data) &gt; <strong className="text-gray-900">Add eSIM</strong>.
                       </p>
                     </div>
                   </div>
 
                   {/* Step 2 */}
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
+                  <div className="flex gap-4 relative">
+                    <div className="flex-shrink-0 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
                       2
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Scan QR Code</h4>
-                      <p className="text-gray-600 font-mono font-bold">
-                        Select <strong className="text-black">Use QR Code</strong> and scan the code.
+                    <div className="flex-1 space-y-2 pt-1">
+                      <h4 className="text-gray-900 font-bold text-lg">Scan QR Code</h4>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        Select <strong className="text-gray-900">Use QR Code</strong> and scan the code.
                       </p>
-                      <div className="mt-2">
-                         <p className="text-xs text-gray-500 font-mono font-bold mb-1">
-                           Can't scan? <strong className="text-black">Enter Details Manually</strong>:
+                      <div className="mt-4 bg-gray-50 rounded-xl p-4 border border-gray-100">
+                         <p className="text-xs text-gray-500 font-bold uppercase mb-2">
+                           Can't scan? <strong className="text-gray-900">Enter Details Manually</strong>:
                          </p>
-                         <div className="bg-gray-50 border-2 border-black p-2 rounded-none">
-                           <div className="flex justify-between items-center mb-1">
-                             <span className="text-xs text-gray-600 font-mono font-bold">SM-DP+:</span>
-                             <button onClick={() => handleCopy(displaySmdp, "smdp")} className="text-xs text-primary hover:underline font-black uppercase">
-                               {copied === "smdp" ? "Copied" : "Copy"}
-                             </button>
+                         <div className="space-y-3">
+                           <div>
+                             <div className="flex justify-between items-center mb-1">
+                               <span className="text-xs text-gray-500 font-medium">SM-DP+:</span>
+                               <button onClick={() => handleCopy(displaySmdp, "smdp")} className="text-xs text-primary hover:text-primary-dark font-bold uppercase transition-colors">
+                                 {copied === "smdp" ? "Copied" : "Copy"}
+                               </button>
+                             </div>
+                             <code className="text-xs text-gray-900 block truncate font-mono bg-white px-2 py-1 rounded border border-gray-200">{displaySmdp}</code>
                            </div>
-                           <code className="text-xs text-black block truncate mb-2 font-mono font-bold">{displaySmdp}</code>
                            
                            {activationCodeOnly && (
-                             <>
+                             <div>
                                <div className="flex justify-between items-center mb-1">
-                                 <span className="text-xs text-gray-600 font-mono font-bold">Code:</span>
-                                 <button onClick={() => handleCopy(activationCodeOnly, "ac")} className="text-xs text-primary hover:underline font-black uppercase">
+                                 <span className="text-xs text-gray-500 font-medium">Code:</span>
+                                 <button onClick={() => handleCopy(activationCodeOnly, "ac")} className="text-xs text-primary hover:text-primary-dark font-bold uppercase transition-colors">
                                    {copied === "ac" ? "Copied" : "Copy"}
                                  </button>
                                </div>
-                               <code className="text-xs text-black block truncate font-mono font-bold">{activationCodeOnly}</code>
-                             </>
+                               <code className="text-xs text-gray-900 block truncate font-mono bg-white px-2 py-1 rounded border border-gray-200">{activationCodeOnly}</code>
+                             </div>
                            )}
                          </div>
                       </div>
@@ -186,46 +192,46 @@ export function InstallStepsDialog({
                   </div>
 
                   {/* Step 3 */}
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
+                  <div className="flex gap-4 relative">
+                    <div className="flex-shrink-0 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
                       3
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Label Your eSIM</h4>
-                      <p className="text-gray-600 font-mono font-bold">
+                    <div className="flex-1 space-y-2 pt-1">
+                      <h4 className="text-gray-900 font-bold text-lg">Label Your eSIM</h4>
+                      <p className="text-gray-600 text-sm leading-relaxed">
                         Name your new plan (e.g., "Cheap eSIMs") to easily identify it.
                       </p>
                     </div>
                   </div>
 
                   {/* Step 4 */}
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
+                  <div className="flex gap-4 relative">
+                    <div className="flex-shrink-0 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
                       4
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Set Default Line</h4>
-                      <ul className="list-disc list-inside text-sm text-gray-600 font-mono font-bold space-y-1">
-                        <li><strong className="text-black">Default Line:</strong> Primary (keep for calls/SMS)</li>
-                        <li><strong className="text-black">Cellular Data:</strong> Select your new eSIM</li>
+                    <div className="flex-1 space-y-2 pt-1">
+                      <h4 className="text-gray-900 font-bold text-lg">Set Default Line</h4>
+                      <ul className="list-disc list-inside text-sm text-gray-600 space-y-1 ml-1">
+                        <li><strong className="text-gray-900">Default Line:</strong> Primary (keep for calls/SMS)</li>
+                        <li><strong className="text-gray-900">Cellular Data:</strong> Select your new eSIM</li>
                       </ul>
                     </div>
                   </div>
 
                   {/* Step 5 */}
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
+                  <div className="flex gap-4 relative">
+                    <div className="flex-shrink-0 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
                       5
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Configure Network</h4>
-                      <p className="text-gray-600 font-mono font-bold mb-1">
-                        In <strong className="text-black">Settings</strong> &gt; <strong className="text-black">Cellular</strong> &gt; Your eSIM:
+                    <div className="flex-1 space-y-2 pt-1">
+                      <h4 className="text-gray-900 font-bold text-lg">Configure Network</h4>
+                      <p className="text-gray-600 text-sm mb-2 leading-relaxed">
+                        In <strong className="text-gray-900">Settings</strong> &gt; <strong className="text-gray-900">Cellular</strong> &gt; Your eSIM:
                       </p>
-                      <ul className="list-disc list-inside text-sm text-gray-600 font-mono font-bold space-y-1">
-                        <li>Toggle <strong className="text-black">Data Roaming</strong> ON</li>
-                        <li>Set <strong className="text-black">Network Selection</strong> to Automatic</li>
-                        <li>Ensure <strong className="text-black">Voice & Data</strong> is LTE or 5G</li>
+                      <ul className="list-disc list-inside text-sm text-gray-600 space-y-1 ml-1">
+                        <li>Toggle <strong className="text-gray-900">Data Roaming</strong> ON</li>
+                        <li>Set <strong className="text-gray-900">Network Selection</strong> to Automatic</li>
+                        <li>Ensure <strong className="text-gray-900">Voice & Data</strong> is LTE or 5G</li>
                       </ul>
                     </div>
                   </div>
@@ -235,111 +241,111 @@ export function InstallStepsDialog({
           )}
 
           {(!activeDevice || activeDevice === "android") && (
-            <Card className="bg-white border-2 border-black rounded-none shadow-hard-sm">
-              <CardContent className="p-6 space-y-6">
+            <Card className="bg-white border border-gray-200 rounded-xl shadow-sm">
+              <CardContent className="p-6 space-y-8">
                 <div className="flex items-center gap-3 mb-4">
-                  <Smartphone className="h-6 w-6 text-primary" />
-                  <h3 className="text-2xl font-black uppercase text-black">Android Installation (Samsung / Pixel)</h3>
+                  <div className="p-2 bg-gray-100 rounded-lg">
+                    <Smartphone className="h-6 w-6 text-gray-900" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">Android Installation (Samsung / Pixel)</h3>
                 </div>
 
-                <div className="space-y-6">
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
+                <div className="space-y-8 relative before:absolute before:left-[19px] before:top-2 before:h-[calc(100%-40px)] before:w-0.5 before:bg-gray-100">
+                  <div className="flex gap-4 relative">
+                    <div className="flex-shrink-0 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
                       1
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Open Settings</h4>
-                      <p className="text-gray-600 font-mono font-bold">
-                        Open the <strong className="text-black">Settings</strong> app on your Android device.
+                    <div className="flex-1 space-y-2 pt-1">
+                      <h4 className="text-gray-900 font-bold text-lg">Open Settings</h4>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        Open the <strong className="text-gray-900">Settings</strong> app on your Android device.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
+                  <div className="flex gap-4 relative">
+                    <div className="flex-shrink-0 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
                       2
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Navigate to Connections</h4>
-                      <p className="text-gray-600 font-mono font-bold">
-                        Tap <strong className="text-black">Connections</strong> (Samsung) or <strong className="text-black">Network & internet</strong> (Pixel).
+                    <div className="flex-1 space-y-2 pt-1">
+                      <h4 className="text-gray-900 font-bold text-lg">Navigate to Connections</h4>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        Tap <strong className="text-gray-900">Connections</strong> (Samsung) or <strong className="text-gray-900">Network & internet</strong> (Pixel).
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
+                  <div className="flex gap-4 relative">
+                    <div className="flex-shrink-0 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
                       3
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">SIM Manager</h4>
-                      <p className="text-gray-600 font-mono font-bold">
-                        Tap <strong className="text-black">SIM Manager</strong> or <strong className="text-black">SIMs</strong>.
+                    <div className="flex-1 space-y-2 pt-1">
+                      <h4 className="text-gray-900 font-bold text-lg">SIM Manager</h4>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        Tap <strong className="text-gray-900">SIM Manager</strong> or <strong className="text-gray-900">SIMs</strong>.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
+                  <div className="flex gap-4 relative">
+                    <div className="flex-shrink-0 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
                       4
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Add eSIM</h4>
-                      <p className="text-gray-600 font-mono font-bold">
-                        Tap <strong className="text-black">Add eSIM</strong> or <strong className="text-black">Add mobile plan</strong>.
+                    <div className="flex-1 space-y-2 pt-1">
+                      <h4 className="text-gray-900 font-bold text-lg">Add eSIM</h4>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        Tap <strong className="text-gray-900">Add eSIM</strong> or <strong className="text-gray-900">Add mobile plan</strong>.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
+                  <div className="flex gap-4 relative">
+                    <div className="flex-shrink-0 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
                       5
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Scan QR Code or Enter Code</h4>
-                      <p className="text-gray-600 font-mono font-bold mb-2">
+                    <div className="flex-1 space-y-2 pt-1">
+                      <h4 className="text-gray-900 font-bold text-lg">Scan QR Code or Enter Code</h4>
+                      <p className="text-gray-600 text-sm mb-2 leading-relaxed">
                         Choose one of these options:
                       </p>
-                      <ul className="list-disc list-inside space-y-2 text-gray-600 font-mono font-bold ml-2">
+                      <ul className="list-disc list-inside space-y-2 text-gray-600 ml-2 text-sm">
                         <li>
-                          <strong className="text-black">Scan QR Code:</strong> Point your camera at the QR code
+                          <strong className="text-gray-900">Scan QR Code:</strong> Point your camera at the QR code
                         </li>
                         <li>
-                          <strong className="text-black">Enter Activation Code:</strong> Manually enter the activation code
+                          <strong className="text-gray-900">Enter Activation Code:</strong> Manually enter the activation code
                         </li>
                       </ul>
                       {activationCodeOnly && (
-                        <div className="mt-3">
-                          <div className="p-3 bg-white border-2 border-black">
-                            <div className="flex items-center justify-between gap-2">
-                              <code className="text-sm text-black font-mono break-all flex-1 font-bold">
-                                {activationCodeOnly}
-                              </code>
-                              <Button
-                                size="sm"
-                                onClick={() => handleCopy(activationCodeOnly, "ac")}
-                                className="bg-white border-2 border-black text-black font-black uppercase rounded-none shadow-hard-sm hover:shadow-none hover:bg-black hover:text-white"
-                              >
-                                {copied === "ac" ? (
-                                  <CheckCircle2 className="h-3 w-3" />
-                                ) : (
-                                  <Copy className="h-3 w-3" />
-                                )}
-                              </Button>
-                            </div>
+                        <div className="mt-4 bg-gray-50 rounded-xl p-4 border border-gray-100">
+                          <div className="flex items-center justify-between gap-3">
+                            <code className="text-sm text-gray-900 font-mono break-all flex-1 bg-white px-3 py-2 rounded border border-gray-200">
+                              {activationCodeOnly}
+                            </code>
+                            <Button
+                              size="sm"
+                              onClick={() => handleCopy(activationCodeOnly, "ac")}
+                              className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:text-black rounded-full shadow-sm h-10 px-4"
+                            >
+                              {copied === "ac" ? (
+                                <CheckCircle2 className="h-4 w-4" />
+                              ) : (
+                                <Copy className="h-4 w-4" />
+                              )}
+                            </Button>
                           </div>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 border-2 border-black bg-primary text-black flex items-center justify-center font-black text-lg">
+                  <div className="flex gap-4 relative">
+                    <div className="flex-shrink-0 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
                       6
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="text-black font-black uppercase">Complete Setup</h4>
-                      <p className="text-gray-600 font-mono font-bold">
+                    <div className="flex-1 space-y-2 pt-1">
+                      <h4 className="text-gray-900 font-bold text-lg">Complete Setup</h4>
+                      <p className="text-gray-600 text-sm leading-relaxed">
                         Follow the on-screen prompts to complete the installation. Your eSIM will be activated once the download is complete.
                       </p>
                     </div>
@@ -349,14 +355,14 @@ export function InstallStepsDialog({
             </Card>
           )}
 
-          <div className="p-4 bg-gray-100 border-2 border-black">
-            <p className="text-sm text-black font-mono font-bold">
-              <strong className="uppercase">Note:</strong> If you encounter any issues during installation, check our{" "}
-              <a href="/support?tab=troubleshooting" className="underline hover:text-primary font-black">
+          <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl">
+            <p className="text-sm text-gray-600">
+              <strong className="text-gray-900 uppercase text-xs tracking-wider">Note:</strong> If you encounter any issues during installation, check our{" "}
+              <a href="/support?tab=troubleshooting" className="underline hover:text-primary font-bold text-gray-900">
                 troubleshooting guide
               </a>{" "}
               or{" "}
-              <a href="/support/contact" className="underline hover:text-primary font-black">
+              <a href="/support/contact" className="underline hover:text-primary font-bold text-gray-900">
                 contact support
               </a>
               .

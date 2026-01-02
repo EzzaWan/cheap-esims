@@ -153,53 +153,50 @@ export default function SupportTicketDetailPage() {
       <div className="flex items-center gap-4 mb-4">
         <Link href="/account/support">
           <Button
-            variant="outline"
-            className="bg-white border-2 border-black text-black hover:bg-black hover:text-white rounded-none font-bold uppercase shadow-hard-sm hover:shadow-none transition-all"
+            variant="ghost"
+            className="text-gray-500 hover:text-black hover:bg-gray-100 rounded-full font-bold transition-all pl-2"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
         </Link>
         <div>
-          <h1 className="text-3xl font-black uppercase tracking-tighter text-black">Support Ticket</h1>
-          <p className="text-gray-500 font-mono text-sm uppercase font-bold">ID: {ticket.id.substring(0, 8)}...</p>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Support Ticket</h1>
+          <p className="text-gray-500 text-sm font-medium">ID: {ticket.id.substring(0, 8)}...</p>
         </div>
       </div>
 
       {/* Original Message */}
-      <Card className="bg-white border-2 border-black rounded-none shadow-hard overflow-hidden">
-        <CardHeader className="bg-secondary border-b-2 border-black p-6">
-          <CardTitle className="text-black font-black uppercase flex items-center gap-2">
+      <Card className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <CardHeader className="bg-gray-50/50 border-b border-gray-200 p-6">
+          <CardTitle className="text-gray-900 font-bold flex items-center gap-2">
             <Mail className="h-5 w-5" />
             Your Message
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
-          <div className="bg-gray-50 border-2 border-black p-4 mb-6 relative">
-            <div className="absolute -top-3 -left-2 bg-black text-white px-2 py-0.5 text-xs font-bold uppercase transform -rotate-2">
-              Original Inquiry
-            </div>
-            <div className="flex items-center justify-between mb-4 mt-2">
-              <Badge className="bg-black text-white hover:bg-black rounded-none font-bold uppercase border border-black">You</Badge>
-              <span className="text-xs font-mono font-bold text-gray-500 flex items-center gap-2">
+          <div className="bg-blue-50/50 rounded-xl border border-blue-100 p-6 mb-6 relative">
+            <div className="flex items-center justify-between mb-4">
+              <Badge className="bg-black text-white hover:bg-gray-800 rounded-full font-bold px-3">You</Badge>
+              <span className="text-xs font-medium text-gray-500 flex items-center gap-2">
                 <Calendar className="h-3 w-3" />
                 {new Date(ticket.createdAt).toLocaleString()}
               </span>
             </div>
-            <p className="text-black font-mono whitespace-pre-wrap text-sm leading-relaxed">{ticket.message}</p>
+            <p className="text-gray-900 whitespace-pre-wrap text-sm leading-relaxed">{ticket.message}</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {ticket.orderId && (
-              <div className="p-3 bg-white border-2 border-black shadow-sm">
+              <div className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
                 <p className="text-xs font-bold text-gray-500 uppercase mb-1">Order ID</p>
-                <p className="text-black font-mono font-bold">{ticket.orderId}</p>
+                <p className="text-gray-900 font-mono font-bold">{ticket.orderId}</p>
               </div>
             )}
             {ticket.device && (
-              <div className="p-3 bg-white border-2 border-black shadow-sm">
+              <div className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
                 <p className="text-xs font-bold text-gray-500 uppercase mb-1">Device</p>
-                <p className="text-black font-mono font-bold">{ticket.device}</p>
+                <p className="text-gray-900 font-medium">{ticket.device}</p>
               </div>
             )}
           </div>
@@ -207,14 +204,14 @@ export default function SupportTicketDetailPage() {
       </Card>
 
       {/* Replies */}
-      <Card className="bg-white border-2 border-black rounded-none shadow-hard overflow-hidden">
-        <CardHeader className="bg-white border-b-2 border-black p-6">
-          <CardTitle className="text-black font-black uppercase flex items-center gap-2">
+      <Card className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <CardHeader className="bg-white border-b border-gray-200 p-6">
+          <CardTitle className="text-gray-900 font-bold flex items-center gap-2">
             <MessageCircle className="h-5 w-5" />
             Conversation History ({ticket.SupportTicketReply?.length || 0})
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-6 space-y-6 bg-gray-50/50">
+        <CardContent className="p-6 space-y-6 bg-gray-50/30">
           {ticket.SupportTicketReply && ticket.SupportTicketReply.length > 0 ? (
             ticket.SupportTicketReply.map((reply) => (
               <div
@@ -222,32 +219,32 @@ export default function SupportTicketDetailPage() {
                 className={`flex flex-col ${reply.isAdmin ? "items-start" : "items-end"}`}
               >
                 <div 
-                  className={`max-w-[85%] border-2 border-black p-4 shadow-hard-sm ${
+                  className={`max-w-[85%] p-5 shadow-sm ${
                     reply.isAdmin 
-                      ? "bg-white rounded-tr-lg rounded-br-lg rounded-bl-lg" 
-                      : "bg-primary text-black rounded-tl-lg rounded-bl-lg rounded-br-lg"
+                      ? "bg-white border border-gray-200 rounded-2xl rounded-tl-none" 
+                      : "bg-primary text-primary-foreground rounded-2xl rounded-tr-none shadow-md shadow-primary/10"
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-4 mb-2 border-b border-black/10 pb-2">
-                    <span className="font-black uppercase text-xs">
+                  <div className="flex items-center justify-between gap-4 mb-2 pb-2 border-b border-black/5">
+                    <span className="font-bold text-xs uppercase tracking-wide">
                       {reply.isAdmin ? (
                         <span className="flex items-center gap-1 text-blue-600">
-                          <Badge className="bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-none h-5 px-1.5">SUPPORT</Badge>
+                          <Badge className="bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-full h-5 px-2">SUPPORT</Badge>
                         </span>
                       ) : "You"}
                     </span>
-                    <span className="text-[10px] font-mono text-gray-500">
+                    <span className={`text-[10px] font-medium ${reply.isAdmin ? "text-gray-400" : "text-primary-foreground/70"}`}>
                       {new Date(reply.createdAt).toLocaleString()}
                     </span>
                   </div>
-                  <p className="text-sm whitespace-pre-wrap font-mono leading-relaxed">{reply.message}</p>
+                  <p className="text-sm whitespace-pre-wrap leading-relaxed">{reply.message}</p>
                 </div>
               </div>
             ))
           ) : (
-            <div className="text-center py-12 border-2 border-dashed border-gray-300 bg-white">
+            <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-xl bg-white/50">
               <MessageCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 font-mono font-bold uppercase text-sm">No responses yet</p>
+              <p className="text-gray-500 font-medium">No responses yet</p>
               <p className="text-gray-400 text-xs mt-1">Our team will get back to you shortly.</p>
             </div>
           )}
@@ -255,9 +252,9 @@ export default function SupportTicketDetailPage() {
       </Card>
 
       {/* Reply Form */}
-      <Card className="bg-white border-2 border-black rounded-none shadow-hard overflow-hidden">
-        <CardHeader className="bg-white border-b-2 border-black p-6">
-          <CardTitle className="text-black font-black uppercase flex items-center gap-2">
+      <Card className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <CardHeader className="bg-white border-b border-gray-200 p-6">
+          <CardTitle className="text-gray-900 font-bold flex items-center gap-2">
             <Send className="h-5 w-5" />
             Send a Reply
           </CardTitle>
@@ -268,17 +265,17 @@ export default function SupportTicketDetailPage() {
               placeholder="Type your message here..."
               value={replyMessage}
               onChange={(e) => setReplyMessage(e.target.value)}
-              className="bg-white border-2 border-black text-black font-mono min-h-[150px] rounded-none focus:ring-0 focus:shadow-hard-sm transition-all p-4 resize-y"
+              className="bg-white border-gray-200 text-gray-900 min-h-[150px] rounded-xl focus:ring-primary focus:border-primary transition-all p-4 resize-y"
               disabled={replying}
             />
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <p className={`text-xs font-mono font-bold ${replyMessage.length > 1000 ? "text-red-500" : "text-gray-500"}`}>
+              <p className={`text-xs font-medium ${replyMessage.length > 1000 ? "text-red-500" : "text-gray-400"}`}>
                 {replyMessage.length}/1000 characters
               </p>
               <Button
                 onClick={handleReply}
                 disabled={replying || !replyMessage.trim() || replyMessage.trim().length < 10}
-                className="w-full sm:w-auto bg-black text-white hover:bg-white hover:text-black border-2 border-black rounded-none font-bold uppercase shadow-hard-sm hover:shadow-none transition-all h-12 px-8"
+                className="w-full sm:w-auto bg-black text-white hover:bg-gray-800 rounded-full font-bold shadow-lg hover:shadow-xl transition-all h-12 px-8"
               >
                 {replying ? (
                   <>

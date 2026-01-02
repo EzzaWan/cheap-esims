@@ -41,30 +41,30 @@ export default function ReviewsPage() {
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Reviews' }]} />
       
-      <div className="bg-white border-2 border-black p-8 shadow-hard">
-        <div className="flex items-center gap-4 mb-6 border-b-2 border-black pb-4">
-          <div className="bg-primary p-3 border-2 border-black">
-            <MessageSquare className="h-6 w-6 text-black" />
+      <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+        <div className="flex items-center gap-4 mb-6 border-b border-gray-200 pb-4">
+          <div className="bg-primary/10 p-3 rounded-full">
+            <MessageSquare className="h-6 w-6 text-primary" />
           </div>
-          <h1 className="text-4xl font-black uppercase tracking-tighter">All Reviews</h1>
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900">All Reviews</h1>
         </div>
 
         {loading ? (
-          <div className="text-center py-12 text-gray-500 font-mono">Loading reviews...</div>
+          <div className="text-center py-12 text-gray-500">Loading reviews...</div>
         ) : reviews.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 font-bold uppercase text-lg">No reviews yet</p>
-            <p className="text-sm text-gray-400 mt-2 font-mono">Reviews will appear here once users start leaving feedback.</p>
+          <div className="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+            <p className="text-gray-900 font-bold text-lg mb-2">No reviews yet</p>
+            <p className="text-sm text-gray-500">Reviews will appear here once users start leaving feedback.</p>
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2">
             {reviews.map((review) => (
-              <div key={review.id} className="border-2 border-black p-6 hover:shadow-hard transition-all">
+              <div key={review.id} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-black text-lg uppercase">{review.userName}</span>
+                    <span className="font-bold text-lg text-gray-900">{review.userName}</span>
                     {review.verified && (
-                      <span className="flex items-center gap-1 text-xs bg-primary/20 text-black px-2 py-0.5 border border-primary font-bold uppercase">
+                      <span className="flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">
                         <CheckCircle2 className="h-3 w-3" />
                         Verified
                       </span>
@@ -76,19 +76,19 @@ export default function ReviewsPage() {
                         key={star}
                         className={`h-4 w-4 ${
                           star <= review.rating
-                            ? "fill-primary text-primary"
-                            : "text-gray-300"
+                            ? "fill-yellow-400 text-yellow-400"
+                            : "fill-gray-100 text-gray-200"
                         }`}
                       />
                     ))}
                   </div>
                 </div>
-                <p className="text-sm font-mono text-gray-700 mb-2 line-clamp-3">{review.comment}</p>
-                <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
-                  <p className="text-xs text-gray-400 font-mono uppercase">
+                <p className="text-sm text-gray-600 mb-2 line-clamp-3 leading-relaxed">{review.comment}</p>
+                <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+                  <p className="text-xs text-gray-400 font-medium">
                     {new Date(review.date).toLocaleDateString()}
                   </p>
-                  <p className="text-xs text-gray-500 font-mono uppercase">Plan: {review.planId}</p>
+                  <p className="text-xs text-gray-500 font-medium bg-gray-50 px-2 py-1 rounded-md">Plan: {review.planId}</p>
                 </div>
               </div>
             ))}

@@ -160,9 +160,9 @@ export default function AffiliateDashboardPage() {
   if (!isLoaded || loading || currencyLoading) {
     return (
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-12 space-y-8">
-        <Skeleton className="h-10 w-48 bg-gray-200 rounded-none" />
-        <Skeleton className="h-64 w-full bg-gray-200 rounded-none" />
-        <Skeleton className="h-96 w-full bg-gray-200 rounded-none" />
+        <Skeleton className="h-10 w-48 bg-gray-200 rounded-xl" />
+        <Skeleton className="h-64 w-full bg-gray-200 rounded-xl" />
+        <Skeleton className="h-96 w-full bg-gray-200 rounded-xl" />
       </div>
     );
   }
@@ -194,36 +194,36 @@ export default function AffiliateDashboardPage() {
       {/* Back Button */}
       <Link
         href="/account"
-        className="inline-flex items-center text-gray-500 hover:text-black transition-colors mb-4 font-mono font-bold uppercase text-sm"
+        className="inline-flex items-center text-gray-500 hover:text-black transition-colors mb-4 font-medium text-sm"
       >
         <ArrowLeft className="h-4 w-4 mr-2" /> Back to Account
       </Link>
 
       {/* Header */}
       <div>
-        <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-black mb-2">Affiliate Dashboard</h1>
-        <p className="text-gray-500 font-mono uppercase text-sm font-bold">Earn 10% lifetime commissions on all referrals</p>
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 mb-2">Affiliate Dashboard</h1>
+        <p className="text-gray-500 text-lg">Earn 10% lifetime commissions on all referrals</p>
       </div>
 
       {/* Top Section: Referral Link & Stats */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Referral Link Card */}
-        <div className="bg-white border-2 border-black p-8 shadow-hard flex flex-col justify-between">
-          <h3 className="text-xl font-black uppercase mb-6">Your Referral Link</h3>
+        <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm flex flex-col justify-between">
+          <h3 className="text-xl font-bold mb-6">Your Referral Link</h3>
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="w-full sm:w-1/3 p-4 bg-gray-50 border-2 border-black">
-                <p className="text-xs font-mono font-bold uppercase text-gray-500 mb-1">Referral Code</p>
-                <p className="text-xl font-black text-black font-mono break-all">{dashboard?.affiliate?.referralCode || 'N/A'}</p>
+              <div className="w-full sm:w-1/3 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <p className="text-xs font-medium uppercase text-gray-500 mb-1">Referral Code</p>
+                <p className="text-xl font-bold text-gray-900 font-mono break-all">{dashboard?.affiliate?.referralCode || 'N/A'}</p>
               </div>
-              <div className="w-full sm:w-2/3 p-4 bg-gray-50 border-2 border-black">
-                <p className="text-xs font-mono font-bold uppercase text-gray-500 mb-1">Referral Link</p>
-                <p className="text-sm text-black font-mono break-all truncate">{dashboard?.affiliate?.referralLink || 'N/A'}</p>
+              <div className="w-full sm:w-2/3 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <p className="text-xs font-medium uppercase text-gray-500 mb-1">Referral Link</p>
+                <p className="text-sm text-gray-900 font-mono break-all truncate">{dashboard?.affiliate?.referralLink || 'N/A'}</p>
               </div>
             </div>
             <Button
               onClick={copyReferralLink}
-              className="w-full bg-primary hover:bg-black hover:text-white text-black border-2 border-black rounded-none font-bold uppercase shadow-hard-sm hover:shadow-none transition-all"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full font-bold shadow-lg shadow-primary/20 transition-all"
             >
               {copied ? (
                 <>
@@ -240,26 +240,26 @@ export default function AffiliateDashboardPage() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-white border-2 border-black p-6 shadow-hard flex flex-col justify-center relative overflow-hidden">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm flex flex-col justify-center relative overflow-hidden">
              <div className="absolute top-0 right-0 p-2 opacity-10">
                 <DollarSign className="h-24 w-24" />
              </div>
-             <p className="text-sm font-mono font-bold uppercase text-gray-500 mb-1">Total Commission</p>
-             <p className="text-4xl font-black tracking-tighter text-black">
+             <p className="text-sm font-medium uppercase text-gray-500 mb-1">Total Commission</p>
+             <p className="text-4xl font-bold tracking-tight text-gray-900">
                 {formatCurrency(dashboard?.stats?.totalCommission || 0)}
              </p>
-             <p className="text-xs font-mono uppercase text-gray-400 mt-2">All-time earnings</p>
+             <p className="text-xs text-gray-400 mt-2">All-time earnings</p>
           </div>
 
-          <div className="bg-black border-2 border-black p-6 shadow-hard flex flex-col justify-center text-white relative overflow-hidden">
+          <div className="bg-black rounded-2xl border border-black p-6 shadow-sm flex flex-col justify-center text-white relative overflow-hidden">
              <div className="absolute top-0 right-0 p-2 opacity-20">
                 <Users className="h-24 w-24 text-white" />
              </div>
-             <p className="text-sm font-mono font-bold uppercase text-gray-400 mb-1">Total Referrals</p>
-             <p className="text-4xl font-black tracking-tighter text-white">
+             <p className="text-sm font-medium uppercase text-gray-400 mb-1">Total Referrals</p>
+             <p className="text-4xl font-bold tracking-tight text-white">
                 {dashboard?.stats?.totalReferrals || 0}
              </p>
-             <p className="text-xs font-mono uppercase text-gray-500 mt-2">Users referred</p>
+             <p className="text-xs text-gray-500 mt-2">Users referred</p>
           </div>
         </div>
       </div>
@@ -268,15 +268,15 @@ export default function AffiliateDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         {/* Convert to Spare Change Section */}
         {dashboard?.remainingCommission !== undefined && dashboard.remainingCommission > 0 ? (
-          <div className="bg-white border-2 border-black p-8 shadow-hard">
-            <h3 className="text-xl font-black uppercase mb-6">Convert to Spare Change</h3>
+          <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+            <h3 className="text-xl font-bold mb-6">Convert to Spare Change</h3>
             <div className="space-y-6">
-              <p className="font-mono text-sm text-gray-600">
+              <p className="text-sm text-gray-600">
                 Convert your affiliate earnings into Spare Change store credit instantly.
               </p>
-              <div className="p-4 bg-secondary border-2 border-black">
-                <p className="text-xs font-mono font-bold uppercase text-gray-500">Available to convert:</p>
-                <p className="text-3xl font-black text-black tracking-tighter">
+              <div className="p-4 bg-secondary/50 rounded-xl border border-gray-200">
+                <p className="text-xs font-medium uppercase text-gray-500">Available to convert:</p>
+                <p className="text-3xl font-bold text-gray-900 tracking-tight">
                   {formatCurrency(dashboard?.remainingCommission || 0)}
                 </p>
               </div>
@@ -317,7 +317,7 @@ export default function AffiliateDashboardPage() {
                 className="space-y-4"
               >
                 <div className="space-y-2">
-                  <Label htmlFor="spareChangeAmount" className="font-bold uppercase text-xs">Amount (USD)</Label>
+                  <Label htmlFor="spareChangeAmount" className="font-bold text-xs uppercase text-gray-500">Amount (USD)</Label>
                   <Input
                     id="spareChangeAmount"
                     type="number"
@@ -326,13 +326,13 @@ export default function AffiliateDashboardPage() {
                     placeholder={`Max: ${formatCurrency(dashboard?.remainingCommission || 0)}`}
                     value={spareChangeAmount}
                     onChange={(e) => setSpareChangeAmount(e.target.value)}
-                    className="border-2 border-black rounded-none font-mono"
+                    className="border-gray-200 rounded-lg font-mono focus:ring-primary focus:border-primary"
                     disabled={convertingToSpareChange || dashboard?.affiliate?.isFrozen}
                   />
                 </div>
                 <Button
                   type="submit"
-                  className="w-full bg-black hover:bg-white hover:text-black text-white border-2 border-black rounded-none font-bold uppercase shadow-hard-sm hover:shadow-none transition-all"
+                  className="w-full bg-black hover:bg-gray-800 text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all"
                   disabled={convertingToSpareChange || dashboard.affiliate?.isFrozen}
                 >
                   {convertingToSpareChange ? "Converting..." : "Convert to Spare Change"}
@@ -341,13 +341,13 @@ export default function AffiliateDashboardPage() {
             </div>
           </div>
         ) : (
-          <div className="bg-white border-2 border-black p-8 shadow-hard flex items-center justify-center text-center h-full border-dashed">
+          <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-8 flex items-center justify-center text-center h-full">
             <div className="space-y-2">
-              <p className="text-gray-500 font-mono">
+              <p className="text-gray-500">
                 You need commission earnings to convert to Spare Change.
               </p>
               <Link href="/account/spare-change">
-                <Button variant="link" className="text-primary font-bold uppercase">
+                <Button variant="link" className="text-primary font-bold">
                   View Spare Change Balance →
                 </Button>
               </Link>
@@ -356,13 +356,13 @@ export default function AffiliateDashboardPage() {
         )}
 
         {/* Cash-Out Request Form */}
-        <div className="bg-white border-2 border-black p-8 shadow-hard">
-          <h3 className="text-xl font-black uppercase mb-6">Request Cash Out</h3>
+        <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+          <h3 className="text-xl font-bold mb-6">Request Cash Out</h3>
           <div className="space-y-6">
             {dashboard?.affiliate?.isFrozen && (
-              <div className="bg-red-50 border-2 border-red-500 p-4 mb-6">
-                 <p className="text-red-600 font-black uppercase mb-2">⚠️ Account Frozen</p>
-                 <p className="text-xs font-mono text-red-500">Your account is temporarily frozen. Payouts are disabled.</p>
+              <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+                 <p className="text-red-600 font-bold uppercase mb-2">⚠️ Account Frozen</p>
+                 <p className="text-xs text-red-500">Your account is temporarily frozen. Payouts are disabled.</p>
               </div>
             )}
 
@@ -400,45 +400,45 @@ export default function AffiliateDashboardPage() {
               className="space-y-4"
             >
               <div className="space-y-2">
-                <Label htmlFor="paymentMethod" className="font-bold uppercase text-xs">Payment Method</Label>
+                <Label htmlFor="paymentMethod" className="font-bold text-xs uppercase text-gray-500">Payment Method</Label>
                 <Input
                   id="paymentMethod"
                   placeholder="PayPal email or Bank IBAN..."
                   value={cashOutForm.paymentMethod}
                   onChange={(e) => setCashOutForm({ ...cashOutForm, paymentMethod: e.target.value })}
-                  className="border-2 border-black rounded-none font-mono"
+                  className="border-gray-200 rounded-lg font-mono focus:ring-primary focus:border-primary"
                   disabled={submittingCashOut || dashboard?.affiliate?.isFrozen}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="affiliateCode" className="font-bold uppercase text-xs">Affiliate Code</Label>
+                <Label htmlFor="affiliateCode" className="font-bold text-xs uppercase text-gray-500">Affiliate Code</Label>
                 <Input
                   id="affiliateCode"
                   placeholder={dashboard?.affiliate?.referralCode || ''}
                   value={cashOutForm.affiliateCode}
                   onChange={(e) => setCashOutForm({ ...cashOutForm, affiliateCode: e.target.value.toUpperCase() })}
-                  className="border-2 border-black rounded-none font-mono"
+                  className="border-gray-200 rounded-lg font-mono focus:ring-primary focus:border-primary"
                   disabled={submittingCashOut || dashboard?.affiliate?.isFrozen}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="amount" className="font-bold uppercase text-xs">Amount (USD)</Label>
+                <Label htmlFor="amount" className="font-bold text-xs uppercase text-gray-500">Amount (USD)</Label>
                 <Input
                   id="amount"
                   type="number"
                   placeholder="0.00"
                   value={cashOutForm.amount}
                   onChange={(e) => setCashOutForm({ ...cashOutForm, amount: e.target.value })}
-                  className="border-2 border-black rounded-none font-mono"
+                  className="border-gray-200 rounded-lg font-mono focus:ring-primary focus:border-primary"
                   disabled={submittingCashOut || dashboard?.affiliate?.isFrozen}
                 />
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-black hover:bg-white hover:text-black text-white border-2 border-black rounded-none font-bold uppercase shadow-hard-sm hover:shadow-none transition-all"
+                className="w-full bg-black hover:bg-gray-800 text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all"
                 disabled={submittingCashOut || dashboard?.affiliate?.isFrozen}
               >
                 {submittingCashOut ? "Submitting..." : "Submit Cash-Out Request"}
@@ -450,35 +450,35 @@ export default function AffiliateDashboardPage() {
 
 
       {/* Recent Purchases */}
-      <div className="bg-white border-2 border-black shadow-hard overflow-hidden">
-        <div className="border-b-2 border-black p-6 bg-secondary">
-          <h3 className="text-xl font-black uppercase">Recent Activity</h3>
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="border-b border-gray-200 p-6 bg-gray-50/50">
+          <h3 className="text-xl font-bold">Recent Activity</h3>
         </div>
         <div className="p-0 overflow-x-auto">
              {!dashboard?.recentPurchases?.length ? (
-                <div className="p-8 text-center text-gray-500 font-mono">No recent activity</div>
+                <div className="p-8 text-center text-gray-500">No recent activity</div>
              ) : (
                 <table className="w-full">
                     <thead>
-                        <tr className="border-b-2 border-black bg-gray-50">
-                            <th className="text-left py-3 px-4 text-xs font-black uppercase">User</th>
-                            <th className="text-left py-3 px-4 text-xs font-black uppercase">Type</th>
-                            <th className="text-left py-3 px-4 text-xs font-black uppercase">Amount</th>
-                            <th className="text-left py-3 px-4 text-xs font-black uppercase">Commission</th>
-                            <th className="text-left py-3 px-4 text-xs font-black uppercase">Status</th>
+                        <tr className="border-b border-gray-200 bg-gray-50">
+                            <th className="text-left py-3 px-4 text-xs font-bold uppercase text-gray-500">User</th>
+                            <th className="text-left py-3 px-4 text-xs font-bold uppercase text-gray-500">Type</th>
+                            <th className="text-left py-3 px-4 text-xs font-bold uppercase text-gray-500">Amount</th>
+                            <th className="text-left py-3 px-4 text-xs font-bold uppercase text-gray-500">Commission</th>
+                            <th className="text-left py-3 px-4 text-xs font-bold uppercase text-gray-500">Status</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                         {dashboard.recentPurchases.map((purchase) => (
                             <tr key={purchase.id} className="hover:bg-gray-50">
-                                <td className="py-3 px-4 text-sm font-mono">{purchase.userEmail}</td>
-                                <td className="py-3 px-4"><Badge variant="outline" className="rounded-none border-black text-[10px] uppercase">{purchase.type}</Badge></td>
-                                <td className="py-3 px-4 font-bold text-sm">{formatCurrency(purchase.amountCents, purchase.displayCurrency, purchase.displayAmountCents)}</td>
-                                <td className="py-3 px-4 font-black text-green-600 text-sm">
+                                <td className="py-3 px-4 text-sm font-mono text-gray-600">{purchase.userEmail}</td>
+                                <td className="py-3 px-4"><Badge variant="outline" className="rounded-full border-gray-200 text-gray-600 text-[10px] uppercase font-bold">{purchase.type}</Badge></td>
+                                <td className="py-3 px-4 font-bold text-sm text-gray-900">{formatCurrency(purchase.amountCents, purchase.displayCurrency, purchase.displayAmountCents)}</td>
+                                <td className="py-3 px-4 font-bold text-green-600 text-sm">
                                     {formatCurrency(Math.round(purchase.amountCents * 0.1))}
                                 </td>
                                 <td className="py-3 px-4">
-                                    <Badge className="rounded-none bg-black text-white hover:bg-black text-[10px] uppercase">{purchase.status}</Badge>
+                                    <Badge className="rounded-full bg-black text-white hover:bg-gray-800 text-[10px] uppercase font-bold">{purchase.status}</Badge>
                                 </td>
                             </tr>
                         ))}
@@ -489,10 +489,10 @@ export default function AffiliateDashboardPage() {
       </div>
 
       {/* Footer - Affiliate Terms Link */}
-      <div className="pt-8 border-t-2 border-black text-center">
-        <p className="text-sm font-mono text-gray-500">
+      <div className="pt-8 border-t border-gray-200 text-center">
+        <p className="text-sm text-gray-500">
           By participating, you agree to the{" "}
-          <Link href="/support/affiliate-terms" className="text-black font-bold underline hover:text-primary">
+          <Link href="/support/affiliate-terms" className="text-black font-bold hover:underline">
             Affiliate Terms
           </Link>
           .

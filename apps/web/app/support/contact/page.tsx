@@ -124,23 +124,23 @@ export default function ContactSupportPage() {
     return (
       <div className="min-h-screen py-10 bg-background text-foreground">
         <div className="max-w-2xl mx-auto px-4">
-          <Card className="bg-white border-2 border-black rounded-none shadow-hard overflow-hidden">
+          <Card className="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
             <CardContent className="p-12 text-center">
-              <div className="bg-green-100 p-4 rounded-full border-2 border-black w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+              <div className="bg-green-50 p-4 rounded-full border border-green-100 w-24 h-24 mx-auto mb-6 flex items-center justify-center">
                  <CheckCircle2 className="h-12 w-12 text-green-600" />
               </div>
-              <h2 className="text-3xl font-black text-black uppercase tracking-tighter mb-4">Message Sent!</h2>
-              <p className="text-gray-600 font-mono mb-8 max-w-md mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 tracking-tight mb-4">Message Sent!</h2>
+              <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
                 We've received your message and will get back to you as soon as possible, usually within 24-48 hours.
               </p>
               <div className="flex gap-4 justify-center">
                 <Link href="/support">
-                  <Button variant="outline" className="border-2 border-black rounded-none font-bold uppercase hover:bg-secondary">
+                  <Button variant="outline" className="border-gray-200 rounded-full font-bold hover:bg-gray-50 px-8 h-12">
                     Back to Support
                   </Button>
                 </Link>
                 <Link href="/">
-                  <Button className="bg-primary hover:bg-black hover:text-white text-black border-2 border-black rounded-none font-bold uppercase shadow-hard-sm hover:shadow-none transition-all">
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground border-0 rounded-full font-bold shadow-lg hover:shadow-xl transition-all px-8 h-12">
                     Go Home
                   </Button>
                 </Link>
@@ -155,21 +155,21 @@ export default function ContactSupportPage() {
   return (
     <div className="min-h-screen py-10 bg-background text-foreground">
       <div className="max-w-2xl mx-auto px-4">
-        <Link href="/support" className="inline-flex items-center gap-2 text-gray-500 hover:text-black transition-colors mb-8 font-mono font-bold uppercase text-sm">
+        <Link href="/support" className="inline-flex items-center gap-2 text-gray-500 hover:text-black transition-colors mb-8 font-medium text-sm">
           <ArrowLeft className="h-4 w-4" />
           Back to Support
         </Link>
 
         <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-black mb-2">Contact Support</h1>
-          <p className="text-gray-500 font-mono font-bold uppercase text-sm">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 mb-2">Contact Support</h1>
+          <p className="text-gray-500 text-lg">
             Send us a message and we'll get back to you
           </p>
         </div>
 
-        <Card className="bg-white border-2 border-black rounded-none shadow-hard overflow-hidden">
-          <CardHeader className="bg-secondary border-b-2 border-black p-6">
-            <CardTitle className="text-black font-black uppercase text-xl flex items-center gap-2">
+        <Card className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
+          <CardHeader className="bg-gray-50/50 border-b border-gray-200 p-6">
+            <CardTitle className="text-gray-900 font-bold text-xl flex items-center gap-2">
               <Mail className="h-5 w-5" />
               Support Form
             </CardTitle>
@@ -177,15 +177,15 @@ export default function ContactSupportPage() {
           <CardContent className="p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
-                <div className="bg-red-50 border-2 border-black p-4 flex items-start gap-3 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]">
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3">
                   <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-red-900 font-mono text-sm font-bold uppercase">{error}</p>
+                  <p className="text-red-900 font-medium">{error}</p>
                 </div>
               )}
 
               <div>
-                <label htmlFor="name" className="block text-sm font-black uppercase text-black mb-2">
-                  Name <span className="text-red-600">*</span>
+                <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-2">
+                  Name <span className="text-red-500">*</span>
                 </label>
                 <Input
                   id="name"
@@ -193,14 +193,14 @@ export default function ContactSupportPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="bg-white border-2 border-black rounded-none shadow-sm focus-visible:ring-0 focus-visible:border-primary text-black placeholder:text-gray-400 font-mono"
+                  className="bg-white border-gray-200 rounded-lg shadow-sm focus-visible:ring-primary focus-visible:border-primary text-gray-900 placeholder:text-gray-400"
                   placeholder="Your full name"
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-black uppercase text-black mb-2">
-                  Email <span className="text-red-600">*</span>
+                <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">
+                  Email <span className="text-red-500">*</span>
                 </label>
                 <Input
                   id="email"
@@ -208,34 +208,34 @@ export default function ContactSupportPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="bg-white border-2 border-black rounded-none shadow-sm focus-visible:ring-0 focus-visible:border-primary text-black placeholder:text-gray-400 font-mono"
+                  className="bg-white border-gray-200 rounded-lg shadow-sm focus-visible:ring-primary focus-visible:border-primary text-gray-900 placeholder:text-gray-400"
                   placeholder="your.email@example.com"
                 />
               </div>
 
               <div>
-                <label htmlFor="orderId" className="block text-sm font-black uppercase text-black mb-2">
-                  Order ID <span className="text-gray-400 text-xs font-mono font-normal lowercase">(optional)</span>
+                <label htmlFor="orderId" className="block text-sm font-bold text-gray-700 mb-2">
+                  Order ID <span className="text-gray-400 text-xs font-normal lowercase">(optional)</span>
                 </label>
                 <Input
                   id="orderId"
                   type="text"
                   value={formData.orderId}
                   onChange={(e) => setFormData({ ...formData, orderId: e.target.value })}
-                  className="bg-white border-2 border-black rounded-none shadow-sm focus-visible:ring-0 focus-visible:border-primary text-black placeholder:text-gray-400 font-mono"
+                  className="bg-white border-gray-200 rounded-lg shadow-sm focus-visible:ring-primary focus-visible:border-primary text-gray-900 placeholder:text-gray-400"
                   placeholder="Order ID if related to a purchase"
                 />
               </div>
 
               <div>
-                <label htmlFor="device" className="block text-sm font-black uppercase text-black mb-2">
-                  Device Model <span className="text-gray-400 text-xs font-mono font-normal lowercase">(optional)</span>
+                <label htmlFor="device" className="block text-sm font-bold text-gray-700 mb-2">
+                  Device Model <span className="text-gray-400 text-xs font-normal lowercase">(optional)</span>
                 </label>
                 <select
                   id="device"
                   value={formData.device}
                   onChange={(e) => setFormData({ ...formData, device: e.target.value })}
-                  className="w-full h-10 px-3 border-2 border-black bg-white text-black font-mono focus:outline-none focus:border-primary rounded-none shadow-sm cursor-pointer appearance-none"
+                  className="w-full h-10 px-3 border border-gray-200 bg-white text-gray-900 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary rounded-lg shadow-sm cursor-pointer appearance-none"
                 >
                   <option value="">Select device model</option>
                   {deviceModels.map((model) => (
@@ -247,15 +247,15 @@ export default function ContactSupportPage() {
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-black uppercase text-black mb-2">
-                  Message <span className="text-red-600">*</span>
+                <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-2">
+                  Message <span className="text-red-500">*</span>
                 </label>
                 <Textarea
                   id="message"
                   required
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="bg-white border-2 border-black rounded-none shadow-sm focus-visible:ring-0 focus-visible:border-primary text-black placeholder:text-gray-400 font-mono min-h-[200px]"
+                  className="bg-white border-gray-200 rounded-lg shadow-sm focus-visible:ring-primary focus-visible:border-primary text-gray-900 placeholder:text-gray-400 min-h-[200px]"
                   placeholder="Please describe your issue or question in detail..."
                 />
               </div>
@@ -263,7 +263,7 @@ export default function ContactSupportPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-primary hover:bg-black hover:text-white text-black border-2 border-black rounded-none font-black uppercase shadow-hard-sm hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-black hover:bg-gray-800 text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>

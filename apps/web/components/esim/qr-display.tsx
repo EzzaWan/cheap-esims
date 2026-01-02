@@ -325,17 +325,17 @@ export function QRDisplay({
 
   if (isExpired) {
     return (
-      <div className="bg-white rounded-none border-2 border-red-500 shadow-hard p-6">
+      <div className="bg-white rounded-2xl border border-red-200 shadow-lg p-6">
         <div className="flex items-start gap-4">
           <AlertTriangle className="h-6 w-6 text-red-600 flex-shrink-0 mt-1" />
           <div className="flex-1">
-            <h3 className="text-lg font-black uppercase text-red-600 mb-2">QR Code Expired</h3>
-            <p className="text-gray-600 font-mono text-sm font-bold mb-4">
+            <h3 className="text-lg font-bold text-red-600 mb-2">QR Code Expired</h3>
+            <p className="text-gray-600 text-sm mb-4">
               This eSIM QR code has expired and can no longer be used for installation.
             </p>
             <Button
               onClick={() => window.location.href = "/"}
-              className="bg-red-600 hover:bg-red-700 text-white border-2 border-black rounded-none uppercase font-bold shadow-hard-sm hover:shadow-none transition-all"
+              className="bg-red-600 hover:bg-red-700 text-white rounded-full font-bold shadow-md hover:shadow-lg transition-all"
             >
               Buy New Plan
             </Button>
@@ -347,24 +347,24 @@ export function QRDisplay({
 
   if (isAlreadyInstalled && !qrCodeUrl) {
     return (
-      <div className="bg-white rounded-none border-2 border-black shadow-hard p-6">
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-6">
         <div className="space-y-4">
-          <h3 className="text-lg font-black uppercase text-black">eSIM Already Installed</h3>
+          <h3 className="text-lg font-bold text-gray-900">eSIM Already Installed</h3>
           {activationCode && (
-            <div className="p-4 bg-gray-50 rounded-none border-2 border-black">
+            <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
               <p className="text-xs text-gray-500 font-bold uppercase mb-2">Activation Code:</p>
               <div className="flex items-center justify-between gap-2">
-                <code className="text-sm text-black font-mono font-bold break-all flex-1">
+                <code className="text-sm text-gray-900 font-mono font-bold break-all flex-1">
                   {activationCode}
                 </code>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={handleCopyActivation}
-                  className="flex-shrink-0 rounded-none border-2 border-black font-bold uppercase hover:bg-black hover:text-white"
+                  className="flex-shrink-0 rounded-full border-gray-200 font-bold hover:bg-gray-100"
                 >
                   {copied === "ac" ? (
-                    <CheckCircle2 className="h-4 w-4" />
+                    <CheckCircle2 className="h-4 w-4 text-green-600" />
                   ) : (
                     <Copy className="h-4 w-4" />
                   )}
@@ -379,33 +379,33 @@ export function QRDisplay({
 
   if (qrError || !qrCodeUrl) {
     return (
-      <div className="bg-white rounded-none border-2 border-black shadow-hard p-6">
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-6">
         <div className="space-y-4">
           <div className="flex items-start gap-4">
             <AlertTriangle className="h-6 w-6 text-yellow-600 flex-shrink-0 mt-1" />
             <div className="flex-1">
-              <h3 className="text-lg font-black uppercase text-black mb-2">QR Code Not Available</h3>
-              <p className="text-gray-600 font-mono text-sm font-bold mb-4">
+              <h3 className="text-lg font-bold text-gray-900 mb-2">QR Code Not Available</h3>
+              <p className="text-gray-600 text-sm mb-4">
                 The QR code could not be loaded. Please use the activation code below or contact support.
               </p>
             </div>
           </div>
 
           {activationCode && (
-            <div className="p-4 bg-gray-50 rounded-none border-2 border-black">
+            <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
               <p className="text-xs text-gray-500 font-bold uppercase mb-2">Activation Code:</p>
               <div className="flex items-center justify-between gap-2">
-                <code className="text-sm text-black font-mono font-bold break-all flex-1">
+                <code className="text-sm text-gray-900 font-mono font-bold break-all flex-1">
                   {activationCode}
                 </code>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={handleCopyActivation}
-                  className="flex-shrink-0 rounded-none border-2 border-black font-bold uppercase hover:bg-black hover:text-white"
+                  className="flex-shrink-0 rounded-full border-gray-200 font-bold hover:bg-gray-100"
                 >
                   {copied === "ac" ? (
-                    <CheckCircle2 className="h-4 w-4" />
+                    <CheckCircle2 className="h-4 w-4 text-green-600" />
                   ) : (
                     <Copy className="h-4 w-4" />
                   )}
@@ -418,7 +418,7 @@ export function QRDisplay({
             <Button
               onClick={onRegenerate}
               variant="outline"
-              className="w-full rounded-none border-2 border-black font-bold uppercase hover:bg-black hover:text-white"
+              className="w-full rounded-full border-gray-200 font-bold hover:bg-gray-50"
             >
               Try Regenerating QR Code
             </Button>
@@ -428,20 +428,36 @@ export function QRDisplay({
     );
   }
 
+  const defaultTrigger = (
+    <Button className="bg-white border border-gray-200 text-gray-900 font-bold hover:bg-gray-50 transition-all rounded-full shadow-sm flex items-center gap-2">
+      <QrCode className="h-4 w-4" />
+      How to Install
+    </Button>
+  );
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        {trigger || defaultTrigger}
+      </DialogTrigger>
+// ... (rest of the file is handled by the Dialog component in install-steps-dialog.tsx, wait, this is QRDisplay, which uses InstallStepsDialog? No, QRDisplay is a separate component)
+// Ah, I am editing QRDisplay.tsx. Let me look at the content again.
+// It renders a div, not a Dialog.
+
   return (
     <div
       ref={qrContainerRef}
-      className={`bg-white rounded-none border-2 border-black shadow-hard p-6 ${
+      className={`bg-white rounded-2xl border border-gray-200 shadow-sm p-6 ${
         isFullscreen
           ? "fixed inset-0 z-[9999] bg-white flex items-center justify-center p-8"
           : ""
       }`}
     >
       {showDeviceCheck && (
-        <div className="mb-4 p-3 bg-yellow-50 border-2 border-yellow-500 shadow-hard-sm">
-          <div className="flex items-center gap-2 text-yellow-700">
+        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl">
+          <div className="flex items-center gap-2 text-yellow-800">
             <AlertTriangle className="h-4 w-4" />
-            <span className="text-sm font-bold font-mono uppercase">
+            <span className="text-sm font-bold">
               Your device might not support eSIM.{" "}
               <a
                 href="/support/device-check"
@@ -455,10 +471,10 @@ export function QRDisplay({
       )}
 
       <div className="space-y-4">
-        <div className="bg-white p-6 border-2 border-black shadow-hard-sm flex items-center justify-center relative min-h-[300px]">
+        <div className="bg-white p-6 border border-gray-200 rounded-xl shadow-sm flex items-center justify-center relative min-h-[300px]">
           {qrLoading && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-black" />
+              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
             </div>
           )}
           <Image
@@ -482,7 +498,7 @@ export function QRDisplay({
             variant="outline"
             size="sm"
             onClick={handleDownload}
-            className="flex items-center gap-2 rounded-none border-2 border-black font-bold uppercase hover:bg-black hover:text-white shadow-hard-sm hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+            className="flex items-center gap-2 rounded-full border-gray-200 font-bold hover:bg-gray-50 shadow-sm transition-all"
           >
             <Download className="h-4 w-4" />
             <span className="hidden sm:inline">Download</span>
@@ -493,7 +509,7 @@ export function QRDisplay({
             variant="outline"
             size="sm"
             onClick={handlePrint}
-            className="flex items-center gap-2 rounded-none border-2 border-black font-bold uppercase hover:bg-black hover:text-white shadow-hard-sm hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+            className="flex items-center gap-2 rounded-full border-gray-200 font-bold hover:bg-gray-50 shadow-sm transition-all"
           >
             <Printer className="h-4 w-4" />
             <span className="hidden sm:inline">Print</span>
@@ -503,7 +519,7 @@ export function QRDisplay({
             variant="outline"
             size="sm"
             onClick={toggleFullscreen}
-            className="flex items-center gap-2 rounded-none border-2 border-black font-bold uppercase hover:bg-black hover:text-white shadow-hard-sm hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+            className="flex items-center gap-2 rounded-full border-gray-200 font-bold hover:bg-gray-50 shadow-sm transition-all"
           >
             {isFullscreen ? (
               <>
@@ -522,12 +538,12 @@ export function QRDisplay({
             variant="outline"
             size="sm"
             onClick={handleCopyQRUrl}
-            className="flex items-center gap-2 rounded-none border-2 border-black font-bold uppercase hover:bg-black hover:text-white shadow-hard-sm hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+            className="flex items-center gap-2 rounded-full border-gray-200 font-bold hover:bg-gray-50 shadow-sm transition-all"
           >
             {copied === "qr-url" ? (
               <>
-                <CheckCircle2 className="h-4 w-4" />
-                <span className="hidden sm:inline">Copied!</span>
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <span className="hidden sm:inline text-green-600">Copied!</span>
               </>
             ) : (
               <>
@@ -542,12 +558,12 @@ export function QRDisplay({
               variant="outline"
               size="sm"
               onClick={handleCopyActivation}
-              className="flex items-center gap-2 rounded-none border-2 border-black font-bold uppercase hover:bg-black hover:text-white shadow-hard-sm hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+              className="flex items-center gap-2 rounded-full border-gray-200 font-bold hover:bg-gray-50 shadow-sm transition-all"
             >
               {copied === "ac" ? (
                 <>
-                  <CheckCircle2 className="h-4 w-4" />
-                  <span className="hidden sm:inline">Copied!</span>
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <span className="hidden sm:inline text-green-600">Copied!</span>
                 </>
               ) : (
                 <>
@@ -563,7 +579,7 @@ export function QRDisplay({
               variant="outline"
               size="sm"
               onClick={handleSaveToDevice}
-              className="flex items-center gap-2 rounded-none border-2 border-black font-bold uppercase hover:bg-black hover:text-white shadow-hard-sm hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+              className="flex items-center gap-2 rounded-full border-gray-200 font-bold hover:bg-gray-50 shadow-sm transition-all"
             >
               <Smartphone className="h-4 w-4" />
               <span className="hidden sm:inline">Save</span>
@@ -571,14 +587,14 @@ export function QRDisplay({
           )}
         </div>
 
-        <div className="text-center text-xs text-gray-500 font-bold uppercase font-mono pt-2">
+        <div className="text-center text-xs text-gray-400 font-bold uppercase pt-2">
           <p>Keyboard shortcuts: F (fullscreen) • D (download) • P (print) • C (copy activation)</p>
         </div>
 
         {activationCode && (
-          <div className="p-3 bg-white rounded-none border-2 border-black shadow-hard-sm">
-            <p className="text-xs text-gray-500 mb-2 uppercase font-mono font-bold">Activation Code:</p>
-            <code className="text-lg text-black font-mono break-all block font-bold tracking-tight">
+          <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 shadow-inner">
+            <p className="text-xs text-gray-500 mb-2 uppercase font-bold">Activation Code:</p>
+            <code className="text-lg text-gray-900 font-mono break-all block font-bold tracking-tight bg-white p-2 rounded border border-gray-200">
               {activationCode}
             </code>
           </div>

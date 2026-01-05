@@ -26,13 +26,20 @@ export class UsersService {
 
     console.log(`[UsersService] Found user ${user.id} for email: ${normalizedEmail}`);
 
-    // Use the relation defined in schema: User -> profiles
+    // Query eSIMs by user ID (via orders)
+    // This includes both orders directly linked to the user and orders that were updated to use this user's email
     const profiles = await this.prisma.esimProfile.findMany({
       where: {
-        userId: user.id
+        Order: {
+          userId: user.id
+        }
       },
       include: {
-        Order: true // Optional: include order details if needed
+        Order: {
+          include: {
+            User: true
+          }
+        }
       }
     });
 

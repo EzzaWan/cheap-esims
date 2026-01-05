@@ -82,30 +82,30 @@ export function Navbar() {
           <CurrencySelector />
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-background hover:bg-primary/20">
+              <Button variant="ghost" size="icon" className="text-gray-900 hover:bg-gray-100 rounded-lg">
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-foreground border-l-2 border-primary w-[300px]">
-              <SheetHeader className="text-left border-b-2 border-primary pb-4 mb-4">
-                <SheetTitle className="text-primary text-xl font-black uppercase flex items-center gap-2">
+            <SheetContent side="right" className="bg-gray-900 border-l border-primary/30 w-[300px] p-0">
+              <SheetHeader className="text-left border-b border-primary/30 pb-4 mb-4 px-6 pt-6">
+                <SheetTitle className="text-primary text-xl font-bold uppercase flex items-center gap-2">
                   <Globe className="h-5 w-5" />
-                  Cheap eSIMs
+                  CHEAP ESIMS
                 </SheetTitle>
               </SheetHeader>
               
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-6 px-6 pb-6">
                 <div className="flex flex-col gap-2">
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Menu</h4>
+                  <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">MENU</h4>
                   {navLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
                         isActive(link.href)
-                          ? "bg-primary/20 text-primary"
-                          : "text-background hover:bg-primary/10"
+                          ? "bg-primary text-black"
+                          : "text-white hover:bg-gray-800"
                       }`}
                     >
                       {link.icon}
@@ -116,17 +116,17 @@ export function Navbar() {
 
                 <div className="h-px bg-primary/30" />
 
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
+                  <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">ACCOUNT</h4>
                   <SignedOut>
-                     <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Account</h4>
                     <Link href="/sign-in" onClick={() => setIsOpen(false)}>
-                      <Button variant="outline" className="w-full justify-start border-2 border-primary text-background hover:bg-primary hover:text-black">
+                      <Button variant="outline" className="w-full justify-start border border-gray-700 text-white hover:bg-gray-800 rounded-xl">
                         <LogIn className="h-4 w-4 mr-2" />
                         Sign In
                       </Button>
                     </Link>
                     <Link href="/sign-up" onClick={() => setIsOpen(false)}>
-                      <Button className="w-full justify-start bg-primary hover:bg-white text-black font-bold">
+                      <Button className="w-full justify-start bg-primary hover:bg-primary/90 text-black font-bold rounded-xl">
                         <UserPlus className="h-4 w-4 mr-2" />
                         Sign Up
                       </Button>
@@ -134,11 +134,10 @@ export function Navbar() {
                   </SignedOut>
 
                   <SignedIn>
-                    <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Account</h4>
                     <Link 
                       href="/account" 
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-background hover:bg-primary/10"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-white hover:bg-gray-800"
                     >
                       <User className="h-4 w-4" />
                       <span className="font-medium">My Account</span>
@@ -146,7 +145,7 @@ export function Navbar() {
                     <Link 
                       href="/my-esims" 
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-background hover:bg-primary/10"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-white hover:bg-gray-800"
                     >
                       <Smartphone className="h-4 w-4" />
                       <span className="font-medium">My eSIMs</span>
@@ -155,7 +154,7 @@ export function Navbar() {
                       <Link 
                         href="/admin" 
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-background hover:bg-primary/10"
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-white hover:bg-gray-800"
                       >
                         <HelpCircle className="h-4 w-4" />
                         <span className="font-medium">Admin</span>
@@ -163,7 +162,7 @@ export function Navbar() {
                     )}
                     <button
                       onClick={handleSignOut}
-                      className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-background hover:bg-primary/10 w-full text-left"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-white hover:bg-gray-800 w-full text-left"
                     >
                       <LogOut className="h-4 w-4" />
                       <span className="font-medium">Sign out</span>

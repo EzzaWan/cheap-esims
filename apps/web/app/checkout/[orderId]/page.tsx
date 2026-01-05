@@ -13,6 +13,7 @@ import { safeFetch } from "@/lib/safe-fetch";
 import { useToast } from "@/components/ui/use-toast";
 import { formatCurrency } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { getPlanName } from "@/lib/admin-helpers";
 
 interface Order {
   id: string;
@@ -43,6 +44,7 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
   const [promoDiscount, setPromoDiscount] = useState<{ percent: number; originalAmount: number; originalDisplayAmount: number } | null>(null);
   const [email, setEmail] = useState("");
   const [updatingEmail, setUpdatingEmail] = useState(false);
+  const [planName, setPlanName] = useState<string>("");
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -53,9 +55,26 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
         });
         setOrder(orderData);
         
+        // Fetch plan name
+        if (orderData.planId) {
+          const name = await getPlanName(orderData.planId, apiUrl);
+          setPlanName(name);
+        }
+        
         // Set email from logged-in user if available
         if (userLoaded && user?.primaryEmailAddress?.emailAddress) {
-          setEmail(user.primaryEmailAddress.emailAddress);
+          const userEmail = user.primaryEmailAddress.emailAddress;
+          setEmail(userEmail);
+          // Store for guest access (in case they log out)
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('guest_checkout_email', userEmail);
+          }
+        } else {
+          // Check for stored guest email
+          const storedEmail = typeof window !== 'undefined' ? localStorage.getItem('guest_checkout_email') : null;
+          if (storedEmail) {
+            setEmail(storedEmail);
+          }
         }
 
         // Check if promo code was previously applied (stored in localStorage)
@@ -281,6 +300,11 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
         }
       );
 
+      // Store email in localStorage for guest access to my-esims
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('guest_checkout_email', email.trim());
+      }
+
       toast({
         title: "Email updated",
         description: "Your email has been updated successfully.",
@@ -288,6 +312,10 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
     } catch (error: any) {
       // Handle 404 gracefully - endpoint not implemented yet, but email will be used during checkout
       if (error.status === 404 || error.message?.includes('404')) {
+        // Still store email for guest access even if endpoint doesn't exist
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('guest_checkout_email', email.trim());
+        }
         toast({
           title: "Email saved",
           description: "Your email will be used for checkout. The email update endpoint is not available yet.",
@@ -410,7 +438,7 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Plan:</span>
-                      <span className="font-medium text-gray-900">{order.planId}</span>
+                      <span className="font-medium text-gray-900">{planName || order.planId}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Order ID:</span>
@@ -588,7 +616,7 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Plan</span>
-                    <span className="text-gray-900">{order.planId}</span>
+                    <span className="text-gray-900">{planName || order.planId}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Subtotal</span>

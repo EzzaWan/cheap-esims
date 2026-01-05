@@ -171,6 +171,42 @@ export class WebhooksService {
 
         this.logger.log(`[CLERK] Created/updated user in database: ${email}`);
 
+        // Link any guest orders with this email to the user
+        // This handles the case where a guest made purchases before signing up
+        try {
+          const normalizedEmail = email.toLowerCase().trim();
+          
+          // Find all users with this email (should only be one, but check for safety)
+          const usersWithEmail = await this.prisma.user.findMany({
+            where: { email: normalizedEmail },
+          });
+
+          // If there are multiple users with the same email (shouldn't happen, but handle it)
+          if (usersWithEmail.length > 1) {
+            this.logger.warn(`[CLERK] Multiple users found with email ${normalizedEmail}, merging orders`);
+            
+            // Get all user IDs except the main one
+            const otherUserIds = usersWithEmail.filter(u => u.id !== user.id).map(u => u.id);
+            
+            // Update all orders from other users to point to the main user
+            if (otherUserIds.length > 0) {
+              await this.prisma.order.updateMany({
+                where: {
+                  userId: { in: otherUserIds },
+                },
+                data: {
+                  userId: user.id,
+                },
+              });
+              
+              this.logger.log(`[CLERK] Linked ${otherUserIds.length} guest order(s) to user ${user.id}`);
+            }
+          }
+        } catch (err) {
+          this.logger.error(`[CLERK] Failed to link guest orders for user ${user.id}:`, err);
+          // Don't throw - this is not critical
+        }
+
         // Create affiliate record for new user
         try {
           await this.affiliateService.createAffiliateForUser(user.id);

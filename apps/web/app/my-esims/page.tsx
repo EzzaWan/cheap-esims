@@ -117,11 +117,31 @@ export default function MyEsimsPage() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (!isLoaded || !user) return;
+    // Wait for Clerk to load
+    if (!isLoaded) return;
 
     const fetchEsims = async () => {
       try {
-        const userEmail = user.primaryEmailAddress?.emailAddress;
+        // Get email from authenticated user, URL params, or localStorage (for guest access)
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailParam = urlParams.get('email');
+        const storedEmail = localStorage.getItem('guest_checkout_email');
+        
+        let userEmail: string | undefined;
+        
+        if (user?.primaryEmailAddress?.emailAddress) {
+          // Authenticated user - use their email
+          userEmail = user.primaryEmailAddress.emailAddress;
+        } else if (emailParam) {
+          // Guest access via URL parameter
+          userEmail = emailParam;
+          // Store for future use
+          localStorage.setItem('guest_checkout_email', emailParam);
+        } else if (storedEmail) {
+          // Guest access via stored email
+          userEmail = storedEmail;
+        }
+
         if (!userEmail) {
           setLoading(false);
           return;
@@ -153,7 +173,13 @@ export default function MyEsimsPage() {
           className="border border-gray-200 rounded-full shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
           onClick={async () => {
             setLoading(true);
-            const userEmail = user?.primaryEmailAddress?.emailAddress;
+            // Get email from authenticated user, URL params, or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            const emailParam = urlParams.get('email');
+            const storedEmail = localStorage.getItem('guest_checkout_email');
+            
+            const userEmail = user?.primaryEmailAddress?.emailAddress || emailParam || storedEmail;
+            
             if (userEmail) {
               try {
                 const data = await safeFetch<EsimProfile[]>(

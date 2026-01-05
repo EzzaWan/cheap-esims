@@ -17,6 +17,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { ExpiryCountdown } from "@/components/esim/expiry-countdown";
 import { getTimeRemaining, getUrgencyLevel } from "@/lib/format-expiry";
 import { getPlanFlagLabels } from "@/lib/plan-flags";
+import { isDailyUnlimitedPlan } from "@/lib/plan-utils";
 
 interface PlanDetails {
   name?: string;

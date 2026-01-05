@@ -26,6 +26,7 @@ interface TopUpOption {
   duration: number;
   durationUnit: string;
   location: string;
+  speed?: string; // Optional for top-up options
 }
 
 export default function TopUpSelectionPage() {
@@ -150,7 +151,8 @@ export default function TopUpSelectionPage() {
           plans={options}
           renderItem={(plan) => {
             const { value: sizeValue, unit: sizeUnit } = formatDataSize(plan.volume);
-            const isUnlimitedPlan = isDailyUnlimitedPlan(plan); // 2GB + FUP1Mbps plans
+            // Cast to Plan type for isDailyUnlimitedPlan check (speed is optional for top-up)
+            const isUnlimitedPlan = isDailyUnlimitedPlan(plan as any); // 2GB + FUP1Mbps plans
             const priceUSD = plan.price || 0;
             const convertedPrice = convert(priceUSD);
             

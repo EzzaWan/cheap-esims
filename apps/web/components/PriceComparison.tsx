@@ -46,7 +46,7 @@ export function PriceComparison({ className }: { className?: string }) {
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4 md:mb-0">
         <div className="text-center md:text-left md:flex-1">
           <h2 className="text-xl font-bold tracking-tight text-black leading-tight">
-            Save up to 35%
+            Save up to 54% more
           </h2>
           <p className="text-gray-500 text-xs font-medium mt-1">
             vs. leading global eSIM providers

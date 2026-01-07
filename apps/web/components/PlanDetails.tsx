@@ -24,6 +24,7 @@ import {
 import { getPlanFlagLabels } from "@/lib/plan-flags";
 import { PlanFlags } from "./PlanFlags";
 import { PriceComparison } from "./PriceComparison";
+import { PlanTrustReviews } from "./PlanTrustReviews";
 
 export function PlanDetails({ plan }: { plan: any }) {
   const { selectedCurrency, convert, formatCurrency } = useCurrency();
@@ -344,6 +345,7 @@ export function PlanDetails({ plan }: { plan: any }) {
 
             <PriceComparison />
         </div>
+        <PlanTrustReviews planId={plan.packageCode} />
       </div>
 
       {/* Right: Receipt / Checkout */}

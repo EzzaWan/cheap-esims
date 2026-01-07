@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 const isPublicRoute = createRouteMatcher([
   '/',
   '/countries(.*)',
+  '/regions(.*)',
   '/plans(.*)',
   '/sign-in(.*)',
   '/sign-up(.*)',

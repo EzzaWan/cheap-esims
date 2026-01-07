@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { getPlanFlagLabels } from "@/lib/plan-flags";
 import { PlanFlags } from "./PlanFlags";
+import { PriceComparison } from "./PriceComparison";
 
 export function PlanDetails({ plan }: { plan: any }) {
   const { selectedCurrency, convert, formatCurrency } = useCurrency();
@@ -209,10 +210,10 @@ export function PlanDetails({ plan }: { plan: any }) {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-3 max-w-7xl mx-auto items-start py-8 px-4">
+    <div className="grid gap-8 lg:grid-cols-3 max-w-7xl mx-auto items-start pb-8 pt-0 px-4">
       {/* Left: Spec Sheet */}
-      <div className="lg:col-span-2 space-y-8">
-        <div className="bg-white border border-gray-200 p-8 shadow-lg rounded-2xl relative overflow-hidden">
+      <div className="lg:col-span-2 space-y-6">
+        <div className="bg-white border border-gray-200 p-6 shadow-lg rounded-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 bg-black text-white px-4 py-2 font-bold uppercase text-xs rounded-bl-xl">
                 Spec Sheet
             </div>
@@ -246,52 +247,55 @@ export function PlanDetails({ plan }: { plan: any }) {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <div className="border border-gray-200 p-4 text-center rounded-xl bg-gray-50">
-                    <div className="text-xs font-bold text-gray-500 uppercase mb-1">Total Data</div>
-                    <div className="text-3xl font-bold text-black">{isUnlimitedPlan ? "Unlimited" : `${sizeValue} ${sizeUnit}`}</div>
+                <div className="border border-gray-200 p-3 text-center rounded-xl bg-gray-50 flex flex-col justify-center min-h-[100px]">
+                    <div className="text-[10px] font-bold text-gray-500 uppercase mb-1">Total Data</div>
+                    <div className="text-2xl font-bold text-black">{isUnlimitedPlan ? "Unlimited" : `${sizeValue} ${sizeUnit}`}</div>
                 </div>
-                <div className="border border-gray-200 p-4 text-center rounded-xl bg-gray-50">
-                    <div className="text-xs font-bold text-gray-500 uppercase mb-1">Duration</div>
+                <div className="border border-gray-200 p-3 text-center rounded-xl bg-gray-50 flex flex-col justify-center min-h-[100px]">
+                    <div className="text-[10px] font-bold text-gray-500 uppercase mb-1">Duration</div>
                     {isUnlimitedPlan ? (
-                        <div className="flex flex-col items-center gap-2">
-                            <input
-                                type="number"
-                                min="1"
-                                max="365"
-                                value={selectedDays}
-                                onChange={(e) => {
-                                    const days = Math.max(1, Math.min(365, parseInt(e.target.value) || 1));
-                                    setSelectedDays(days);
-                                }}
-                                className="text-3xl font-bold text-black text-center w-24 border-2 border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:border-primary"
-                            />
-                            <div className="flex gap-1 flex-wrap justify-center mt-1">
+                        <div className="flex flex-col items-center gap-1.5 w-full">
+                            <div className="flex items-baseline justify-center gap-1">
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max="365"
+                                    value={selectedDays}
+                                    onChange={(e) => {
+                                        const days = Math.max(1, Math.min(365, parseInt(e.target.value) || 1));
+                                        setSelectedDays(days);
+                                    }}
+                                    className="text-2xl font-bold text-black text-center w-16 bg-transparent border-b-2 border-gray-300 focus:border-primary focus:outline-none p-0"
+                                />
+                                <span className="text-sm font-bold text-gray-400">Days</span>
+                            </div>
+                            <div className="flex gap-1 justify-center w-full">
                                 {[7, 14, 30].map((days) => (
                                     <button
                                         key={days}
                                         onClick={() => setSelectedDays(days)}
-                                        className={`text-xs px-2 py-0.5 rounded-full font-medium transition-colors ${
+                                        className={`text-[10px] px-2 py-0.5 rounded-md font-bold transition-all border ${
                                             selectedDays === days
-                                                ? 'bg-primary text-black'
-                                                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                                ? 'bg-black text-white border-black'
+                                                : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
                                         }`}
                                     >
-                                        {days}d
+                                        {days}
                                     </button>
                                 ))}
                             </div>
                         </div>
                     ) : (
-                        <div className="text-3xl font-bold text-black">{plan.duration} Days</div>
+                        <div className="text-2xl font-bold text-black">{plan.duration} Days</div>
                     )}
                 </div>
-                <div className="border border-gray-200 p-4 text-center rounded-xl bg-gray-50">
-                    <div className="text-xs font-bold text-gray-500 uppercase mb-1">Speed</div>
+                <div className="border border-gray-200 p-3 text-center rounded-xl bg-gray-50 flex flex-col justify-center min-h-[100px]">
+                    <div className="text-[10px] font-bold text-gray-500 uppercase mb-1">Speed</div>
                     <div className="text-2xl font-bold text-black">{plan.speed}</div>
                 </div>
-                <div className="border border-gray-200 p-4 text-center rounded-xl bg-gray-50">
-                    <div className="text-xs font-bold text-gray-500 uppercase mb-1">Activation</div>
-                    <div className="text-xl font-bold text-black">Auto</div>
+                <div className="border border-gray-200 p-3 text-center rounded-xl bg-gray-50 flex flex-col justify-center min-h-[100px]">
+                    <div className="text-[10px] font-bold text-gray-500 uppercase mb-1">Activation</div>
+                    <div className="text-2xl font-bold text-black">Auto</div>
                 </div>
             </div>
 
@@ -319,7 +323,7 @@ export function PlanDetails({ plan }: { plan: any }) {
                                     {plan.location.split(',').map((code: string) => (
                                         <div key={code} className="flex items-center gap-3 border border-gray-100 p-3 rounded-lg hover:bg-gray-50 transition-colors">
                                             <div className="w-8 h-5 rounded overflow-hidden border border-gray-200 flex-shrink-0">
-                                                 <FlagIcon logoUrl={`https://flagcdn.com/w320/${code.trim().toLowerCase().split('-')[0]}.png`} alt={code} className="h-full w-full object-cover" />
+                                                 <FlagIcon logoUrl={`https://flagcdn.com/w320/${code.trim().toLowerCase().split('-')[0]}.png`} alt={code} className="h-full w-full object-cover border-none" />
                                             </div>
                                             <span className="font-bold text-xs uppercase text-gray-700">{getCountryName(code.trim())}</span>
                                         </div>
@@ -331,18 +335,14 @@ export function PlanDetails({ plan }: { plan: any }) {
                 ) : (
                     <div className="flex items-center gap-4 bg-gray-50 p-4 border border-gray-200 w-fit rounded-xl">
                         <div className="w-12 h-8 rounded-md overflow-hidden border border-gray-200 shadow-sm">
-                            <FlagIcon logoUrl={`https://flagcdn.com/w320/${plan.location.toLowerCase().split('-')[0]}.png`} alt={plan.location} className="h-full w-full object-cover" />
+                            <FlagIcon logoUrl={`https://flagcdn.com/w320/${plan.location.toLowerCase().split('-')[0]}.png`} alt={plan.location} className="h-full w-full object-cover border-none" />
                         </div>
                         <span className="font-bold text-lg uppercase text-black">{getCountryName(plan.location)}</span>
                     </div>
                 )}
             </div>
-            
-             <div className="mt-8 pt-6 border-t border-gray-100 flex items-center justify-between">
-                <Link href="/device-check" className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-primary-dark hover:underline">
-                    <Smartphone className="h-4 w-4" /> Check Device Compatibility
-                </Link>
-            </div>
+
+            <PriceComparison />
         </div>
       </div>
 
@@ -435,6 +435,22 @@ export function PlanDetails({ plan }: { plan: any }) {
                  </span>
              </div>
          </div>
+
+         {/* Check Device Compatibility - Separate Card */}
+         <Link href="/device-check" className="block mt-4">
+             <div className="bg-white border border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-between group">
+                 <div className="flex items-center gap-3">
+                     <div className="bg-gray-100 p-2 rounded-lg group-hover:bg-primary/20 transition-colors">
+                         <Smartphone className="h-5 w-5 text-gray-700 group-hover:text-primary-dark" />
+                     </div>
+                     <div>
+                         <div className="font-bold text-sm text-gray-900">Device Compatibility</div>
+                         <div className="text-xs text-gray-500">Check if your phone works</div>
+                     </div>
+                 </div>
+                 <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-primary-dark transition-colors" />
+             </div>
+         </Link>
       </div>
 
       {/* Device Warning */}

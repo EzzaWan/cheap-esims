@@ -10,7 +10,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { safeFetch } from "@/lib/safe-fetch";
 import { useParams, useRouter } from "next/navigation";
 import { fetchDiscounts } from "@/lib/admin-discounts";
-import { getSlugFromCode } from "@/lib/country-slugs";
+import { getSlugFromCode, getCountryName } from "@/lib/country-slugs";
 import { addRecentlyViewed } from "@/lib/recently-viewed";
 import { isDailyUnlimitedPlan } from "@/lib/plan-utils";
 import { getPlanFlagLabels } from "@/lib/plan-flags";
@@ -121,15 +121,38 @@ export default function PlanPage() {
     return name;
   };
 
-  return (
-    <div className="space-y-6">
-      <Breadcrumbs 
-        items={[
+  const breadcrumbsItems = (() => {
+    const currentLabel = getBreadcrumbLabel();
+    const defaultItems = [
+      { label: 'Home', href: '/' },
+      { label: 'Plans', href: '/' },
+      { label: currentLabel },
+    ];
+
+    if (!plan || !plan.location) return defaultItems;
+
+    // If location is single country, link to country page
+    if (!plan.location.includes(',')) {
+      const slug = getSlugFromCode(plan.location);
+      if (slug) {
+        return [
           { label: 'Home', href: '/' },
-          { label: 'Plans', href: '/' },
-          { label: getBreadcrumbLabel() },
-        ]}
-      />
+          { label: getCountryName(plan.location), href: `/countries/${slug}` },
+          { label: currentLabel },
+        ];
+      }
+    }
+
+    return defaultItems;
+  })();
+
+  return (
+    <div className="space-y-2">
+      <div className="max-w-7xl mx-auto px-4 pt-4">
+        <Breadcrumbs 
+          items={breadcrumbsItems}
+        />
+      </div>
       
       <PlanDetails plan={plan} />
     </div>

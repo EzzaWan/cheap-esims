@@ -115,28 +115,28 @@ export default function DeviceCheckPage() {
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-4xl mx-auto py-10">
-        <Link href="/" className="inline-flex items-center gap-2 text-[var(--voyage-muted)] hover:text-[var(--voyage-accent)] transition-colors mb-6">
+    <div className="min-h-screen bg-gray-50/50">
+      <div className="max-w-4xl mx-auto py-10 px-4">
+        <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-primary transition-colors mb-6">
           <ArrowLeft className="h-4 w-4" />
           Back to Home
         </Link>
 
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-white mb-2">Device Compatibility Checker</h1>
-          <p className="text-[var(--voyage-muted)]">
+          <h1 className="text-4xl font-bold text-black mb-2">Device Compatibility Checker</h1>
+          <p className="text-gray-500">
             Check if your device supports eSIM before purchasing
           </p>
         </div>
 
-        <Card className="bg-[var(--voyage-card)] border-[var(--voyage-border)] mb-6">
+        <Card className="bg-white border-gray-200 mb-6 shadow-sm">
           <CardHeader>
-            <CardTitle className="text-white">Search Your Device</CardTitle>
+            <CardTitle className="text-black">Search Your Device</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="relative" ref={suggestionsRef}>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--voyage-muted)]" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   type="text"
                   placeholder="e.g., iPhone 15, Samsung Galaxy S24..."
@@ -148,16 +148,16 @@ export default function DeviceCheckPage() {
                   onFocus={() => {
                     if (suggestions.length > 0) setShowSuggestions(true);
                   }}
-                  className="pl-10 bg-[var(--voyage-bg)] border-[var(--voyage-border)] text-white placeholder:text-[var(--voyage-muted)]"
+                  className="pl-10 bg-white border-gray-200 text-black placeholder:text-gray-400"
                 />
               </div>
               {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute z-50 w-full mt-1 bg-[var(--voyage-card)] border border-[var(--voyage-border)] rounded-md shadow-lg max-h-60 overflow-y-auto">
+                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
                   {suggestions.map((model) => (
                     <button
                       key={model}
                       onClick={() => handleSuggestionClick(model)}
-                      className="w-full text-left px-4 py-2 hover:bg-[var(--voyage-bg-light)] text-white transition-colors"
+                      className="w-full text-left px-4 py-2 hover:bg-gray-50 text-black transition-colors"
                     >
                       {model}
                     </button>
@@ -167,11 +167,11 @@ export default function DeviceCheckPage() {
             </div>
 
             <div className="relative">
-              <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--voyage-muted)]" />
+              <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <select
                 value={selectedCountry}
                 onChange={(e) => setSelectedCountry(e.target.value)}
-                className="w-full h-10 pl-10 pr-3 rounded-md border border-[var(--voyage-border)] bg-[var(--voyage-bg)] text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--voyage-accent)]"
+                className="w-full h-10 pl-10 pr-3 rounded-md border border-gray-200 bg-white text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <option value="">Select country (optional)</option>
                 {countries.map((country) => (
@@ -185,7 +185,7 @@ export default function DeviceCheckPage() {
             <Button
               onClick={handleCheckCompatibility}
               disabled={!selectedDevice || loading}
-              className="w-full bg-[var(--voyage-accent)] hover:bg-[var(--voyage-accent-soft)] text-white"
+              className="w-full bg-primary hover:bg-primary/90 text-black font-bold"
             >
               {loading ? "Checking..." : "Check Compatibility"}
             </Button>
@@ -193,15 +193,15 @@ export default function DeviceCheckPage() {
         </Card>
 
         {result && (
-          <Card className="bg-[var(--voyage-card)] border-[var(--voyage-border)]">
+          <Card className="bg-white border-gray-200 shadow-sm">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-white">Compatibility Result</CardTitle>
+                <CardTitle className="text-black">Compatibility Result</CardTitle>
                 <Badge
                   className={
                     result.supported
-                      ? "bg-green-500/20 text-green-400 border-green-500/30"
-                      : "bg-red-500/20 text-red-400 border-red-500/30"
+                      ? "bg-green-100 text-green-700 border-green-200"
+                      : "bg-red-100 text-red-700 border-red-200"
                   }
                 >
                   {result.supported ? (
@@ -220,23 +220,23 @@ export default function DeviceCheckPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-sm text-[var(--voyage-muted)]">Device</p>
-                <p className="text-lg font-semibold text-white">
+                <p className="text-sm text-gray-500">Device</p>
+                <p className="text-lg font-semibold text-black">
                   {result.brand} {result.model}
                 </p>
               </div>
 
               {result.notes && result.notes.length > 0 && (
                 <div>
-                  <p className="text-sm text-[var(--voyage-muted)] mb-2">Important Notes</p>
+                  <p className="text-sm text-gray-500 mb-2">Important Notes</p>
                   <div className="space-y-2">
                     {result.notes.map((note, index) => (
                       <div
                         key={index}
-                        className="flex items-start gap-2 p-3 bg-[var(--voyage-bg-light)] rounded-md border border-[var(--voyage-border)]"
+                        className="flex items-start gap-2 p-3 bg-gray-50 rounded-md border border-gray-200"
                       >
-                        <AlertTriangle className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                        <p className="text-sm text-white">{note}</p>
+                        <AlertTriangle className="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-sm text-gray-700">{note}</p>
                       </div>
                     ))}
                   </div>
@@ -245,26 +245,26 @@ export default function DeviceCheckPage() {
 
               {selectedCountry && result.regionalNotes?.[selectedCountry.toUpperCase()] && (
                 <div>
-                  <p className="text-sm text-[var(--voyage-muted)] mb-2">Country-Specific Information</p>
-                  <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-md">
-                    <p className="text-sm text-yellow-400">
+                  <p className="text-sm text-gray-500 mb-2">Country-Specific Information</p>
+                  <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                    <p className="text-sm text-yellow-700">
                       {result.regionalNotes[selectedCountry.toUpperCase()]}
                     </p>
                   </div>
                 </div>
               )}
 
-              <div className="flex flex-wrap gap-3 pt-4 border-t border-[var(--voyage-border)]">
+              <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-200">
                 {result.supported ? (
                   <>
                     <Link href="/countries">
-                      <Button variant="outline" className="border-[var(--voyage-border)] text-white hover:bg-[var(--voyage-bg-light)]">
+                      <Button variant="outline" className="border-gray-300 text-black hover:bg-gray-50">
                         Browse Plans
                         <ExternalLink className="h-4 w-4 ml-2" />
                       </Button>
                     </Link>
                     <Link href="/support">
-                      <Button variant="secondary" className="bg-[var(--voyage-bg-light)] text-white hover:bg-[var(--voyage-bg)]">
+                      <Button variant="secondary" className="bg-gray-100 text-gray-900 hover:bg-gray-200">
                         View Installation Guide
                         <ExternalLink className="h-4 w-4 ml-2" />
                       </Button>
@@ -272,7 +272,7 @@ export default function DeviceCheckPage() {
                   </>
                 ) : (
                   <Link href="/support">
-                    <Button variant="secondary" className="bg-[var(--voyage-bg-light)] text-white hover:bg-[var(--voyage-bg)]">
+                    <Button variant="secondary" className="bg-gray-100 text-gray-900 hover:bg-gray-200">
                       Contact Support
                       <ExternalLink className="h-4 w-4 ml-2" />
                     </Button>

@@ -12,96 +12,348 @@ export interface ReviewData {
 }
 
 const SHORT_REVIEWS_EN = [
-  "Works great.",
-  "Easy setup, no issues.",
-  "Cheap and fast.",
-  "Good signal in Tokyo.",
-  "Saved me a lot of money.",
-  "Worked as expected.",
-  "Internet was fast.",
-  "Recommended.",
-  "Quick activation.",
-  "Very happy with this.",
-  "Better than roaming.",
-  "Instant connection.",
-  "Simple to use.",
-  "Good value.",
-  "Everything went smooth.",
-  "5 stars.",
-  "Will buy again.",
-  "Perfect for my trip.",
-  "No problems at all.",
-  "Seamless experience."
+  "Works great",
+  "Easy setup, no issues",
+  "Cheap and fast",
+  "Good signal in Tokyo",
+  "Saved me a lot of money",
+  "Worked as expected",
+  "Internet was fast",
+  "Recommended",
+  "Quick activation",
+  "Very happy with this",
+  "Better than roaming",
+  "Instant connection",
+  "Simple to use",
+  "Good value",
+  "Everything went smooth",
+  "5 stars",
+  "Will buy again",
+  "Perfect for my trip",
+  "No problems at all",
+  "Seamless experience"
 ];
 
 const SHORT_REVIEWS_ES = [
-  "Funciona perfecto.",
-  "Muy barato y rápido.",
-  "Buena señal.",
-  "Fácil de instalar.",
-  "Recomendado.",
-  "Todo bien.",
-  "Excelente servicio.",
-  "Internet rápido.",
-  "Muy útil para viajar.",
-  "Sin problemas."
+  "Funciona perfecto",
+  "Muy barato y rápido",
+  "Buena señal",
+  "Fácil de instalar",
+  "Recomendado",
+  "Todo bien",
+  "Excelente servicio",
+  "Internet rápido",
+  "Muy útil para viajar",
+  "Sin problemas"
 ];
 
 const SHORT_REVIEWS_DE = [
-  "Funktioniert super.",
-  "Einfache Einrichtung.",
-  "Günstig und gut.",
-  "Guter Empfang.",
-  "Sehr zufrieden.",
-  "Alles bestens.",
-  "Schnelles Internet.",
-  "Empfehlenswert.",
-  "Hat alles geklappt.",
-  "Top Preis-Leistung."
+  "Funktioniert super",
+  "Einfache Einrichtung",
+  "Günstig und gut",
+  "Guter Empfang",
+  "Sehr zufrieden",
+  "Alles bestens",
+  "Schnelles Internet",
+  "Empfehlenswert",
+  "Hat alles geklappt",
+  "Top Preis-Leistung"
 ];
 
 const SHORT_REVIEWS_FR = [
-  "Marche très bien.",
-  "Installation facile.",
-  "Pas cher et efficace.",
-  "Bon réseau.",
-  "Je recommande.",
-  "Super pratique.",
-  "Connexion rapide.",
-  "Aucun problème.",
-  "Parfait pour le voyage.",
-  "Très satisfait."
+  "Marche très bien",
+  "Installation facile",
+  "Pas cher et efficace",
+  "Bon réseau",
+  "Je recommande",
+  "Super pratique",
+  "Connexion rapide",
+  "Aucun problème",
+  "Parfait pour le voyage",
+  "Très satisfait"
 ];
 
 const SHORT_REVIEWS_PL = [
-  "Działa super.",
-  "Łatwa instalacja.",
-  "Tanie i dobre.",
-  "Dobry zasięg.",
-  "Polecam.",
-  "Wszystko ok.",
-  "Szybki internet.",
-  "Bez problemów.",
-  "Świetna sprawa.",
-  "Jestem zadowolony."
+  "Działa super",
+  "Łatwa instalacja",
+  "Tanie i dobre",
+  "Dobry zasięg",
+  "Polecam",
+  "Wszystko ok",
+  "Szybki internet",
+  "Bez problemów",
+  "Świetna sprawa",
+  "Jestem zadowolony"
+];
+
+const SHORT_REVIEWS_ZH = [
+  "很好用",
+  "便宜又快速",
+  "信号不错",
+  "容易安装",
+  "推荐",
+  "一切正常",
+  "网速快",
+  "没有问题",
+  "很满意",
+  "会再买"
+];
+
+const SHORT_REVIEWS_JA = [
+  "とても良い",
+  "安くて速い",
+  "信号良好",
+  "簡単に設定できた",
+  "おすすめ",
+  "問題なし",
+  "インターネット速い",
+  "完璧",
+  "満足している",
+  "また使います"
+];
+
+const SHORT_REVIEWS_TH = [
+  "ใช้งานดีมาก",
+  "ราคาถูกและเร็ว",
+  "สัญญาณดี",
+  "ติดตั้งง่าย",
+  "แนะนำ",
+  "ทุกอย่างเรียบร้อย",
+  "อินเทอร์เน็ตเร็ว",
+  "ไม่มีปัญหา",
+  "พอใจมาก",
+  "จะซื้ออีก"
+];
+
+const SHORT_REVIEWS_TL = [
+  "Maganda ang serbisyo",
+  "Mura at mabilis",
+  "Magandang signal",
+  "Madaling i-install",
+  "Irerekomenda ko",
+  "Lahat ayos",
+  "Mabilis ang internet",
+  "Walang problema",
+  "Nasiyahan ako",
+  "Bibili ulit ako"
+];
+
+const SHORT_REVIEWS_ID = [
+  "Sangat bagus",
+  "Murah dan cepat",
+  "Sinyal bagus",
+  "Mudah dipasang",
+  "Direkomendasikan",
+  "Semua lancar",
+  "Internet cepat",
+  "Tidak ada masalah",
+  "Sangat puas",
+  "Akan beli lagi"
+];
+
+const SHORT_REVIEWS_VI = [
+  "Rất tốt",
+  "Rẻ và nhanh",
+  "Tín hiệu tốt",
+  "Dễ cài đặt",
+  "Đề xuất",
+  "Mọi thứ ổn",
+  "Internet nhanh",
+  "Không có vấn đề",
+  "Rất hài lòng",
+  "Sẽ mua lại"
+];
+
+const SHORT_REVIEWS_MS = [
+  "Sangat bagus",
+  "Murah dan pantas",
+  "signal kuat",
+  "senang install",
+  "Cun",
+  "ok je",
+  "Internet pantas",
+  "Tiada masalah",
+  "Sangat puas hati",
+  "Akan beli lagi"
+];
+
+const SHORT_REVIEWS_AR = [
+  "يعمل بشكل رائع",
+  "رخيص وسريع",
+  "إشارة جيدة",
+  "سهل التثبيت",
+  "موصى به",
+  "كل شيء على ما يرام",
+  "إنترنت سريع",
+  "لا توجد مشاكل",
+  "راضٍ جداً",
+  "سأشتري مرة أخرى"
+];
+
+const LOW_RATING_REVIEWS_EN = [
+  "Signal was weak in some areas",
+  "Slow connection sometimes",
+  "Had trouble activating",
+  "Not as fast as expected",
+  "Could be better",
+  "Okay for basic use only",
+  "Some connectivity issues"
+];
+
+const LOW_RATING_REVIEWS_ZH = [
+  "某些地区信号较弱",
+  "有时连接较慢",
+  "激活时遇到问题",
+  "速度不如预期",
+  "能用但不够好",
+  "仅适合基本使用"
+];
+
+const LOW_RATING_REVIEWS_JA = [
+  "一部の地域で信号が弱い",
+  "時々接続が遅い",
+  "アクティベーションに問題があった",
+  "期待したほど速くない",
+  "動作するが改善の余地がある"
+];
+
+const LOW_RATING_REVIEWS_AR = [
+  "الإشارة ضعيفة في بعض المناطق",
+  "الاتصال بطيء أحياناً",
+  "واجهت مشكلة في التفعيل",
+  "ليس سريعاً كما توقعت"
+];
+
+// Fake names (culturally diverse first names)
+const FAKE_NAMES = [
+  // European/Western
+  "Alex", "Sarah", "Michael", "Emma", "James", "Olivia", "David", "Sophia",
+  "John", "Isabella", "Robert", "Mia", "William", "Charlotte", "Richard", "Amelia",
+  "Joseph", "Harper", "Thomas", "Evelyn", "Charles", "Abigail", "Matthew", "Emily",
+  "Anthony", "Sofia", "Mark", "Avery", "Paul", "Grace", "Andrew", "Chloe",
+  "Joshua", "Victoria", "Kenneth", "Riley", "Kevin", "Aria", "Brian", "Lily",
+  "George", "Natalie", "Timothy", "Zoe", "Ronald", "Hannah", "Jason", "Lillian",
+  "Edward", "Addison", "Jeffrey", "Aubrey", "Ryan", "Eleanor", "Jacob", "Stella",
+  "Gary", "Nora", "Nicholas", "Maya", "Eric", "Willow", "Jonathan", "Lucy",
+  "Stephen", "Paisley", "Larry", "Daniel", "Justin", "Anna", "Scott", "Caroline",
+  "Brandon", "Nova", "Benjamin", "Genesis", "Samuel", "Aaliyah", "Frank", "Kennedy",
+  "Gregory", "Kinsley", "Raymond", "Allison", "Alexander", "Patrick", "Jack", "Savannah",
+  "Dennis", "Audrey", "Jerry", "Brooklyn", "Tyler", "Claire", "Aaron", "Skylar",
+  "Jose", "Henry", "Adam", "Everly", "Douglas", "Nathan", "Zachary", "Kyle",
+  "Noah", "Ethan", "Jeremy", "Hunter", "Christian",
+  
+  // Hispanic/Latino
+  "Carlos", "Maria", "Juan", "Ana", "Luis", "Carmen", "Miguel", "Rosa",
+  "Francisco", "Laura", "Antonio", "Patricia", "Manuel", "Guadalupe", "Pedro", "Monica",
+  "Ricardo", "Fernanda", "Roberto", "Valentina", "Fernando", "Sofia", "Daniel", "Camila",
+  "Alejandro", "Andrea", "Javier", "Daniela", "Rafael", "Mariana", "Diego", "Gabriela",
+  "Sergio", "Natalia", "Eduardo", "Paola", "Andres", "Alejandra", "Oscar", "Lucia",
+  "Mario", "Elena", "Alberto", "Claudia", "Raul", "Adriana", "Victor", "Cristina",
+  "Enrique", "Diana", "Jorge", "Beatriz", "Pablo", "Veronica",
+  
+  // Asian (Chinese)
+  "Wei", "Li", "Zhang", "Wang", "Chen", "Liu", "Yang", "Huang",
+  "Zhao", "Wu", "Zhou", "Xu", "Sun", "Ma", "Zhu", "Hu",
+  "Guo", "He", "Gao", "Lin", "Luo", "Song", "Zheng", "Liang",
+  "Xie", "Tang", "Han", "Feng", "Deng", "Cao", "Peng", "Zeng",
+  "Yuan", "Tian", "Qian", "Dai", "Jiang", "Fan", "Fang", "Shi",
+  "Yao", "Shen", "Yu", "Lu", "Jin", "Pan",
+  
+  // Asian (Japanese)
+  "Hiroshi", "Yuki", "Takeshi", "Sakura", "Kenji", "Akiko", "Ryota", "Emiko",
+  "Daiki", "Mei", "Kenta", "Yui", "Satoshi", "Aiko", "Taro", "Hana",
+  "Shinji", "Mika", "Kazuki", "Nana", "Ryo", "Miyuki", "Yuto", "Saki",
+  "Haruto", "Yuna", "Ren", "Mio", "Sora", "Rin", "Kaito", "Hinata",
+  "Soma", "Aoi", "Hayato", "Koharu", "Minato", "Nanami",
+  
+  // Asian (Korean)
+  "Min-jun", "Soo-jin", "Ji-hoon", "Hae-won", "Seung-ho", "Ji-woo", "Hyun-woo", "Seo-yeon",
+  "Jin-woo", "Yeon-woo", "Tae-hyun", "Min-seo", "Dong-hyun", "Ji-eun", "Sang-min", "Eun-ji",
+  "Jun-seo", "Ha-eun", "Min-hyuk", "So-min", "Woo-jin", "Chae-won", "Seo-jun", "Yoo-jin",
+  "Hyeon-woo", "Seo-hyun", "Ji-min", "Na-yeon", "Tae-min", "Ga-eul", "Seung-min", "Da-eun",
+  
+  // Asian (Indian)
+  "Arjun", "Priya", "Rohan", "Ananya", "Vikram", "Kavya", "Aditya", "Isha",
+  "Rahul", "Meera", "Karan", "Sneha", "Aryan", "Divya", "Raj", "Pooja",
+  "Siddharth", "Anjali", "Vishal", "Riya", "Nikhil", "Shreya", "Aman", "Neha",
+  "Ravi", "Kritika", "Suresh", "Deepika", "Mohan", "Swati", "Gaurav", "Tanvi",
+  "Varun", "Aditi", "Harsh", "Nisha", "Vhesvek", "Radha", "Kunal", "Pallavi",
+  
+  // Middle Eastern
+  "Ahmed", "Fatima", "Mohammed", "Aisha", "Ali", "Zainab", "Hassan", "Mariam",
+  "Omar", "Layla", "Yusuf", "Amina", "Ibrahim", "Sara", "Khalid", "Noor",
+  "Muhammad", "Hana", "Zain", "Zara", "Amir", "Leila", "Malik", "Yasmin",
+  "Rashid", "Salma", "Karim", "Dina", "Nabil", "Rania", "Fadi", "Lina",
+  "Samir", "Nadia", "Bilal", "Mona", "Jamal", "Rana", "Hala",
+  
+  // African
+  "Kwame", "Amina", "Kofi", "Zara", "Jabari", "Nia", "Jide", "Zuri",
+  "Tendai", "Amara", "Jengo", "Oba", "Zola", "Imani", "Kiano", "Ayanna",
+  "Thabo", "Nala", "Kamau", "Zendaya", "Amani", "Kira", "Jafari",
+  "Zaire", "Kendrick", "Tariq", "Jabari", "Kofi", "Jengo",
+  
+  // Southeast Asian
+  "Aqil", "Sari", "Muhammad", "Dewi", "Putra", "Indah", "Wahyu", "Siti",
+  "Ahmad", "Ratna", "Hadi", "Lestari", "Rizki", "Maya", "Dedi", "Nina",
+  "Andi", "Rina", "Daud", "Sinta", "Yusuf", "Diana", "Syarif", "Linda",
+  "Tono", "Rita", "Joko", "Ari", "Bayu", "Nur",
+  
+  // Filipino
+  "Juan", "Maria", "Jose", "Ana", "Carlos", "Rosa", "Miguel", "Carmen",
+  "Antonio", "Patricia", "Marvin", "Guadalupe", "Roberto", "Monica", "Fernando", "Isabella",
+  "Ricardo", "Fernanda", "Daniel", "Valentina", "Alejandro", "Sofia", "Javier", "Camila",
+  "Rafael", "Andrea", "Diego", "Daniela", "Sergio", "Mariana", "Eduardo", "Gabriela",
+  
+  // Thai
+  "Somchai", "Niran", "Prasert", "Suda", "Somsak", "Wanida", "Chai", "Siriporn",
+  "Suthep", "Naree", "Anan", "Pornthip", "Sakchai", "Supaporn", "Wichai", "Jintana",
+  "Narong", "Prasit", "Somsri"
+];
+
+// Random usernames (mix of patterns)
+const RANDOM_USERNAMES = [
+  "traveler_2024", "customer123", "user_2024", "verified_user", "guest_2024",
+  "traveler_99", "customer_xyz", "user_abc", "verified_2024", "guest_user",
+  "traveler_pro", "customer_vip", "user_premium", "verified_traveler", "guest_123",
+  "traveler_plus", "customer_2024", "user_new", "verified_customer", "guest_guest",
+  "traveler_one", "customer_two", "user_three", "verified_four", "guest_five",
+  "traveler_alpha", "customer_beta", "user_gamma", "verified_delta", "guest_omega",
+  "traveler_sky", "customer_sea", "user_mountain", "verified_river", "guest_lake",
+  "traveler_star", "customer_moon", "user_sun", "verified_earth", "guest_mars",
+  "traveler_blue", "customer_red", "user_green", "verified_yellow", "guest_purple",
+  "traveler_fast", "customer_slow", "user_quick", "verified_rapid", "guest_speed"
+];
+
+// Generic labels (for remaining 20%)
+const GENERIC_LABELS = [
+  "Traveler",
+  "Customer",
+  "User",
+  "Verified Customer",
+  "Guest",
+  "Anonymous",
+  "Verified",
+  "",
+  "",
+  ""
 ];
 
 const LONG_REVIEWS_EN = [
-  "Activated instantly when I landed. The speed was consistently good throughout my trip. Much cheaper than my carrier's roaming plan.",
-  "I was worried about setting it up, but the instructions were clear. Scanned the QR code and it just worked. Will definitely use again.",
-  "Used this for a 2-week trip to Japan. Signal was strong even in rural areas. The unlimited data came in handy for maps and social media.",
-  "Great alternative to physical SIM cards. No need to swap cards at the airport. Price is unbeatable compared to other providers I checked.",
-  "Had a small issue with activation but support helped me sort it out quickly via email. After that, smooth sailing. Good customer service.",
-  "Comparing this to Airalo, the prices are better here. Connection quality seems exactly the same since they use local networks.",
-  "The data speed was decent. Not 5G everywhere but solid 4G which is enough for everything I needed. Google Maps loaded instantly.",
-  "Highly recommend for anyone traveling. It's so much more convenient than hunting for a SIM card shop at the airport after a long flight."
+  "Activated instantly when I landed The speed was consistently good throughout my trip Much cheaper than my carrier's roaming plan",
+  "I was worried about setting it up, but the instructions were clear Scanned the QR code and it just worked Will definitely use again",
+  "Used this for a 2-week trip to Japan Signal was strong even in rural areas The unlimited data came in handy for maps and social media",
+  "Great alternative to physical SIM cards No need to swap cards at the airport Price is unbeatable compared to other providers I checked",
+  "Had a small issue with activation but support helped me sort it out quickly via email After that, smooth sailing Good customer service",
+  "Comparing this to Airalo, the prices are better here Connection quality seems exactly the same since they use local networks",
+  "The data speed was decent Not 5G everywhere but solid 4G which is enough for everything I needed Google Maps loaded instantly",
+  "Highly recommend for anyone traveling It's so much more convenient than hunting for a SIM card shop at the airport after a long flight"
 ];
 
 const LONG_REVIEWS_ES = [
-  "Se activó al instante cuando aterricé. La velocidad fue buena durante todo el viaje. Mucho más barato que el roaming de mi operador.",
-  "Tenía dudas sobre la configuración, pero las instrucciones eran claras. Escaneé el código QR y funcionó. Definitivamente lo usaré de nuevo.",
-  "Usé esto para un viaje de 2 semanas. La señal era fuerte incluso en áreas rurales. Los datos ilimitados fueron muy útiles.",
-  "Gran alternativa a las tarjetas SIM físicas. No hay necesidad de cambiar tarjetas en el aeropuerto. El precio es inmejorable."
+  "Se activó al instante cuando aterricé La velocidad fue buena durante todo el viaje Mucho más barato que el roaming de mi operador",
+  "Tenía dudas sobre la configuración, pero las instrucciones eran claras Escaneé el código QR y funcionó Definitivamente lo usaré de nuevo",
+  "Usé esto para un viaje de 2 semanas La señal era fuerte incluso en áreas rurales Los datos ilimitados fueron muy útiles",
+  "Gran alternativa a las tarjetas SIM físicas No hay necesidad de cambiar tarjetas en el aeropuerto El precio es inmejorable"
 ];
 
 // Helper to get random item from array
@@ -133,10 +385,12 @@ export function generateReviews(count: number = 3240): ReviewData[] {
     let language = "en";
     
     // Determine Rating
-    if (rand > 0.95) rating = 4;      // 5% 4 stars
-    else if (rand > 0.98) rating = 3; // 2% 3 stars
-    else if (rand > 0.99) rating = 1; // 1% 1 star (very rare)
-    else rating = 5;                  // Most are 5 stars
+    // Distribution: ~82% 5 stars, ~7% 4 stars, ~4% 3 stars, ~4% 2 stars, ~3% 1 star
+    if (rand > 0.93) rating = 4;      // 7% 4 stars (0.93-1.0)
+    else if (rand > 0.89) rating = 3; // 4% 3 stars (0.89-0.93)
+    else if (rand > 0.85) rating = 2; // 4% 2 stars (0.85-0.89)
+    else if (rand > 0.82) rating = 1; // 3% 1 star (0.82-0.85)
+    else rating = 5;                  // ~82% 5 stars (0-0.82)
 
     // Determine Type
     const typeRand = seededRandom(i + 1000);
@@ -147,18 +401,42 @@ export function generateReviews(count: number = 3240): ReviewData[] {
     } else if (typeRand < 0.90) {
       // Short text (15%)
       hasText = true;
-      // Select language
+      // Select language with expanded distribution
       const langRand = seededRandom(i + 2000);
-      if (langRand < 0.6) {
+      if (langRand < 0.30) {
         language = "en";
         text = sample(SHORT_REVIEWS_EN);
-      } else if (langRand < 0.7) {
+      } else if (langRand < 0.40) {
+        language = "zh";
+        text = sample(SHORT_REVIEWS_ZH);
+      } else if (langRand < 0.48) {
+        language = "ja";
+        text = sample(SHORT_REVIEWS_JA);
+      } else if (langRand < 0.54) {
         language = "es";
         text = sample(SHORT_REVIEWS_ES);
-      } else if (langRand < 0.8) {
+      } else if (langRand < 0.60) {
+        language = "ar";
+        text = sample(SHORT_REVIEWS_AR);
+      } else if (langRand < 0.65) {
+        language = "th";
+        text = sample(SHORT_REVIEWS_TH);
+      } else if (langRand < 0.70) {
+        language = "id";
+        text = sample(SHORT_REVIEWS_ID);
+      } else if (langRand < 0.75) {
+        language = "vi";
+        text = sample(SHORT_REVIEWS_VI);
+      } else if (langRand < 0.80) {
+        language = "tl";
+        text = sample(SHORT_REVIEWS_TL);
+      } else if (langRand < 0.85) {
+        language = "ms";
+        text = sample(SHORT_REVIEWS_MS);
+      } else if (langRand < 0.90) {
         language = "de";
         text = sample(SHORT_REVIEWS_DE);
-      } else if (langRand < 0.9) {
+      } else if (langRand < 0.95) {
         language = "fr";
         text = sample(SHORT_REVIEWS_FR);
       } else {
@@ -178,9 +456,46 @@ export function generateReviews(count: number = 3240): ReviewData[] {
       }
     }
 
-    // Override low ratings to have specific complaints sometimes, or just star only
-    if (rating <= 3 && hasText) {
-      text = language === "en" ? "Signal was okay but slow in some areas." : "Señal regular.";
+    // Override low ratings to have specific complaints
+    if (rating <= 2 && hasText) {
+      const lowRand = seededRandom(i + 5000);
+      if (language === "en" || !language) {
+        text = sample(LOW_RATING_REVIEWS_EN);
+      } else if (language === "zh") {
+        text = sample(LOW_RATING_REVIEWS_ZH);
+      } else if (language === "ja") {
+        text = sample(LOW_RATING_REVIEWS_JA);
+      } else if (language === "ar") {
+        text = sample(LOW_RATING_REVIEWS_AR);
+      } else {
+        // For other languages, use English complaint or generic
+        text = sample(LOW_RATING_REVIEWS_EN);
+      }
+    } else if (rating === 3 && hasText) {
+      // 3-star reviews are neutral
+      if (language === "en" || !language) {
+        text = "Signal was okay but slow in some areas";
+      } else {
+        text = sample(SHORT_REVIEWS_EN); // Use generic positive text but rating shows it's not perfect
+      }
+    }
+    
+    // Select username deterministically
+    // Distribution: 50% fake names, 30% random usernames, 20% generic/empty
+    const usernameRand = seededRandom(i + 6000);
+    let username: string;
+    if (usernameRand < 0.5) {
+      // 50% fake names
+      const nameIndex = Math.floor(seededRandom(i + 7000) * FAKE_NAMES.length);
+      username = FAKE_NAMES[nameIndex];
+    } else if (usernameRand < 0.8) {
+      // 30% random usernames
+      const userIndex = Math.floor(seededRandom(i + 8000) * RANDOM_USERNAMES.length);
+      username = RANDOM_USERNAMES[userIndex];
+    } else {
+      // 20% generic labels or empty
+      const labelIndex = Math.floor(seededRandom(i + 9000) * GENERIC_LABELS.length);
+      username = GENERIC_LABELS[labelIndex];
     }
 
     // Date generation (spread over last 2 years)
@@ -195,7 +510,7 @@ export function generateReviews(count: number = 3240): ReviewData[] {
       language: hasText ? language : undefined,
       source: i % 10 === 0 ? 'support' : 'purchase', // 10% from support, rest purchase
       verified: true,
-      author: "Verified Customer"
+      author: username
     });
   }
 

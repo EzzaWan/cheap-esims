@@ -899,9 +899,8 @@ export function generateReviews(count: number = 3240): ReviewData[] {
     const daysBack = Math.floor(seededRandom(i + 4000) * 730);
     const date = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000).toISOString();
 
-    // Only 40% of reviews should have verified=true (60% should be false)
-    const verifiedRand = seededRandom(i + 10000);
-    const isVerified = verifiedRand < 0.4; // 40% verified
+    // All reviews show verified purchase badge
+    const isVerified = true;
 
     reviews.push({
       id: `mock-${i}`,

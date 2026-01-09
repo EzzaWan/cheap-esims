@@ -147,6 +147,7 @@ export class ReviewsService {
       },
     });
 
+    // All reviews show verified purchase tag
     return reviews.map((review) => ({
       id: review.id,
       planId: review.planId,
@@ -155,7 +156,7 @@ export class ReviewsService {
       comment: review.comment,
       language: review.language,
       source: review.source,
-      verified: review.verified,
+      verified: true, // All reviews show verified
       date: review.createdAt.toISOString(),
     }));
   }

@@ -26,13 +26,19 @@ interface Review {
 
 export default function AdminReviewsPage() {
   const { user, isLoaded } = useUser();
-  const { isAdmin } = useIsAdmin();
+  const { isAdmin, loading: adminLoading } = useIsAdmin();
   const router = useRouter();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (isLoaded && !isAdmin) {
+    // Wait for both user and admin check to complete
+    if (!isLoaded || adminLoading) {
+      return;
+    }
+
+    // Redirect if not admin
+    if (!isAdmin) {
       router.push('/');
       return;
     }
@@ -54,10 +60,8 @@ export default function AdminReviewsPage() {
       }
     };
 
-    if (isLoaded && isAdmin) {
-      fetchReviews();
-    }
-  }, [user, isLoaded, isAdmin, router]);
+    fetchReviews();
+  }, [user, isLoaded, isAdmin, adminLoading, router]);
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this review?')) {
@@ -88,6 +92,18 @@ export default function AdminReviewsPage() {
     }
   };
 
+  // Show loading state while checking admin status
+  if (!isLoaded || adminLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-gray-500 font-mono">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect if not admin (handled in useEffect, but also guard here)
   if (!isAdmin) {
     return null;
   }

@@ -3,32 +3,88 @@
 import { useEffect, useState } from "react";
 import { Star, Globe, ChevronRight, User } from "lucide-react";
 import Link from "next/link";
-import { generateReviews, ReviewData } from "@/lib/mock-reviews";
+import { generateReviews, ReviewData, isMediumOrLongReview } from "@/lib/mock-reviews";
+import { safeFetch } from "@/lib/safe-fetch";
 
 interface PlanTrustReviewsProps {
   planId: string;
 }
 
+interface ApiReview {
+  id: string;
+  planId: string | null;
+  userName: string;
+  rating: number;
+  comment: string | null;
+  language: string | null;
+  source: string | null;
+  verified: boolean;
+  date: string;
+}
+
 export function PlanTrustReviews({ planId }: PlanTrustReviewsProps) {
   const [reviews, setReviews] = useState<ReviewData[]>([]);
   const [loading, setLoading] = useState(true);
-  const totalCount = 3242; // Consistent total count
+  const [totalCount, setTotalCount] = useState(3242);
 
   useEffect(() => {
-    // In a real app, you would filter by planId if available, 
-    // or fallback to global reviews.
-    // Since we are standardizing on the trustworthy global set:
-    const allReviews = generateReviews(totalCount);
+    const loadReviews = async () => {
+      try {
+        // Fetch real review count
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+        const countData = await safeFetch<{ count: number }>(`${apiUrl}/reviews/count`, { showToast: false });
+        const realCount = countData?.count || 0;
+        
+        // Generate mock reviews (base count)
+        const mockCount = 3242;
+        const allMockReviews = generateReviews(mockCount);
+        
+        // Fetch real reviews
+        let realReviews: ReviewData[] = [];
+        try {
+          const apiData = await safeFetch<ApiReview[]>(`${apiUrl}/reviews/all`, { showToast: false });
+          realReviews = (apiData || []).map((review): ReviewData => ({
+            id: review.id,
+            rating: review.rating,
+            date: review.date,
+            comment: review.comment || undefined,
+            language: review.language || undefined,
+            source: (review.source as 'purchase' | 'survey' | 'support') || 'purchase',
+            verified: review.verified,
+            author: review.userName || 'Anonymous'
+          }));
+        } catch (error) {
+          console.error("Failed to fetch real reviews:", error);
+        }
+        
+        // Merge and filter for medium/long reviews only
+        const allReviews = [...realReviews, ...allMockReviews];
+        const mediumLongReviews = allReviews
+          .filter(r => isMediumOrLongReview(r))
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+          .slice(0, 3); // Get latest 3 medium/long reviews
+        
+        // Update total count (real + mock)
+        setTotalCount(realCount + mockCount);
+        setReviews(mediumLongReviews);
+      } catch (error) {
+        console.error("Failed to load reviews:", error);
+        // Fallback to mock reviews
+        const allMockReviews = generateReviews(3242);
+        const mediumLongReviews = allMockReviews
+          .filter(r => isMediumOrLongReview(r))
+          .slice(0, 3);
+        setReviews(mediumLongReviews);
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    // Pick 3 high quality reviews to show
-    // Deterministic slice based on planId would be better, but random is okay for now
-    // Let's filter for English and high rating for the widget
-    const highQuality = allReviews
-      .filter(r => r.rating >= 4 && r.comment && r.comment.length > 30 && r.language === 'en')
-      .slice(0, 3);
-      
-    setReviews(highQuality);
-    setLoading(false);
+    loadReviews();
+    
+    // Refresh every 30 seconds to get latest reviews
+    const interval = setInterval(loadReviews, 30000);
+    return () => clearInterval(interval);
   }, [planId]);
 
   if (loading) {

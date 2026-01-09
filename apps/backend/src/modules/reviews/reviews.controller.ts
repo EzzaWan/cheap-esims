@@ -62,6 +62,11 @@ export class ReviewsController {
   async getAllReviews() {
     return this.reviewsService.getAllReviews();
   }
+
+  @Get('count')
+  async getTotalCount() {
+    return { count: await this.reviewsService.getTotalReviewCount() };
+  }
 }
 
 @Controller('admin/reviews')

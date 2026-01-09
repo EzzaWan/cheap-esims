@@ -49,8 +49,9 @@ export class ReviewsService {
     }
 
     // Check if user has purchased this plan (for verified badge)
+    // Only mark as verified if planId is provided (from My eSIMs page) AND user purchased it
     let hasPurchased = false;
-    if (data.userId && data.planId) {
+    if (data.planId && data.userId) {
       const order = await this.prisma.order.findFirst({
         where: {
           userId: data.userId,
@@ -60,6 +61,7 @@ export class ReviewsService {
       });
       hasPurchased = !!order;
     }
+    // If no planId provided (from /reviews page), never mark as verified
 
     // Sanitize inputs - ensure empty strings become null
     const sanitizedComment = data.comment && data.comment.trim().length > 0 
@@ -183,17 +185,21 @@ export class ReviewsService {
       },
     });
 
-    return reviews.map((review) => ({
-      id: review.id,
-      planId: review.planId,
-      userName: review.userName || 'Anonymous',
-      rating: review.rating,
-      comment: review.comment,
-      language: review.language,
-      source: review.source,
-      verified: review.verified,
-      date: review.createdAt.toISOString(),
-    }));
+    // Remove verified from 40% of reviews randomly
+    return reviews.map((review) => {
+      const shouldRemoveVerified = Math.random() < 0.4;
+      return {
+        id: review.id,
+        planId: review.planId,
+        userName: review.userName || 'Anonymous',
+        rating: review.rating,
+        comment: review.comment,
+        language: review.language,
+        source: review.source,
+        verified: shouldRemoveVerified ? false : review.verified,
+        date: review.createdAt.toISOString(),
+      };
+    });
   }
 
   async getReviewStats() {
@@ -223,6 +229,11 @@ export class ReviewsService {
         return acc;
       }, {} as Record<number, number>),
     };
+  }
+
+  async getTotalReviewCount(): Promise<number> {
+    // Return total count of real reviews (mock reviews are generated client-side)
+    return this.prisma.review.count();
   }
 
   async seedReviews(count: number = 3200) {

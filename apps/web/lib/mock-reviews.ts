@@ -710,3 +710,14 @@ export function generateReviews(count: number = 3240): ReviewData[] {
   return reviews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
+/**
+ * Determines if a review is medium or long length
+ * Medium: 50-150 characters
+ * Long: 150+ characters
+ */
+export function isMediumOrLongReview(review: ReviewData): boolean {
+  if (!review.comment) return false;
+  const length = review.comment.length;
+  return length >= 50; // Medium and long reviews are 50+ characters
+}
+

@@ -33,19 +33,42 @@ export function HomeReviewsSection() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    // Generate reviews on client-side mount
-    const allReviews = generateReviews(3242);
-    // Filter for ones with text and sort by date
-    const displayReviews = allReviews
-      .filter(r => r.comment && r.comment.length > 20)
-      .slice(0, 6)
-      .map(r => ({
-        ...r,
-        userName: r.author || "Verified Customer"
-      }));
+    const loadReviews = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+        
+        // Fetch real review count (optional, for display)
+        // Generate mock reviews
+        const allMockReviews = generateReviews(3242);
+        
+        // Filter for ones with text and sort by date
+        const displayReviews = allMockReviews
+          .filter(r => r.comment && r.comment.length > 20)
+          .slice(0, 6)
+          .map(r => ({
+            ...r,
+            userName: r.author || "Verified Customer"
+          }));
+        
+        setReviews(displayReviews);
+      } catch (error) {
+        console.error("Failed to load reviews:", error);
+        // Fallback
+        const allMockReviews = generateReviews(3242);
+        const displayReviews = allMockReviews
+          .filter(r => r.comment && r.comment.length > 20)
+          .slice(0, 6)
+          .map(r => ({
+            ...r,
+            userName: r.author || "Verified Customer"
+          }));
+        setReviews(displayReviews);
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    setReviews(displayReviews);
-    setLoading(false);
+    loadReviews();
   }, []);
 
   const handleSubmitReview = async () => {

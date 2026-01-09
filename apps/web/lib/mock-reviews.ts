@@ -393,10 +393,8 @@ const GENERIC_LABELS = [
   "Traveler",
   "Customer",
   "User",
-  "Verified Customer",
   "Guest",
   "Anonymous",
-  "Verified",
   "",
   "",
   ""

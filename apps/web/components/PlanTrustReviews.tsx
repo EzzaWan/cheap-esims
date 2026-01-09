@@ -169,7 +169,7 @@ export function PlanTrustReviews({ planId }: PlanTrustReviewsProps) {
                  <div className="bg-gray-100 p-1 rounded-full">
                    <User className="w-3 h-3 text-gray-500" />
                  </div>
-                 <span className="text-xs font-bold text-gray-900">{review.author || "Verified Customer"}</span>
+                 <span className="text-xs font-bold text-gray-900">{review.author || "Anonymous"}</span>
                  {review.verified && (
                    <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-bold">Verified</span>
                  )}

@@ -47,7 +47,7 @@ export function HomeReviewsSection() {
           .slice(0, 6)
           .map(r => ({
             ...r,
-            userName: r.author || "Verified Customer"
+            userName: r.author || "Anonymous"
           }));
         
         setReviews(displayReviews);
@@ -60,7 +60,7 @@ export function HomeReviewsSection() {
           .slice(0, 6)
           .map(r => ({
             ...r,
-            userName: r.author || "Verified Customer"
+            userName: r.author || "Anonymous"
           }));
         setReviews(displayReviews);
       } finally {

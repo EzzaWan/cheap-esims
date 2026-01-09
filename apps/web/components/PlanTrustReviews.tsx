@@ -57,12 +57,34 @@ export function PlanTrustReviews({ planId }: PlanTrustReviewsProps) {
           console.error("Failed to fetch real reviews:", error);
         }
         
-        // Merge and filter for medium/long reviews only
-        const allReviews = [...realReviews, ...allMockReviews];
-        const mediumLongReviews = allReviews
+        // Prioritize real reviews, then merge with mock reviews
+        // Filter for medium/long reviews only and sort by date (newest first)
+        const realMediumLong = realReviews
           .filter(r => isMediumOrLongReview(r))
-          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-          .slice(0, 3); // Get latest 3 medium/long reviews
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        
+        const mockMediumLong = allMockReviews
+          .filter(r => isMediumOrLongReview(r))
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        
+        // Combine all and sort by date again to ensure latest are first
+        // Real reviews will naturally be more recent, but we want absolute latest
+        const allMediumLong = [...realMediumLong, ...mockMediumLong]
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        
+        // Get latest 3 medium/long reviews
+        const mediumLongReviews = allMediumLong.slice(0, 3);
+        
+        // Debug logging
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[PlanTrustReviews] Real medium/long:', realMediumLong.length);
+          console.log('[PlanTrustReviews] Mock medium/long:', mockMediumLong.length);
+          console.log('[PlanTrustReviews] Selected reviews:', mediumLongReviews.map(r => ({ 
+            id: r.id.substring(0, 10), 
+            date: r.date, 
+            commentLength: r.comment?.length || 0 
+          })));
+        }
         
         // Update total count (real + mock)
         setTotalCount(realCount + mockCount);

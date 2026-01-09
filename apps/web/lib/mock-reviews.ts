@@ -694,6 +694,10 @@ export function generateReviews(count: number = 3240): ReviewData[] {
     const daysBack = Math.floor(seededRandom(i + 4000) * 730);
     const date = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000).toISOString();
 
+    // Only 40% of reviews should have verified=true (60% should be false)
+    const verifiedRand = seededRandom(i + 10000);
+    const isVerified = verifiedRand < 0.4; // 40% verified
+
     reviews.push({
       id: `mock-${i}`,
       rating,
@@ -701,7 +705,7 @@ export function generateReviews(count: number = 3240): ReviewData[] {
       comment: hasText ? text : undefined,
       language: hasText ? language : undefined,
       source: i % 10 === 0 ? 'support' : 'purchase', // 10% from support, rest purchase
-      verified: true,
+      verified: isVerified,
       author: username
     });
   }

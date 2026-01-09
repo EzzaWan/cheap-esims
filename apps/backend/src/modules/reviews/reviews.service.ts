@@ -185,9 +185,20 @@ export class ReviewsService {
       },
     });
 
-    // Remove verified from 40% of reviews randomly
+    // Remove verified from 40% of reviews deterministically based on review ID
+    // This ensures consistent results across API calls
     return reviews.map((review) => {
-      const shouldRemoveVerified = Math.random() < 0.4;
+      // Use a simple hash of the review ID to deterministically decide
+      // This ensures the same review always gets the same verified status
+      const hash = review.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const shouldRemoveVerified = (hash % 100) < 40; // 40% will have verified removed
+      
+      // Only remove verified if the review doesn't have a planId (from /reviews page)
+      // Reviews with planId should keep their verified status (they're from My eSIMs)
+      const shouldShowVerified = review.planId 
+        ? review.verified // Keep verified if it has planId (from My eSIMs)
+        : (shouldRemoveVerified ? false : review.verified); // Remove from 40% if no planId
+      
       return {
         id: review.id,
         planId: review.planId,
@@ -196,7 +207,7 @@ export class ReviewsService {
         comment: review.comment,
         language: review.language,
         source: review.source,
-        verified: shouldRemoveVerified ? false : review.verified,
+        verified: shouldShowVerified,
         date: review.createdAt.toISOString(),
       };
     });

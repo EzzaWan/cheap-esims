@@ -31,7 +31,27 @@ const SHORT_REVIEWS_EN = [
   "Will buy again",
   "Perfect for my trip",
   "No problems at all",
-  "Seamless experience"
+  "Seamless experience",
+  "works perfectly",
+  "no complaints",
+  "great value for money",
+  "fast internet",
+  "easy to install",
+  "worked immediately",
+  "better than expected",
+  "would recommend",
+  "cheaper than others",
+  "signal was strong",
+  "activated quickly",
+  "no issues at all",
+  "very satisfied",
+  "excellent service",
+  "worth the money",
+  "connection was stable",
+  "perfect for travel",
+  "exactly as described",
+  "highly recommend",
+  "great experience"
 ];
 
 const SHORT_REVIEWS_ES = [
@@ -312,17 +332,61 @@ const FAKE_NAMES = [
 
 // Random usernames (mix of patterns)
 const RANDOM_USERNAMES = [
-  "traveler_2024", "customer123", "user_2024", "verified_user", "guest_2024",
-  "traveler_99", "customer_xyz", "user_abc", "verified_2024", "guest_user",
-  "traveler_pro", "customer_vip", "user_premium", "verified_traveler", "guest_123",
-  "traveler_plus", "customer_2024", "user_new", "verified_customer", "guest_guest",
-  "traveler_one", "customer_two", "user_three", "verified_four", "guest_five",
-  "traveler_alpha", "customer_beta", "user_gamma", "verified_delta", "guest_omega",
-  "traveler_sky", "customer_sea", "user_mountain", "verified_river", "guest_lake",
-  "traveler_star", "customer_moon", "user_sun", "verified_earth", "guest_mars",
-  "traveler_blue", "customer_red", "user_green", "verified_yellow", "guest_purple",
-  "traveler_fast", "customer_slow", "user_quick", "verified_rapid", "guest_speed"
-];
+    "throwaway_48721",
+    "justPassingBy",
+    "wifiOnPlane",
+    "nomadAF",
+    "lostInTransit",
+    "plsDontTrackMe",
+    "idkMan42",
+    "actuallyHelpful",
+    "workedForMe",
+    "noIssuesHere",
+  
+    "404username",
+    "signalWasFine",
+    "landingAt3am",
+    "batteryLowAgain",
+    "airportCoffee",
+    "oneBagOnly",
+    "seat39B",
+    "checkedBagsSuck",
+    "offlineIsPain",
+    "customsLine",
+  
+    "whySoSlow",
+    "surprisinglyGood",
+    "notSponsored",
+    "skepticalAtFirst",
+    "worthItIMO",
+    "noRegretsTBH",
+    "wouldBuyAgain",
+    "cheapButWorks",
+    "asAdvertised",
+    "finallyOnline",
+  
+    "randomHuman93",
+    "user_178392",
+    "anotherInternetGuy",
+    "somebodyElse",
+    "anonTraveller",
+    "probablyABot",
+    "trustIssues",
+    "lowExpectations",
+    "pleasantlySurprised",
+    "mehItsFine",
+  
+    "midnightPurchase",
+    "usedOnce",
+    "workedAbroad",
+    "didTheJob",
+    "quickSetup",
+    "noComplaintsHere",
+    "notTechy",
+    "parentsApproved",
+    "travelBrain",
+    "jetlaggedUser"
+  ];  
 
 // Generic labels (for remaining 20%)
 const GENERIC_LABELS = [
@@ -339,21 +403,99 @@ const GENERIC_LABELS = [
 ];
 
 const LONG_REVIEWS_EN = [
-  "Activated instantly when I landed The speed was consistently good throughout my trip Much cheaper than my carrier's roaming plan",
-  "I was worried about setting it up, but the instructions were clear Scanned the QR code and it just worked Will definitely use again",
-  "Used this for a 2-week trip to Japan Signal was strong even in rural areas The unlimited data came in handy for maps and social media",
-  "Great alternative to physical SIM cards No need to swap cards at the airport Price is unbeatable compared to other providers I checked",
-  "Had a small issue with activation but support helped me sort it out quickly via email After that, smooth sailing Good customer service",
-  "Comparing this to Airalo, the prices are better here Connection quality seems exactly the same since they use local networks",
-  "The data speed was decent Not 5G everywhere but solid 4G which is enough for everything I needed Google Maps loaded instantly",
-  "Highly recommend for anyone traveling It's so much more convenient than hunting for a SIM card shop at the airport after a long flight"
+  "activated instantly when I landed the speed was consistently good throughout my trip much cheaper than my carrier's roaming plan",
+  "I was worried about setting it up, but the instructions were clear scanned the QR code and it just worked will definitely use again",
+  "used this for a 2-week trip to Japan signal was strong even in rural areas the unlimited data came in handy for maps and social media",
+  "great alternative to physical SIM cards no need to swap cards at the airport price is unbeatable compared to other providers I checked",
+  "had a small issue with activation but support helped me sort it out quickly via email after that, smooth sailing good customer service",
+  "comparing this to Airalo, the prices are better here connection quality seems exactly the same since they use local networks",
+  "the data speed was decent not 5G everywhere but solid 4G which is enough for everything I needed Google Maps loaded instantly",
+  "highly recommend for anyone traveling it's so much more convenient than hunting for a SIM card shop at the airport after a long flight",
+  "worked perfectly from day one used it across multiple countries in Europe and never had any connectivity issues the setup was super simple",
+  "I travel a lot for work and this has been a game changer no more expensive roaming charges or hunting for local SIM cards at airports",
+  "the signal strength was impressive even in remote areas I was able to video call my family back home without any lag or drops",
+  "initially skeptical about eSIMs but this changed my mind completely seamless activation and the data speeds were better than my home WiFi",
+  "spent 3 weeks in Asia and this eSIM worked flawlessly in every country I visited saved me hundreds compared to my usual roaming costs",
+  "customer support was responsive when I had a question about activation they replied within an hour and helped me resolve it quickly",
+  "the unlimited plan was perfect for my needs I streamed videos, used maps constantly, and never had to worry about running out of data",
+  "setup took less than 5 minutes just scanned the QR code and I was online immediately much easier than I expected",
+  "used this during a business trip and it was reliable for video conferences and file uploads no interruptions or quality issues",
+  "the price point is unbeatable I compared with several other providers and this was significantly cheaper for the same data allowance",
+  "worked great in both urban and rural areas I was surprised by how strong the signal was even in the countryside",
+  "I'm not very tech-savvy but the installation process was straightforward the instructions were clear and easy to follow",
+  "the connection was stable throughout my entire trip no random disconnections or slow periods even during peak usage times",
+  "this is my second time using this service and it's been consistent both times reliable, affordable, and exactly what I need for travel",
+  "the data speeds were fast enough for everything I needed including streaming music, using social media, and video calls",
+  "I appreciated that I could activate it before leaving home so I had internet as soon as I landed no waiting at the airport",
+  "great value for money especially compared to what my carrier charges for international roaming saved me over $100 on this trip alone"
+];
+
+// Medium length reviews (between short and long)
+const MEDIUM_REVIEWS_EN = [
+  "worked great during my trip to Europe no issues with connectivity and the price was much better than roaming",
+  "easy setup process took maybe 2 minutes and I was online immediately would definitely use this again",
+  "signal was strong throughout my stay in Tokyo used it for maps and social media without any problems",
+  "cheaper than buying a local SIM card and way more convenient activated before I left home",
+  "the data speeds were good enough for video calls and streaming didn't experience any lag or buffering",
+  "customer service responded quickly when I had a question about my plan very helpful and friendly",
+  "used this for a week in Singapore and it worked perfectly everywhere I went strong signal even underground",
+  "the unlimited plan was perfect for my needs never had to worry about running out of data",
+  "setup was straightforward just scanned the QR code and followed the instructions no technical knowledge needed",
+  "much better value than my carrier's international plan saved me over $50 on this trip alone",
+  "connection was stable the entire time no random disconnections or slow periods during my 2 week trip",
+  "worked in multiple countries seamlessly didn't need to change anything when crossing borders",
+  "the activation email came quickly and the instructions were clear made the whole process stress-free",
+  "data speeds were consistent whether I was in the city center or more remote areas",
+  "appreciated being able to activate before leaving so I had internet as soon as I landed",
+  "used it for work calls and video conferences and it performed well no quality issues",
+  "the price point is really competitive compared to other eSIM providers I've tried",
+  "signal strength was impressive even in areas where my phone normally struggles",
+  "simple installation process that even someone not tech-savvy could handle easily",
+  "reliable connection throughout my entire vacation never had to worry about losing internet access"
+];
+
+const MEDIUM_REVIEWS_ES = [
+  "funcionó muy bien durante mi viaje a Europa sin problemas de conectividad y el precio fue mucho mejor que el roaming",
+  "proceso de configuración fácil tomó quizás 2 minutos y estaba en línea inmediatamente definitivamente lo usaría de nuevo",
+  "la señal fue fuerte durante toda mi estancia en Tokio lo usé para mapas y redes sociales sin ningún problema",
+  "más barato que comprar una tarjeta SIM local y mucho más conveniente activado antes de salir de casa",
+  "las velocidades de datos fueron lo suficientemente buenas para videollamadas y transmisión no experimenté retrasos ni buffering",
+  "el servicio al cliente respondió rápidamente cuando tuve una pregunta sobre mi plan muy útil y amable",
+  "lo usé durante una semana en Singapur y funcionó perfectamente en todas partes donde fui señal fuerte incluso bajo tierra",
+  "el plan ilimitado fue perfecto para mis necesidades nunca tuve que preocuparme por quedarme sin datos",
+  "la configuración fue sencilla solo escaneé el código QR y seguí las instrucciones no se necesita conocimiento técnico",
+  "mucho mejor valor que el plan internacional de mi operador me ahorré más de $50 solo en este viaje",
+  "la conexión fue estable todo el tiempo sin desconexiones aleatorias o períodos lentos durante mi viaje de 2 semanas",
+  "funcionó en múltiples países sin problemas no necesité cambiar nada al cruzar fronteras",
+  "el correo de activación llegó rápidamente y las instrucciones fueron claras hicieron todo el proceso sin estrés",
+  "las velocidades de datos fueron consistentes ya fuera en el centro de la ciudad o en áreas más remotas",
+  "aprecié poder activar antes de salir para tener internet tan pronto como aterricé",
+  "lo usé para llamadas de trabajo y videoconferencias y funcionó bien sin problemas de calidad",
+  "el precio es realmente competitivo comparado con otros proveedores de eSIM que he probado",
+  "la fuerza de la señal fue impresionante incluso en áreas donde mi teléfono normalmente tiene problemas",
+  "proceso de instalación simple que incluso alguien no experto en tecnología podría manejar fácilmente",
+  "conexión confiable durante todas mis vacaciones nunca tuve que preocuparme por perder el acceso a internet"
 ];
 
 const LONG_REVIEWS_ES = [
-  "Se activó al instante cuando aterricé La velocidad fue buena durante todo el viaje Mucho más barato que el roaming de mi operador",
-  "Tenía dudas sobre la configuración, pero las instrucciones eran claras Escaneé el código QR y funcionó Definitivamente lo usaré de nuevo",
-  "Usé esto para un viaje de 2 semanas La señal era fuerte incluso en áreas rurales Los datos ilimitados fueron muy útiles",
-  "Gran alternativa a las tarjetas SIM físicas No hay necesidad de cambiar tarjetas en el aeropuerto El precio es inmejorable"
+  "se activó al instante cuando aterricé la velocidad fue buena durante todo el viaje mucho más barato que el roaming de mi operador",
+  "tenía dudas sobre la configuración, pero las instrucciones eran claras escaneé el código QR y funcionó definitivamente lo usaré de nuevo",
+  "usé esto para un viaje de 2 semanas la señal era fuerte incluso en áreas rurales los datos ilimitados fueron muy útiles",
+  "gran alternativa a las tarjetas SIM físicas no hay necesidad de cambiar tarjetas en el aeropuerto el precio es inmejorable",
+  "funcionó perfectamente desde el primer día lo usé en varios países de Europa y nunca tuve problemas de conectividad la configuración fue súper simple",
+  "viajo mucho por trabajo y esto ha sido un cambio total no más cargos caros de roaming ni buscar tarjetas SIM locales en aeropuertos",
+  "la fuerza de la señal fue impresionante incluso en áreas remotas pude hacer videollamadas a mi familia sin retrasos ni cortes",
+  "al principio escéptico sobre los eSIMs pero esto cambió mi opinión completamente activación sin problemas y las velocidades fueron mejores que mi WiFi de casa",
+  "pasé 3 semanas en Asia y este eSIM funcionó perfectamente en todos los países que visité me ahorré cientos comparado con mis costos de roaming habituales",
+  "el soporte al cliente fue rápido cuando tuve una pregunta sobre la activación respondieron en una hora y me ayudaron a resolverlo rápidamente",
+  "el plan ilimitado fue perfecto para mis necesidades transmití videos, usé mapas constantemente y nunca tuve que preocuparme por quedarme sin datos",
+  "la configuración tomó menos de 5 minutos solo escaneé el código QR y estaba en línea inmediatamente mucho más fácil de lo que esperaba",
+  "lo usé durante un viaje de negocios y fue confiable para videoconferencias y carga de archivos sin interrupciones ni problemas de calidad",
+  "el precio es inmejorable comparé con varios otros proveedores y esto fue significativamente más barato por la misma cantidad de datos",
+  "funcionó bien tanto en áreas urbanas como rurales me sorprendió lo fuerte que era la señal incluso en el campo",
+  "no soy muy experto en tecnología pero el proceso de instalación fue sencillo las instrucciones fueron claras y fáciles de seguir",
+  "la conexión fue estable durante todo mi viaje sin desconexiones aleatorias ni períodos lentos incluso durante horas pico de uso",
+  "esta es la segunda vez que uso este servicio y ha sido consistente ambas veces confiable, asequible y exactamente lo que necesito para viajar"
 ];
 
 // Helper to get random item from array
@@ -369,6 +511,9 @@ export function generateReviews(count: number = 3240): ReviewData[] {
   const reviews: ReviewData[] = [];
   const now = new Date();
   
+  // Track used medium/long reviews to prevent duplicates
+  const usedMediumLongReviews = new Set<string>();
+  
   for (let i = 0; i < count; i++) {
     // Deterministic randomness based on index
     const rand = seededRandom(i); 
@@ -383,6 +528,7 @@ export function generateReviews(count: number = 3240): ReviewData[] {
     let hasText = false;
     let text = "";
     let language = "en";
+    let isMediumOrLong = false;
     
     // Determine Rating
     // Distribution: ~82% 5 stars, ~7% 4 stars, ~4% 3 stars, ~4% 2 stars, ~3% 1 star
@@ -399,8 +545,9 @@ export function generateReviews(count: number = 3240): ReviewData[] {
       // Star only (75%)
       hasText = false;
     } else if (typeRand < 0.90) {
-      // Short text (15%)
+      // Short text (15%) - can repeat
       hasText = true;
+      isMediumOrLong = false;
       // Select language with expanded distribution
       const langRand = seededRandom(i + 2000);
       if (langRand < 0.30) {
@@ -443,16 +590,61 @@ export function generateReviews(count: number = 3240): ReviewData[] {
         language = "pl";
         text = sample(SHORT_REVIEWS_PL);
       }
-    } else {
-      // Long text (5-10%)
+    } else if (typeRand < 0.95) {
+      // Medium text (5%) - no duplicates
       hasText = true;
-      // Mostly EN/ES for long ones in this mock
-      if (seededRandom(i + 3000) < 0.8) {
+      isMediumOrLong = true;
+      const langRand = seededRandom(i + 3000);
+      let reviewKey = "";
+      let attempts = 0;
+      const maxAttempts = 100;
+      
+      do {
+        if (langRand < 0.7) {
+          language = "en";
+          text = sample(MEDIUM_REVIEWS_EN);
+        } else {
+          language = "es";
+          text = sample(MEDIUM_REVIEWS_ES);
+        }
+        reviewKey = `${language}:${text}`;
+        attempts++;
+      } while (usedMediumLongReviews.has(reviewKey) && attempts < maxAttempts);
+      
+      if (attempts >= maxAttempts && usedMediumLongReviews.has(reviewKey)) {
         language = "en";
-        text = sample(LONG_REVIEWS_EN);
+        text = sample(SHORT_REVIEWS_EN);
+        isMediumOrLong = false;
       } else {
-        language = "es";
-        text = sample(LONG_REVIEWS_ES);
+        usedMediumLongReviews.add(reviewKey);
+      }
+    } else {
+      // Long text (5%) - no duplicates
+      hasText = true;
+      isMediumOrLong = true;
+      const langRand = seededRandom(i + 3000);
+      let reviewKey = "";
+      let attempts = 0;
+      const maxAttempts = 100;
+      
+      do {
+        if (langRand < 0.8) {
+          language = "en";
+          text = sample(LONG_REVIEWS_EN);
+        } else {
+          language = "es";
+          text = sample(LONG_REVIEWS_ES);
+        }
+        reviewKey = `${language}:${text}`;
+        attempts++;
+      } while (usedMediumLongReviews.has(reviewKey) && attempts < maxAttempts);
+      
+      if (attempts >= maxAttempts && usedMediumLongReviews.has(reviewKey)) {
+        language = "en";
+        text = sample(SHORT_REVIEWS_EN);
+        isMediumOrLong = false;
+      } else {
+        usedMediumLongReviews.add(reviewKey);
       }
     }
 

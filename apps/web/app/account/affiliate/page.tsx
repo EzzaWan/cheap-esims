@@ -202,7 +202,16 @@ export default function AffiliateDashboardPage() {
       {/* Header */}
       <div>
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 mb-2">Affiliate Dashboard</h1>
-        <p className="text-gray-500 text-lg">Earn 10% lifetime commissions on all referrals</p>
+        <p className="text-gray-500 text-lg">Give 10%, Get 10% — Share the savings, earn together!</p>
+      </div>
+
+      {/* Explainer Card */}
+      <div className="bg-card border border-border rounded-lg p-4 mb-4">
+        <h3 className="text-lg font-semibold mb-2">🎁 Give 10%, Get 10%</h3>
+        <p className="text-sm text-muted-foreground">
+          When you share your link, your friends get <span className="font-semibold">10% off</span> their first purchase, 
+          and you earn <span className="font-semibold text-primary">10% commission</span> on all their purchases — forever!
+        </p>
       </div>
 
       {/* Top Section: Referral Link & Stats */}

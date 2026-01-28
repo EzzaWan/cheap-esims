@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { getPlanName } from "@/lib/admin-helpers";
 import { getPlanFlagLabels } from "@/lib/plan-flags";
 import { isDailyUnlimitedPlan } from "@/lib/plan-utils";
+import { getStoredReferralCode } from "@/lib/referral";
 
 interface Order {
   id: string;
@@ -49,6 +50,10 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
   const [updatingEmail, setUpdatingEmail] = useState(false);
   const [planName, setPlanName] = useState<string>("");
   const [plan, setPlan] = useState<any>(null);
+  const [referralDiscount, setReferralDiscount] = useState<{
+    eligible: boolean;
+    discountPercent: number;
+  } | null>(null);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -129,6 +134,22 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
           } catch (e) {
             // Invalid stored data, clear it
             localStorage.removeItem(`promo_${params.orderId}`);
+          }
+        }
+
+        // Check referral discount eligibility
+        const referralCode = getStoredReferralCode();
+        if (referralCode && orderData.User?.id) {
+          try {
+            const discountCheck = await safeFetch<{
+              eligible: boolean;
+              discountPercent: number;
+            }>(`${apiUrl}/orders/check-referral-discount?userId=${orderData.User.id}&referralCode=${referralCode}`, {
+              showToast: false,
+            });
+            setReferralDiscount(discountCheck);
+          } catch (error) {
+            console.error('Error checking referral discount:', error);
           }
         }
       } catch (error) {
@@ -390,10 +411,14 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
     setProcessing(true);
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+      const referralCode = getStoredReferralCode();
       const data = await safeFetch<{ url: string }>(`${apiUrl}/orders/${params.orderId}/checkout`, {
         method: 'POST',
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: checkoutEmail }),
+        body: JSON.stringify({ 
+          email: checkoutEmail,
+          referralCode: referralCode || undefined,
+        }),
         showToast: false,
       });
       
@@ -462,6 +487,18 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
                 <CardTitle className="text-2xl font-semibold text-gray-900">Order Review</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
+                {/* Referral Discount Banner */}
+                {referralDiscount?.eligible && (
+                  <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-4">
+                    <p className="text-green-400 font-semibold">
+                      🎉 10% First Purchase Discount!
+                    </p>
+                    <p className="text-sm text-gray-400 mt-1">
+                      You've been referred! Get {referralDiscount.discountPercent}% off your first purchase.
+                    </p>
+                  </div>
+                )}
+
                 {/* Order Details */}
                 <div className="space-y-3">
                   <h3 className="text-sm font-semibold text-gray-900">Order Details</h3>

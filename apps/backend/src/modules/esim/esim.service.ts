@@ -309,8 +309,58 @@ export class EsimService {
       return hasFUP1Mbps;
     };
 
+    // Helper function to check if plan has FUP flag (any FUP, not just 1Mbps)
+    const hasFUP = (pkg: any): boolean => {
+      const nameLower = (pkg.name || '').toLowerCase();
+      const fupPattern = /\bfup(\d+)?mbps?\b/i;
+      const fupStandalone = /\bfup\b/i;
+      return nameLower.match(fupPattern) !== null || 
+             nameLower.match(fupStandalone) !== null ||
+             pkg.fup === true ||
+             pkg.fairUsagePolicy === true ||
+             (typeof pkg.fup === 'string' && /^fup(\d+)?mbps?$/i.test(pkg.fup));
+    };
+
+    // Helper function to check if plan has nonhkip flag
+    const hasNonHKIP = (pkg: any): boolean => {
+      const nameLower = (pkg.name || '').toLowerCase();
+      return nameLower.includes('nonhkip') || 
+             nameLower.includes('nonhk') ||
+             pkg.nonhkip === true ||
+             pkg.ipType === 'nonhkip' ||
+             (typeof pkg.nonhkip === 'string' && pkg.nonhkip.toLowerCase() === 'nonhkip');
+    };
+
+    // Helper function to check if a plan is a 1GB 7 days plan (plain, not FUP or nonhkip)
+    const is1GB7DaysPlan = (pkg: any): boolean => {
+      if (pkg.volume === -1) {
+        return false;
+      }
+      const volumeGB = pkg.volume / (1024 * 1024 * 1024);
+      const roundedGB = Math.round(volumeGB * 10) / 10;
+      
+      // Must be exactly 1GB
+      if (roundedGB !== 1.0) {
+        return false;
+      }
+      
+      // Must be exactly 7 days
+      const duration = pkg.duration || 0;
+      const durationUnit = (pkg.durationUnit || 'day').toLowerCase();
+      if (duration !== 7 || durationUnit !== 'day') {
+        return false;
+      }
+      
+      // Must NOT have FUP or nonhkip flags
+      if (hasFUP(pkg) || hasNonHKIP(pkg)) {
+        return false;
+      }
+      
+      return true;
+    };
+
     // Filter out plans that don't meet our criteria:
-    // 1. Remove plans with volume <= 1.5GB (2GB = 2 * 1024 * 1024 * 1024 bytes)
+    // 1. Remove plans with volume <= 1.5GB (EXCEPT 1GB 7 days plans and 2GB + FUP1Mbps)
     // 2. Remove plans with duration = 1 day (EXCEPT 2GB + FUP1Mbps plans which go to Unlimited tab)
     const filteredPackageList = packageList.filter((pkg: any) => {
       // 2GB + FUP1Mbps plans are allowed (they will go to Unlimited tab)
@@ -318,11 +368,16 @@ export class EsimService {
         return true; // Keep Unlimited plans
       }
       
+      // 1GB 7 days plans are allowed (plain, not FUP or nonhkip)
+      if (is1GB7DaysPlan(pkg)) {
+        return true; // Keep 1GB 7 days plans
+      }
+      
       // Check volume: must be >= 2GB (or unlimited -1)
       if (pkg.volume !== -1) {
         const volumeGB = pkg.volume / (1024 * 1024 * 1024);
         if (volumeGB <= 1.5) {
-          return false; // 1.5GB or less, exclude
+          return false; // 1.5GB or less, exclude (except 1GB 7 days which is handled above)
         }
       }
       

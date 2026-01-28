@@ -242,9 +242,60 @@ export class OrdersService {
       });
 
       // Get amounts
-      const amountUSD = updatedOrder.amountCents / 100;
+      let amountUSD = updatedOrder.amountCents / 100;
       const targetCurrency = (updatedOrder.displayCurrency || updatedOrder.currency || 'USD').toUpperCase();
-      const displayAmount = (updatedOrder.displayAmountCents || updatedOrder.amountCents) / 100;
+      let displayAmount = (updatedOrder.displayAmountCents || updatedOrder.amountCents) / 100;
+
+      // Check for referral discount eligibility
+      let discountAmount = 0;
+      let referralId: string | null = null;
+      
+      if (referralCode) {
+        // Find affiliate by referral code
+        const affiliate = await this.prisma.affiliate.findUnique({
+          where: { referralCode },
+        });
+        
+        if (affiliate) {
+          // Check if user has any completed orders
+          const existingOrders = await this.prisma.order.findMany({
+            where: {
+              userId: updatedOrder.userId,
+              status: { in: ['paid', 'active', 'esim_created', 'provisioning'] },
+            },
+          });
+          
+          // Only apply discount if no completed orders (first purchase)
+          if (existingOrders.length === 0) {
+            discountAmount = Math.round(amountUSD * 0.1 * 100); // 10% discount in cents
+            amountUSD = amountUSD * 0.9; // Apply discount
+            displayAmount = displayAmount * 0.9; // Apply discount to display amount too
+            
+            // Create or get referral record
+            let referral = await this.prisma.referral.findUnique({
+              where: { referredUserId: updatedOrder.userId },
+            });
+            
+            if (!referral) {
+              referral = await this.prisma.referral.create({
+                data: {
+                  id: crypto.randomUUID(),
+                  affiliateId: affiliate.id,
+                  referredUserId: updatedOrder.userId,
+                  firstPurchaseDiscountUsed: false,
+                },
+              });
+            }
+            
+            referralId = referral.id;
+            this.logger.log(`[CHECKOUT] Applied 10% referral discount for first purchase. Discount: $${(discountAmount / 100).toFixed(2)}, New amount: $${amountUSD.toFixed(2)}`);
+          } else {
+            this.logger.log(`[CHECKOUT] User has existing orders, referral discount not eligible`);
+          }
+        } else {
+          this.logger.warn(`[CHECKOUT] Referral code ${referralCode} not found`);
+        }
+      }
 
       // Convert to target currency for Stripe
       let convertedAmount = amountUSD;
@@ -316,6 +367,8 @@ export class OrdersService {
           amountUSD: amountUSD.toString(),
           displayCurrency: targetCurrency,
           ...(referralCode ? { referralCode } : {}),
+          referralDiscountApplied: discountAmount > 0 ? 'true' : 'false',
+          referralId: referralId || '',
         },
       });
 
@@ -526,6 +579,20 @@ export class OrdersService {
       // Handle referral and affiliate setup
       await this.setupUserAffiliateAndReferral(user, referralCode);
 
+      // Mark referral discount as used if it was applied
+      if (session.metadata?.referralDiscountApplied === 'true' && session.metadata?.referralId) {
+        try {
+          await this.prisma.referral.update({
+            where: { id: session.metadata.referralId },
+            data: { firstPurchaseDiscountUsed: true },
+          });
+          this.logger.log(`[CHECKOUT] Marked referral discount as used for referral ${session.metadata.referralId}`);
+        } catch (error) {
+          this.logger.error(`[CHECKOUT] Failed to mark referral discount as used:`, error);
+          // Don't throw - this is not critical for order processing
+        }
+      }
+
       // Continue with email sending and provisioning
       await this.processOrderCompletion(order, user, planCode);
       return;
@@ -611,12 +678,62 @@ export class OrdersService {
       },
     });
 
+    // Mark referral discount as used if it was applied (legacy flow)
+    if (session.metadata?.referralDiscountApplied === 'true' && session.metadata?.referralId) {
+      try {
+        await this.prisma.referral.update({
+          where: { id: session.metadata.referralId },
+          data: { firstPurchaseDiscountUsed: true },
+        });
+        this.logger.log(`[CHECKOUT] Marked referral discount as used for referral ${session.metadata.referralId}`);
+      } catch (error) {
+        this.logger.error(`[CHECKOUT] Failed to mark referral discount as used:`, error);
+        // Don't throw - this is not critical for order processing
+      }
+    }
+
     // Send order confirmation email (fire and forget)
     this.sendOrderConfirmationEmail(order, user, planCode).catch((err) => {
       this.logger.error(`[EMAIL] Failed to send order confirmation: ${err.message}`);
     });
 
     await this.performEsimOrderForOrder(order, user, planCode, session);
+  }
+
+  /**
+   * Check if a user is eligible for referral discount
+   */
+  async checkReferralDiscountEligibility(userId: string, referralCode?: string): Promise<{
+    eligible: boolean;
+    discountPercent: number;
+  }> {
+    if (!referralCode) {
+      return { eligible: false, discountPercent: 0 };
+    }
+    
+    // Find affiliate
+    const affiliate = await this.prisma.affiliate.findUnique({
+      where: { referralCode },
+    });
+    
+    if (!affiliate) {
+      return { eligible: false, discountPercent: 0 };
+    }
+    
+    // Check if user has any completed orders
+    const existingOrders = await this.prisma.order.findMany({
+      where: {
+        userId,
+        status: { in: ['paid', 'active', 'esim_created', 'provisioning'] },
+      },
+    });
+    
+    // Only eligible if no completed orders (first purchase)
+    if (existingOrders.length === 0) {
+      return { eligible: true, discountPercent: 10 };
+    }
+    
+    return { eligible: false, discountPercent: 0 };
   }
 
   /**

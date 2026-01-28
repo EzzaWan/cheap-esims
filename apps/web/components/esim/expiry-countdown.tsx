@@ -18,6 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { safeFetch } from "@/lib/safe-fetch";
 import { toast } from "@/components/ui/use-toast";
+import { useUser } from "@clerk/nextjs";
 
 interface ExpiryCountdownProps {
   expiry: string | Date | null | undefined;
@@ -32,6 +33,7 @@ export function ExpiryCountdown({
   iccid,
   onExpired,
 }: ExpiryCountdownProps) {
+  const { user } = useUser();
   const [now, setNow] = useState(Date.now());
   const [time, setTime] = useState<TimeRemaining | null>(null);
   const [urgency, setUrgency] = useState<UrgencyLevel>("safe");
@@ -79,11 +81,30 @@ export function ExpiryCountdown({
   const handleSync = async () => {
     if (!iccid || isSyncing) return;
 
+    // Get user email from Clerk, URL params, or localStorage (for guest access)
+    const urlParams = new URLSearchParams(window.location.search);
+    const emailParam = urlParams.get('email');
+    const storedEmail = localStorage.getItem('guest_checkout_email');
+    const userEmail = user?.primaryEmailAddress?.emailAddress || emailParam || storedEmail;
+
+    if (!userEmail) {
+      console.error("Sync error: User email required");
+      toast({
+        variant: "destructive",
+        title: "Sync Failed",
+        description: "User email required. Please sign in or provide your email.",
+      });
+      return;
+    }
+
     setIsSyncing(true);
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
       await safeFetch(`${apiUrl}/esim/${iccid}/sync`, {
         method: "POST",
+        headers: {
+          "x-user-email": userEmail,
+        },
         showToast: false,
       });
 

@@ -216,6 +216,17 @@ export class OrdersController {
     }
   }
 
+  @Get('check-referral-discount')
+  async checkReferralDiscount(
+    @Query('userId') userId: string,
+    @Query('referralCode') referralCode?: string,
+  ) {
+    if (!userId) {
+      throw new BadRequestException('userId is required');
+    }
+    return this.ordersService.checkReferralDiscountEligibility(userId, referralCode);
+  }
+
   @Post(':id/email')
   @RateLimit({ limit: 10, window: 60 })
   async updateOrderEmail(

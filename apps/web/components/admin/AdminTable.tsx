@@ -84,6 +84,12 @@ function AdminTableComponent<T extends { id: string }>({
                   <td
                     key={idx}
                     className={`text-left px-4 py-3 text-sm break-words ${cellClassName}`}
+                    onClick={(e) => {
+                      // If this cell has interactive content (like buttons), prevent row click
+                      if (column.render) {
+                        e.stopPropagation();
+                      }
+                    }}
                   >
                     {cellContent}
                   </td>

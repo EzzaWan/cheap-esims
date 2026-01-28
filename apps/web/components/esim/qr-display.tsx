@@ -19,6 +19,7 @@ import { toPng } from "html-to-image";
 import { saveAs } from "file-saver";
 import { generateEsimInstallLink, isMobileDevice } from "@/lib/utils";
 import { Smartphone as SmartphoneIcon } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 interface QRDisplayProps {
   qrCodeUrl: string | null;
@@ -41,6 +42,7 @@ export function QRDisplay({
   planName,
   showDeviceCheck = false,
 }: QRDisplayProps) {
+  const { user } = useUser();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [qrLoading, setQrLoading] = useState(true);
   const [qrError, setQrError] = useState(false);
@@ -112,12 +114,23 @@ export function QRDisplay({
     if (!qrCodeUrl || !qrContainerRef.current) return;
 
     try {
+      // Get user email from Clerk, URL params, or localStorage (for guest access)
+      const urlParams = new URLSearchParams(window.location.search);
+      const emailParam = urlParams.get('email');
+      const storedEmail = localStorage.getItem('guest_checkout_email');
+      const userEmail = user?.primaryEmailAddress?.emailAddress || emailParam || storedEmail;
+
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
       const proxyUrl = qrCodeUrl.startsWith("http") && apiUrl
         ? `${apiUrl}/esims/${iccid}/qr-image`
         : qrCodeUrl;
 
-      const response = await fetch(proxyUrl);
+      const headers: HeadersInit = {};
+      if (userEmail) {
+        headers["x-user-email"] = userEmail;
+      }
+
+      const response = await fetch(proxyUrl, { headers });
       if (!response.ok) throw new Error("Failed to fetch QR image");
 
       const blob = await response.blob();
@@ -288,12 +301,23 @@ export function QRDisplay({
     if (!qrCodeUrl) return;
 
     try {
+      // Get user email from Clerk, URL params, or localStorage (for guest access)
+      const urlParams = new URLSearchParams(window.location.search);
+      const emailParam = urlParams.get('email');
+      const storedEmail = localStorage.getItem('guest_checkout_email');
+      const userEmail = user?.primaryEmailAddress?.emailAddress || emailParam || storedEmail;
+
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
       const proxyUrl = qrCodeUrl.startsWith("http") && apiUrl
         ? `${apiUrl}/esims/${iccid}/qr-image`
         : qrCodeUrl;
 
-      const response = await fetch(proxyUrl);
+      const headers: HeadersInit = {};
+      if (userEmail) {
+        headers["x-user-email"] = userEmail;
+      }
+
+      const response = await fetch(proxyUrl, { headers });
       if (!response.ok) throw new Error("Failed to fetch QR image");
 
       const blob = await response.blob();

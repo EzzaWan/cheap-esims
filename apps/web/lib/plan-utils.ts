@@ -142,13 +142,19 @@ export function isDailyUnlimitedPlan(plan: Plan): boolean {
 }
 
 /**
- * Check if plan should be visible (>= 2GB and not 1 day, OR 2GB + FUP1Mbps)
+ * Check if plan should be visible (>= 2GB and not 1 day, OR 2GB + FUP1Mbps, OR 1GB 7 days)
  * All plans >= 2GB (except 1 day plans, unless 2GB + FUP1Mbps) are visible regardless of price
+ * 1GB 7 days plans are always visible regardless of price
  */
 export function isPlanVisible(
   plan: Plan,
   discountPercent?: number
 ): boolean {
+  // Always show 1GB 7 days plans regardless of price
+  if (is1GB7DaysPlan(plan)) {
+    return true;
+  }
+  
   // 2GB + FUP1Mbps plans are always visible (they go to Unlimited tab)
   if (isDailyUnlimitedPlan(plan)) {
     return true;
@@ -168,7 +174,7 @@ export function isPlanVisible(
   const minSizeBytes = 2 * 1024 * 1024 * 1024; // 2GB in bytes
   const volumeGB = plan.volume / (1024 * 1024 * 1024);
   if (volumeGB <= 1.5) {
-    return false; // 1.5GB or less, exclude
+    return false; // 1.5GB or less, exclude (except 1GB 7 days which is handled above)
   }
   
   // Check duration: must not be 1 day (unless Daily Unlimited)
@@ -215,7 +221,7 @@ export function getDurationsForSize(
     return planKey === targetSize;
   });
   
-  // Filter to only visible plans (>= 2GB and not 1 day)
+  // Filter to only visible plans (>= 2GB and not 1 day, or 1GB 7 days)
   const visible = matches.filter((plan) => {
     const gb = calculateGB(plan.volume);
     const discountPercent = getDiscount(plan.packageCode, gb);
@@ -248,11 +254,26 @@ export function getDurationsForSize(
 }
 
 /**
- * Filter plans to only those >= 2GB and not 1 day
+ * Filter plans to only those >= 2GB and not 1 day, or 1GB 7 days
  */
 export function filterVisiblePlans(plans: Plan[]): Plan[] {
   return plans.filter((plan) => {
     const gb = calculateGB(plan.volume);
+    
+    // Exclude all plans <= 1.5GB (except unlimited plans and 1GB 7 days)
+    if (gb <= 1.5) {
+      // Only allow if it's an unlimited plan (2GB + FUP1Mbps) or 1GB 7 days
+      if (isDailyUnlimitedPlan(plan) || is1GB7DaysPlan(plan)) {
+        // Allow unlimited plans even though they're 2GB
+        // Allow 1GB 7 days plans
+        // Continue to duration and price check below
+      } else {
+        // Exclude all other plans <= 1.5GB
+        return false;
+      }
+    }
+    
+    // Filter by price (>= $3 USD), but 1GB 7 days bypasses this in isPlanVisible
     const discountPercent = getDiscount(plan.packageCode, gb);
     return isPlanVisible(plan, discountPercent);
   });
@@ -268,6 +289,47 @@ function hasNonHKIP(plan: Plan): boolean {
          (plan as any).nonhkip === true ||
          (plan as any).ipType === 'nonhkip' ||
          (typeof (plan as any).nonhkip === 'string' && (plan as any).nonhkip.toLowerCase() === 'nonhkip');
+}
+
+/**
+ * Check if a plan has FUP flag (any FUP, not just 1Mbps)
+ */
+function hasFUP(plan: Plan): boolean {
+  const nameLower = (plan.name || '').toLowerCase();
+  const fupPattern = /\bfup(\d+)?mbps?\b/i;
+  const fupStandalone = /\bfup\b/i;
+  return nameLower.match(fupPattern) !== null || 
+         nameLower.match(fupStandalone) !== null ||
+         (plan as any).fup === true ||
+         (plan as any).fairUsagePolicy === true ||
+         (typeof (plan as any).fup === 'string' && /^fup(\d+)?mbps?$/i.test((plan as any).fup));
+}
+
+/**
+ * Check if a plan is a 1GB 7 days plan (plain, not FUP or nonhkip)
+ */
+function is1GB7DaysPlan(plan: Plan): boolean {
+  const gb = calculateGB(plan.volume);
+  const roundedGB = Math.round(gb * 10) / 10;
+  
+  // Must be exactly 1GB
+  if (roundedGB !== 1.0) {
+    return false;
+  }
+  
+  // Must be exactly 7 days
+  const duration = plan.duration || 0;
+  const durationUnit = (plan.durationUnit || 'day').toLowerCase();
+  if (duration !== 7 || durationUnit !== 'day') {
+    return false;
+  }
+  
+  // Must NOT have FUP or nonhkip flags
+  if (hasFUP(plan) || hasNonHKIP(plan)) {
+    return false;
+  }
+  
+  return true;
 }
 
 /**
